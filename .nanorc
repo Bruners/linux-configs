@@ -1,0 +1,77 @@
+set autoindent
+# set backup
+# set boldtext
+set cut
+# set fill -8
+set morespace
+# set mouse
+# set nohelp
+# set nonewlines
+set nowrap
+set smarthome
+set smooth
+#set speller "aspell -x -c"
+# set suspend
+set tabsize 4
+# set tabstospaces
+# set wordbounds
+include "/usr/share/nano/c.nanorc"
+include "/usr/share/nano/html.nanorc"
+include "/usr/share/nano/nanorc.nanorc"
+include "/usr/share/nano/patch.nanorc"
+include "/usr/share/nano/perl.nanorc"
+include "/usr/share/nano/python.nanorc"
+include "/usr/share/nano/sh.nanorc"
+include "/usr/share/nano/asm.nanorc"
+include "/usr/share/nano/css.nanorc"
+include "/usr/share/nano/gentoo.nanorc"
+include "/usr/share/nano/java.nanorc"
+include "/usr/share/nano/mutt.nanorc"
+include "/usr/share/nano/ocaml.nanorc"
+include "/usr/share/nano/php.nanorc"
+include "/usr/share/nano/ruby.nanorc"
+include "/usr/share/nano/tex.nanorc"
+include "/usr/share/nano/awk.nanorc"
+include "/usr/share/nano/debian.nanorc"
+include "/usr/share/nano/groff.nanorc"
+include "/usr/share/nano/pov.nanorc"
+include "/usr/share/nano/xml.nanorc"
+include "/usr/share/nano/fortran.nanorc"
+include "/usr/share/nano/man.nanorc"
+include "/usr/share/nano/objc.nanorc"
+include "/usr/share/nano/tcl.nanorc"
+
+# Custom syntax highlight
+# Valid colors are 
+# "green", "red", "blue","white", 
+# "yellow", "cyan", "magenta" and "black"
+# with the optional prefix "bright" for foreground colors.
+
+# Lua .lua
+syntax "lua" "\.lua$"
+color black "def [a-zA-Z_0-9]+"
+color blue "\<(_VERSION|assert|collectgarbage|dofile|error|gcinfo|loadfile|loadstring|print|tonumber|tostring|type|unpack|_ALERT|_ERRORMESSAGE|_INPUT|_PROMT|_OUTPUT|_STDERR|_STDIN|_STDOUT|call|dostring|foreach|foreachi|getn|globals|newtype|rawget|rawset|require|sort|tinsert|tremove|_G|getfenv|getmetatable|ipairs|pairs|loadlib|next|pcall|rawegal|rawget|rawset|require|setfenv|setmetatable|xpcall|string|table|math|corountine|io|os|debug)\>"
+color brightblue "\<(and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\>"
+color yellow "\<(abs|acos|asin|atan|atan2|ceil|cos|deg|exp|floor|format|frexp|gsub|ldexp|log|log10|max|min|mod|rad|random|randomseed|sin|sqrt|strbyte|strchar|strfind|strlen|strlower|strrep|strsub|strupper|tan|string.byte|string.char|string.dump|string.find|string.len|string.lower|string.rep|string.sub|string.upper|string.format|string.gfind|string.gsub|table.concat|table.foreach|table.foreachi|table.getn|table.sort|table.insert|table.remove|table.setn|math.abs|math.acos|math.asin|math.atan|math.atan2|math.ceil|math.cos|math.deg|math.exp|math.floor|math.frexp|math.ldexp|math.log|math.log10|math.max|math.min|math.mod|math.pi|math.rad|math.random|math.randomseed|math.sin|math.sqrt|math.tan)\>"
+color brightred "\+|\-|\*|\/|\%|\^|\#|\=\=|\~\=|\<\=|\>\=|\<|\>|\=|\;|\:|\,|\.|\.\.|\.\.\."
+color yellow "\[|\]|\(|\)|\{|\}"
+color brightwhite "\"(\\.|[^\"])*\""
+color cyan "\-\-.*$"
+
+# Config files .conf
+syntax "configfiles" "(\.|/|)conf$" "(\.|/|)ample$" "(\.|/|)globals$" "xfce.*$"
+color brightblack "\<(alias)\>"
+color green "<(\\.|[^'])*>"
+color magenta "[a-zA-Z0-9\_]+="
+color black ">(\\.|[^'><])*</"
+color blue "//.*$"
+color red ""(\\.|[^\"])*""
+color red "title.*$"
+color black ":unscaled" "http\:\/\/" "ftp\:\/\/" "rsync\:\/\/"
+color magenta "'(\\.|[^'])*'"
+color brightblack "[0-9]"
+color brightblack "[<>]"
+color magenta "Section" "EndSection" "SubSection" "EndSubSection"
+color red "root"
+color brightred,blue "^.*-->" start="<!--.*" end="$"
+color blue "#.*$" start="<!--" end="-->"

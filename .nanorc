@@ -57,6 +57,7 @@ color brightred "\+|\-|\*|\/|\%|\^|\#|\=\=|\~\=|\<\=|\>\=|\<|\>|\=|\;|\:|\,|\.|\
 color yellow "\[|\]|\(|\)|\{|\}"
 color brightwhite "\"(\\.|[^\"])*\""
 color cyan "\-\-.*$"
+color cyan start="\-\-\[\[" end="\]\]"
 
 # Config files .conf
 syntax "configfiles" "(\.|/|)conf$" "(\.|/|)ample$" "(\.|/|)globals$" "xfce.*$"

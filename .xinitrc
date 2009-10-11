@@ -21,7 +21,7 @@ xcompmgr &
 gnome-phone-manager &
 gnome-power-manager &
 bluetooth-applet &
-keychain idrsa &
+keychain id_rsa &
 syndaemon -S -i 2 &
 wicd-client &
 

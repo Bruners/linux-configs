@@ -24,7 +24,7 @@ urxvt*loginShell:         true
 urxvt*termName:           rxvt-unicode
 urxvt*transparent:        true
 urxvt*shadomg:            10
-urxvt*cutchars:           "()*,<>[]{}|'
+urxvt*cutchars:           "()*,<>[]{}|'"
 urxvt*print-pipe:         cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
 urxvt*secondaryScroll:    true
 urxvt*mapAlert:           true
@@ -35,12 +35,14 @@ urxvt*perl-ext-common:    default,matcher
 urxvt*urlLauncher:        /usr/bin/firefox
 urxvt*matcher.button:     1
 
+xcalc*font: -windows-dina-bold-r-normal--13-80-96-96-c-70-microsoft-cp1252
+
 !transparent=0000 opaque=ffff
 urxvt*background: rgba:0000/0000/0000/4444
 urxvt*intensityStyles: True
 
-Xcursor*theme: Mist
-Xcursor*size: 12
+Xcursor*theme: whiteglass
+Xcursor*size: 16
 
 xterm*eightBitInput: False
 xterm*font: -*-dina-medium-r-*-*-*-*-*-*-*-*-*-*
@@ -55,12 +57,12 @@ xterm*jumpScroll: True
 xterm*mutiScroll: True
 xterm*toolBar: false
 
-*.Dialog.headingFont:        -*-dina-bold-r-*-*-13-*-*-*-*-*-*-*
-*.Dialog.bodyFont:           -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
-*.Dialog.labelFont:          -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
-*.Dialog.unameFont:          -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
-*.Dialog.buttonFont:         -*-dina-bold-r-*-*-13-*-*-*-*-*-*-*
-*.Dialog.dateFont:           -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
+xscreensaver.Dialog.headingFont:        -*-dina-bold-r-*-*-13-*-*-*-*-*-*-*
+xscreensaver.Dialog.bodyFont:           -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
+xscreensaver.Dialog.labelFont:          -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
+xscreensaver.Dialog.unameFont:          -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
+xscreensaver.Dialog.buttonFont:         -*-dina-bold-r-*-*-13-*-*-*-*-*-*-*
+xscreensaver.Dialog.dateFont:           -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
 
 xscreensaver.passwd.passwdFont:         -*-dina-bold-r-*-*-13-*-*-*-*-*-*-*
 !general dialog box (affects main hostname, username, password text)

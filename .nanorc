@@ -1,4 +1,4 @@
-set autoindent
+#set autoindent
 # set backup
 # set boldtext
 set cut
@@ -50,29 +50,29 @@ include "/usr/share/nano/tcl.nanorc"
 # Lua .lua
 syntax "lua" "\.lua$"
 color black "def [a-zA-Z_0-9]+"
-color blue "\<(_VERSION|assert|collectgarbage|dofile|error|gcinfo|loadfile|loadstring|print|tonumber|tostring|type|unpack|_ALERT|_ERRORMESSAGE|_INPUT|_PROMT|_OUTPUT|_STDERR|_STDIN|_STDOUT|call|dostring|foreach|foreachi|getn|globals|newtype|rawget|rawset|require|sort|tinsert|tremove|_G|getfenv|getmetatable|ipairs|pairs|loadlib|next|pcall|rawegal|rawget|rawset|require|setfenv|setmetatable|xpcall|string|table|math|corountine|io|os|debug)\>"
+color cyan "\<(_VERSION|assert|collectgarbage|dofile|error|gcinfo|loadfile|loadstring|print|tonumber|tostring|type|unpack|_ALERT|_ERRORMESSAGE|_INPUT|_PROMT|_OUTPUT|_STDERR|_STDIN|_STDOUT|call|dostring|foreach|foreachi|getn|globals|newtype|rawget|rawset|require|sort|tinsert|tremove|_G|getfenv|getmetatable|ipairs|pairs|loadlib|next|pcall|rawegal|rawget|rawset|require|setfenv|setmetatable|xpcall|string|table|math|corountine|io|os|debug)\>"
 color brightblue "\<(and|break|do|else|elseif|end|false|for|function|if|in|local|nil|not|or|repeat|return|then|true|until|while)\>"
 color yellow "\<(abs|acos|asin|atan|atan2|ceil|cos|deg|exp|floor|format|frexp|gsub|ldexp|log|log10|max|min|mod|rad|random|randomseed|sin|sqrt|strbyte|strchar|strfind|strlen|strlower|strrep|strsub|strupper|tan|string.byte|string.char|string.dump|string.find|string.len|string.lower|string.rep|string.sub|string.upper|string.format|string.gfind|string.gsub|table.concat|table.foreach|table.foreachi|table.getn|table.sort|table.insert|table.remove|table.setn|math.abs|math.acos|math.asin|math.atan|math.atan2|math.ceil|math.cos|math.deg|math.exp|math.floor|math.frexp|math.ldexp|math.log|math.log10|math.max|math.min|math.mod|math.pi|math.rad|math.random|math.randomseed|math.sin|math.sqrt|math.tan)\>"
 color brightred "\+|\-|\*|\/|\%|\^|\#|\=\=|\~\=|\<\=|\>\=|\<|\>|\=|\;|\:|\,|\.|\.\.|\.\.\."
 color yellow "\[|\]|\(|\)|\{|\}"
 color brightwhite "\"(\\.|[^\"])*\""
-color cyan "\-\-.*$"
-color cyan start="\-\-\[\[" end="\]\]"
+color brightcyan "\-\-.*$"
+color brightcyan start="\-\-\[\[" end="\]\]"
 
 # Config files .conf
 syntax "configfiles" "(\.|/|)conf$" "(\.|/|)ample$" "(\.|/|)globals$" "xfce.*$"
-color brightblack "\<(alias)\>"
+color black "def \<(alias)\>"
 color green "<(\\.|[^'])*>"
 color magenta "[a-zA-Z0-9\_]+="
-color black ">(\\.|[^'><])*</"
-color blue "//.*$"
+color brightwhite "def >(\\.|[^'><])*</"
+color brightblue "//.*$"
 color red ""(\\.|[^\"])*""
 color red "title.*$"
-color black ":unscaled" "http\:\/\/" "ftp\:\/\/" "rsync\:\/\/"
+color black "def :unscaled" "http\:\/\/" "ftp\:\/\/" "rsync\:\/\/"
 color magenta "'(\\.|[^'])*'"
-color brightblack "[0-9]"
-color brightblack "[<>]"
+color black "def [0-9]"
+color black "def [<>]"
 color magenta "Section" "EndSection" "SubSection" "EndSubSection"
 color red "root"
 color brightred,blue "^.*-->" start="<!--.*" end="$"
-color blue "#.*$" start="<!--" end="-->"
+color brightcyan "#.*$" start="<!--" end="-->"

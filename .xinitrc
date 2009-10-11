@@ -9,20 +9,20 @@ xrdb -merge .Xdefaults
 
 trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --height 11 --transparent true --tint 0x000000 &
 
-# Set background
+# Set background and cursor
 
-xsetroot -solid black &
 xsetroot -cursor_name left_ptr
 
 find $HOME/Pictures/wallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale
 
 # Launch apps
-
-#xscreensaver &
+xscreensaver &
 xcompmgr &
-wicd-client &
 gnome-phone-manager &
 gnome-power-manager &
 bluetooth-applet &
+keychain idrsa &
+syndaemon -S -i 2 &
+wicd-client &
 
 exec xmonad

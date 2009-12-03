@@ -3,7 +3,7 @@
 
 # Load Resources
 
-xrdb -merge .Xdefaults &
+xrdb -merge ~/.Xdefaults &
 
 # Set up an icon tray
 

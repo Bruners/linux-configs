@@ -1,45 +1,41 @@
-! rxvt-unicode ---------------------------------------------------------------
+urxvt*font:			xft:Monospace:pixelsize=11:antialias=true:hinting=true
+urxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
 
-!urxvt*font: -xos4-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
-!urxvt*boldFont: -xos4-terminus-bold-r-normal--12-120-72-72-c-60-iso8859-1
-urxvt*boldFont: -windows-dina-bold-r-normal--13-80-96-96-c-70-microsoft-cp1252
-urxvt*font: -windows-dina-medium-r-normal--13-80-96-96-c-70-microsoft-cp1252
-urxvt*internalBorder:     5
-urxvt*fading:             20
-!darken=(0 to 100) lighten=(-1 to -100)
-urxvt*shading:            30
-!urxvt*tintColor:          black
-!urxvt*depth:             32
-urxvt*saveLines:          32767
-urxvt*visualBell:         true
-urxvt*scrollTtyKeypress:  true
-urxvt*scrollWithBuffer:   false
-urxvt*scrollTtyOutput:    false
-urxvt*scrollBar:          false
-urxvt*scrollstyle:        xterm
-urxvt*scrollBar_right:    true
-urxvt*scrollColor:        #777777
-urxvt*cursorColor:        #ffcc00
-urxvt*loginShell:         true
-urxvt*termName:           rxvt-unicode
-urxvt*transparent:        true
-urxvt*shadomg:            10
-urxvt*cutchars:           "()*,<>[]{}|'"
-urxvt*print-pipe:         cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
-urxvt*secondaryScroll:    true
-urxvt*mapAlert:           true
-urxvt*utmpInhibit:        true
-
+urxvt*shading:		30
+urxvt*depth:		24
+urxvt*saveLines:	1024
+urxvt*visualBell:	true
+urxvt*scrollBar:	False
+urxvt*cursorColor:	#ffcc00
+!urxvt*underlineColor: #ffcc00
+urxvt*loginShell:	true
+urxvt*termName:		rxvt-unicode
+urxvt*transparent:	true
+urxvt*print-pipe:	cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
+urxvt*secondaryScroll:	true
+urxvt*mapAlert:		true
+urxvt*utmpInhibit:	true
+urxvt*scrollTtyOutput: false
+urxvt*scrollWithBuffer: false
+urxvt*scrollTtyKeypress: true
+urxvt*borderLess:	true
+urxvt*skipBuiltinGlyphs: true
+urxvt*mouseWheelScrollPage: false
+urxvt*pointerBlank: true
+urxvt*pointerBlankDelay: 5
+urxvt*urgentOnBell:	true
+URxvt.keysym.Home:          \033[1~
+URxvt.keysym.End:           \033[4~
 urxvt*perl-lib:           /usr/lib/urxvt/perl/
 urxvt*perl-ext-common:    default,matcher
 urxvt*urlLauncher:        /usr/bin/firefox
 urxvt*matcher.button:     1
 
 xcalc*font: -windows-dina-bold-r-normal--13-80-96-96-c-70-microsoft-cp1252
-
-!transparent=0000 opaque=ffff
-urxvt*background: rgba:0000/0000/0000/4444
-urxvt*intensityStyles: True
+xclock*update:            1
+xclock*analog:            false
+xclock*Foreground:        white
+xclock*background:        black
 
 Xcursor*theme: whiteglass
 Xcursor*size: 16
@@ -56,6 +52,61 @@ xterm*scrollTtyOutput: True
 xterm*jumpScroll: True
 xterm*mutiScroll: True
 xterm*toolBar: false
+
+xcalc*geometry:                        200x275
+xcalc.ti.bevel.background:             #111111
+xcalc.ti.bevel.screen.background:      #000000
+xcalc.ti.bevel.screen.DEG.background:  #000000
+xcalc.ti.bevel.screen.DEG.foreground:  LightSeaGreen
+xcalc.ti.bevel.screen.GRAD.background: #000000
+xcalc.ti.bevel.screen.GRAD.foreground: LightSeaGreen
+xcalc.ti.bevel.screen.RAD.background:  #000000
+xcalc.ti.bevel.screen.RAD.foreground:  LightSeaGreen
+xcalc.ti.bevel.screen.INV.background:  #000000
+xcalc.ti.bevel.screen.INV.foreground:  Red
+xcalc.ti.bevel.screen.LCD.background:  #000000
+xcalc.ti.bevel.screen.LCD.foreground:  LightSeaGreen
+xcalc.ti.bevel.screen.LCD.shadowWidth: 0
+xcalc.ti.bevel.screen.M.background:    #000000
+xcalc.ti.bevel.screen.M.foreground:    LightSeaGreen
+xcalc.ti.bevel.screen.P.background:    #000000
+xcalc.ti.bevel.screen.P.foreground:    Yellow
+xcalc.ti.Command.foreground:  White
+xcalc.ti.Command.background:  #777777
+xcalc.ti.button5.background:  Orange3
+xcalc.ti.button19.background: #611161
+xcalc.ti.button18.background: #611161
+xcalc.ti.button20.background: #611111
+!uncomment to change label on division button
+!xcalc.ti.button20.label:      /
+xcalc.ti.button25.background: #722222
+xcalc.ti.button30.background: #833333
+xcalc.ti.button35.background: #944444
+xcalc.ti.button40.background: #a55555
+xcalc.ti.button22.background: #222262
+xcalc.ti.button23.background: #222262
+xcalc.ti.button24.background: #222272
+xcalc.ti.button27.background: #333373
+xcalc.ti.button28.background: #333373
+xcalc.ti.button29.background: #333373
+xcalc.ti.button32.background: #444484
+xcalc.ti.button33.background: #444484
+xcalc.ti.button34.background: #444484
+xcalc.ti.button37.background: #555595
+xcalc.ti.button38.background: #555595
+xcalc.ti.button39.background: #555595
+XCalc*Cursor:                 hand2
+XCalc*ShapeStyle:             rectangle
+
+x11-ssh-askpass*font:                   -*-dina-medium-r-*-*-12-*-*-*-*-*-*-*
+x11-ssh-askpass*background:             #000000
+x11-ssh-askpass*foreground:             #ffffff
+x11-ssh-askpass.Button*background:      #000000
+x11-ssh-askpass.Indicator*foreground:   #ff9900
+x11-ssh-askpass.Indicator*background:   #090909
+x11-ssh-askpass*topShadowColor:         #000000
+x11-ssh-askpass*bottomShadowColor:      #000000
+x11-ssh-askpass.*borderWidth:           1
 
 xscreensaver.Dialog.headingFont:        -*-dina-bold-r-*-*-13-*-*-*-*-*-*-*
 xscreensaver.Dialog.bodyFont:           -*-dina-medium-r-*-*-13-*-*-*-*-*-*-*
@@ -85,3 +136,21 @@ xscreensaver.passwd.thermometer.width:       8
 !datestamp format--see the strftime(3) manual page for details
 xscreensaver.dateFormat:    %I:%M%P %a %b %d, %Y
 
+*background: rgb:00/00/00
+*foreground: rgb:ff/ff/ff
+*color0:     rgb:00/00/00
+*color1:     rgb:d3/62/65
+*color2:     rgb:ae/ce/91
+*color3:     rgb:e7/e1/8c
+*color4:     rgb:7a/7a/b0
+*color5:     rgb:96/3c/59
+*color6:     rgb:41/81/79
+*color7:     rgb:be/be/be
+*color8:     rgb:66/66/66
+*color9:     rgb:ef/81/71
+*color10:    rgb:e5/f7/79
+*color11:    rgb:ff/f7/96
+*color12:    rgb:41/86/be
+*color13:    rgb:ef/9e/be
+*color14:    rgb:71/be/be
+*color15:    rgb:ff/ff/ff

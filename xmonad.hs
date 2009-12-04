@@ -60,6 +60,7 @@ myDefaultGaps = [(18,0,0,0)]
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     [ ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)                            -- Lanch a terminal
     , ((modMask              , xK_p     ), spawn "exe=`dmenu_path | dmenu -fn \"terminus-8\" -nb \"#000000\" -nf \"#ffffff\" -sf orange -sb black` && eval \"exec $exe\"")  -- Launch dmenu
+    , ((modMask .|. shiftMask, xK_p     ), spawn "PieDock")                                         -- Spawn PieDock
     , ((modMask .|. shiftMask, xK_c     ), kill)                                                    -- Close focused window
     , ((modMask              , xK_space ), sendMessage NextLayout)                                  -- Rotate through the available layout agorithms
     , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)                      -- Reset the layouts on the current workspace to default
@@ -139,8 +140,7 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className --> doShift myWS8 | c <- myWS8ShiftC ]
     , [ fmap ( c `isInfixOf`) className --> doShift myWS9 | c <- myWS9ShiftC ]
     , [ isFullscreen  --> doFullFloat ]
-    , [ (className =? myIBrowser <&&> resource =? "Dialog") --> doFloat]
-	, [ (className =? myIBrowser <&&> resource =? "Extension") --> doFloat]
+    , [ className =? myIBrowser <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
     , [ resource  =? "desktop_window" --> doIgnore ]
     , [ resource  =? "kdesktop"       --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className --> doFloat | c <- myMatchAnywhereFloatsC ]
@@ -148,9 +148,10 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className --> doCenterFloat | c <- myMatchCenterFloatsC ]
     ]
 
-  where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer", "Downloads"]
+  where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer"]
         myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview"]
-        myMatchAnywhereFloatsT = ["VLC", "vlc", "Downloads"]
+        myMatchAnywhereFloatsT = ["VLC", "vlc"]
+        myIBrowserFloat = ["Dialog", "Extension", "Browser", "Downloads"]
        
         myWS1ShiftC = []
         myWS2ShiftC = [myIBrowser]

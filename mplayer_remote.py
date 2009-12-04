@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# source http://bit-rot.blogspot.com/2009/07/mplayer-remote-control-using-cellphone.html
 
 import curses.wrapper
 pipe_location="/home/lasseb/.mplayer/rc"
@@ -9,7 +10,7 @@ def main(stdscr):
 	green = curses.color_pair(1)
 	cyan = curses.color_pair(2)
 
-	stdscr.addstr(0, 20, "mPlayer Remote\n", cyan)
+	stdscr.addstr("mPlayer Remote\n", cyan)
 	stdscr.addstr("\n"+"Keybindings:"+"\n")
 	stdscr.addstr("F - ")
 	stdscr.addstr("Fullscreen on/off", green)

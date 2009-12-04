@@ -81,7 +81,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask              , xK_period), sendMessage (IncMasterN (-1)))                           -- Deincrement the number of windows in the master area
     , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))                               -- Quit xmonad
     , ((modMask              , xK_q     ), restart "xmonad" True)                                   -- Restart xmonad
-    , ((0                    , xK_Print ), spawn "`scrot -e 'mv $f ~/Pictures/scrot'`")             -- Capture screenshoot with scrot
+    , ((modMask              , xK_Print ), spawn "`scrot -e 'mv $f ~/Pictures/scrot'`")             -- Capture screenshoot with scrot
     , ((controlMask          , xK_Print ), spawn "`sleep 0.2; scrot -s -e 'mv $f ~/Pictures/'`")      -- Capture screenshot with scrot
     , ((modMask              , xK_Left  ), prevWS )                                                 -- Cycle to previous workspace
     , ((modMask              , xK_Right ), nextWS )                                                 -- Cycle to next workspace

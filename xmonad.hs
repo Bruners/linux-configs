@@ -47,7 +47,7 @@ myWS3 = "3:irssi"
 myWS4 = "4:wine"
 myWS5 = "5:mp3"
 myWS6 = "6:oof"
-myWS7 = "7"
+myWS7 = "7:gimp"
 myWS8 = "8"
 myWS9 = "9"
 
@@ -111,14 +111,13 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask, button2), (\w -> focus w >> windows W.swapMaster))                    -- mod-button2, Raise the window to the top of the stack
     , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w))                     -- mod-button3, Set the window to floating mode and resize by dragging
     ]
-  
-myLayout = standardLayouts
-  where
-     standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| Grid ||| full ||| gimp)
 
-     -- tiled = Tall nmaster delta ratio
+myLayout = onWorkspace myWS7 gimp $ standardLayouts
+  where
+     standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| Grid ||| full)
+
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     gimp  = withIM (0.11) (Role "gimp-toolbox") $
+     gimp  = avoidStruts $ withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
              withIM (0.15) (Role "gimp-dock") Full
      full = noBorders Full
@@ -149,7 +148,7 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className --> doCenterFloat | c <- myMatchCenterFloatsC ]
     ]
 
-  where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer", "Gimp", "Downloads"]
+  where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer", "Downloads"]
         myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview"]
         myMatchAnywhereFloatsT = ["VLC", "vlc", "Downloads"]
        
@@ -159,7 +158,7 @@ myManageHook = composeAll . concat $
         myWS4ShiftC = ["Wine"]
         myWS5ShiftC = ["Spotify", "Quodlibet"]
         myWS6ShiftC = ["OpenOffice.org 3.1"]
-        myWS7ShiftC = []
+        myWS7ShiftC = ["Gimp"]
         myWS8ShiftC = []
         myWS9ShiftC = []
         myIgnores = ["trayer"]

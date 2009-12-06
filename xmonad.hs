@@ -58,45 +58,48 @@ myDefaultGaps = [(18,0,0,0)]
 
 -- use xev to fin key codes
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
-    [ ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)                            -- Lanch a terminal
-    , ((modMask              , xK_p     ), spawn "exe=`dmenu_path | dmenu -fn \"terminus-8\" -nb \"#000000\" -nf \"#ffffff\" -sf orange -sb black` && eval \"exec $exe\"")  -- Launch dmenu
-    , ((modMask .|. shiftMask, xK_p     ), spawn "PieDock")                                         -- Spawn PieDock
-    , ((modMask .|. shiftMask, xK_c     ), kill)                                                    -- Close focused window
-    , ((modMask              , xK_space ), sendMessage NextLayout)                                  -- Rotate through the available layout agorithms
-    , ((modMask .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)                      -- Reset the layouts on the current workspace to default
-    , ((modMask              , xK_n     ), refresh)                                                 -- Resize viewed windows to the correct size
-    , ((modMask              , xK_Tab   ), windows W.focusDown)                                     -- Move focus to the next window
-    , ((modMask              , xK_j     ), windows W.focusDown)                                     -- Move Foucs to the next window
-    , ((modMask              , xK_k     ), windows W.focusUp  )                                     -- Move focus to the previous window
-    , ((modMask              , xK_m     ), windows W.focusMaster  )                                 -- Move focus to the master window
-    , ((modMask              , xK_Return), windows W.swapMaster)                                    -- Swap the focused window and the master window
-    , ((modMask .|. shiftMask, xK_j     ), windows W.swapDown  )                                    -- Swap the focused window with the next window
-    , ((modMask .|. shiftMask, xK_k     ), windows W.swapUp    )                                    -- Swap the focused window with the previous window
-    , ((modMask              , xK_h     ), sendMessage Shrink )                                     -- Shrink the master area horiz
-    , ((modMask              , xK_l     ), sendMessage Expand )                                     -- Expand the master area horiz
-    , ((modMask .|. shiftMask, xK_h     ), sendMessage MirrorShrink )                               -- Shrink mirror vert
-    , ((modMask .|. shiftMask, xK_l     ), sendMessage MirrorExpand )                               -- Expand mirror vert
-    , ((modMask              , xK_t     ), withFocused $ windows . W.sink)                          -- Push window back into tiling
-    , ((modMask              , xK_comma ), sendMessage (IncMasterN 1))                              -- Increment the number of windows in the master area
-    , ((modMask              , xK_period), sendMessage (IncMasterN (-1)))                           -- Deincrement the number of windows in the master area
-    , ((modMask .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))                               -- Quit xmonad
-    , ((modMask              , xK_q     ), restart "xmonad" True)                                   -- Restart xmonad
-    , ((modMask              , xK_Print ), spawn "`scrot -e 'mv $f ~/Pictures/scrot'`")             -- Capture screenshoot with scrot
-    , ((controlMask          , xK_Print ), spawn "`sleep 0.2; scrot -s -e 'mv $f ~/Pictures/'`")      -- Capture screenshot with scrot
-    , ((modMask              , xK_Left  ), prevWS )                                                 -- Cycle to previous workspace
-    , ((modMask              , xK_Right ), nextWS )                                                 -- Cycle to next workspace
-    , ((modMask .|. shiftMask, xK_Left  ), shiftToPrev )                                            -- Move current workspace to previous workspace
-    , ((modMask .|. shiftMask, xK_Right ), shiftToNext )                                            -- Move current workspace to next workspace
-    , ((0                    , 0x1008ff11 ), spawn "amixer set Master 10%- unmute")                 -- Reduce master volume by 10% and unmute
-    , ((0                    , 0x1008ff13 ), spawn "amixer set Master 10%+ unmute")                 -- Raise master volume by 10% and unmute
-    , ((0                    , 0x1008ff12 ), spawn "amixer set Master mute")                        -- Mute master volume
-    -- , ((modMask .|. shiftMask, xK_l     ), spawn "xscreensaver-command -lock" )                     -- Lock the screen if xscreensaver is running
+    [ ((modMask .|. shiftMask, xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
+    , ((modMask              , xK_p      ), spawn "run_dmenu"                 ) -- Launch dmenu
+    , ((modMask .|. shiftMask, xK_p      ), spawn "PieDock"                   ) -- Spawn PieDock
+    , ((modMask .|. shiftMask, xK_c      ), kill                              ) -- Close focused window
+    , ((modMask              , xK_space  ), sendMessage NextLayout            ) -- Rotate availanle layouts
+    , ((modMask .|. shiftMask, xK_space  ), setLayout $ XMonad.layoutHook conf) -- Reset the layouts
+    , ((modMask              , xK_n      ), refresh                           ) -- Resize windows to correct size
+    , ((modMask              , xK_Tab    ), windows W.focusDown               ) -- Move focus to next window
+    , ((modMask              , xK_j      ), windows W.focusDown               ) -- Move Foucs to next window
+    , ((modMask              , xK_k      ), windows W.focusUp                 ) -- Move focus to previous window
+    , ((modMask              , xK_m      ), windows W.focusMaster             ) -- Move focus to master window
+    , ((modMask              , xK_Return ), windows W.swapMaster              ) -- Swap focused and master window
+    , ((modMask .|. shiftMask, xK_j      ), windows W.swapDown                ) -- Swap focused with next window
+    , ((modMask .|. shiftMask, xK_k      ), windows W.swapUp                  ) -- Swap focused with prev window
+    , ((modMask              , xK_h      ), sendMessage Shrink                ) -- Shrink master area horiz
+    , ((modMask              , xK_l      ), sendMessage Expand                ) -- Expand master area horiz
+    , ((modMask .|. shiftMask, xK_h      ), sendMessage MirrorShrink          ) -- Shrink mirror vert
+    , ((modMask .|. shiftMask, xK_l      ), sendMessage MirrorExpand          ) -- Expand mirror vert
+    , ((modMask              , xK_t      ), withFocused $ windows . W.sink    ) -- Push window back into tiling
+    , ((modMask              , xK_comma  ), sendMessage (IncMasterN 1)        ) -- Increment windows in master
+    , ((modMask              , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows in master
+    , ((modMask .|. shiftMask, xK_q      ), io (exitWith ExitSuccess)         ) -- Quit xmonad
+    , ((modMask              , xK_q      ), restart "xmonad" True             ) -- Restart xmonad
+    , ((modMask              , xK_Print  ), spawn "run_scrot"                 ) -- Capture with scrot
+    , ((controlMask          , xK_Print  ), spawn "run_cscrot"                ) -- Capture current with scrot
+    , ((modMask              , xK_Left   ), prevWS                            ) -- Cycle to previous workspace
+    , ((modMask              , xK_Right  ), nextWS                            ) -- Cycle to next workspace
+    , ((modMask .|. shiftMask, xK_Left   ), shiftToPrev                       ) -- Move current WS to previous
+    , ((modMask .|. shiftMask, xK_Right  ), shiftToNext                       ) -- Move current WS next
+    , ((0                    , 0x1008ff11), spawn "vol-"                      ) -- Reduce volume
+    , ((0                    , 0x1008ff13), spawn "vol+"                      ) -- Raise volume
+    , ((0                    , 0x1008ff12), spawn "mute"                      ) -- Mute volume
+    , ((modMask .|. shiftMask, xK_l      ), spawn "xscreensaver-command -lock") -- Lock the screen
     ]
     ++
 
+
+    -- mod-[1..9], Switch to workspace N
+    -- mod-shift-[1..9], Move client to workspace N
     [((m .|. modMask, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]                       -- mod-[1..9], Switch to workspace N
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]                        -- mod-shift-[1..9], Move client to workspace N
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
 
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
@@ -108,9 +111,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
-    [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w))                       -- mod-button1, Set the window to floating mode and move by dragging
-    , ((modMask, button2), (\w -> focus w >> windows W.swapMaster))                    -- mod-button2, Raise the window to the top of the stack
-    , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w))                     -- mod-button3, Set the window to floating mode and resize by dragging
+    [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w)    ) -- Float window and move with m1
+    , ((modMask, button2), (\w -> focus w >> windows W.swapMaster) ) -- Raise window to the top of the stack
+    , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w)  ) -- Float window and resize with m3
     ]
 
 myLayout = onWorkspace myWS7 gimp $ standardLayouts

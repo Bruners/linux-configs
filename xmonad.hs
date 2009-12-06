@@ -142,7 +142,7 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className --> doShift myWS7 | c <- myWS7ShiftC ]
     , [ fmap ( c `isInfixOf`) className --> doShift myWS8 | c <- myWS8ShiftC ]
     , [ fmap ( c `isInfixOf`) className --> doShift myWS9 | c <- myWS9ShiftC ]
-    , [ isFullscreen  --> doFullFloat ]
+    , [ isFullscreen --> doFullFloat ]
     , [ className =? myIBrowser <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
     , [ resource  =? "desktop_window" --> doIgnore ]
     , [ resource  =? "kdesktop"       --> doIgnore ]

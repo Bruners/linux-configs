@@ -44,7 +44,7 @@ myNumlockMask   = mod2Mask
 myWS1 = "1:main"
 myWS2 = "2:www"
 myWS3 = "3:irssi"
-myWS4 = "4:wine"
+myWS4 = "4:games"
 myWS5 = "5:mp3"
 myWS6 = "6:oof"
 myWS7 = "7:gimp"
@@ -60,7 +60,7 @@ myDefaultGaps = [(18,0,0,0)]
 myKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
     , ((mM        , xK_p      ), spawn "run_dmenu"                 ) -- Launch dmenu
-    , ((mM .|. sM , xK_p      ), spawn "PieDock"                   ) -- Spawn PieDock
+   -- , ((mM .|. sM , xK_p      ), spawn "PieDock"                   ) -- Spawn PieDock
     , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
     , ((mM .|. sM , xK_space  ), setLayout $ XMonad.layoutHook conf) -- Reset the layouts
@@ -159,7 +159,7 @@ myManageHook = composeAll . concat $
         myWS1ShiftC = []
         myWS2ShiftC = [myIBrowser]
         myWS3ShiftC = ["Pidgin"]
-        myWS4ShiftC = ["Wine"]
+        myWS4ShiftC = ["Wine", "Heroes of Newerth"]
         myWS5ShiftC = ["Spotify", "Quodlibet"]
         myWS6ShiftC = ["OpenOffice.org 3.1"]
         myWS7ShiftC = ["Gimp"]

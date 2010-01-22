@@ -34,7 +34,6 @@ import qualified Data.Map        as M
 
 import System.IO
 
-myIBrowser = "Shiretoko"
 myTerminal = "urxvtc"
 myBorderWidth   = 1
 
@@ -114,6 +113,8 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w)    ) -- Float window and move with m1
     , ((modMask, button2), (\w -> focus w >> windows W.swapMaster) ) -- Raise window to the top of the stack
     , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w)  ) -- Float window and resize with m3
+--    , ((modMask, button4), (\_ -> prevWS)) -- switch to previous workspace
+--    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
 myLayout = onWorkspace myWS7 gimp $ standardLayouts
@@ -154,10 +155,11 @@ myManageHook = composeAll . concat $
   where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer"]
         myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview"]
         myMatchAnywhereFloatsT = ["VLC", "vlc"]
+
         myIBrowserFloat = ["Dialog", "Extension", "Browser", "Downloads"]
-       
+        myIBrowser = "Firefox"
         myWS1ShiftC = []
-        myWS2ShiftC = [myIBrowser]
+        myWS2ShiftC = ["Firefox", "Namoroka"]
         myWS3ShiftC = ["Pidgin"]
         myWS4ShiftC = ["Wine", "Heroes of Newerth"]
         myWS5ShiftC = ["Spotify", "Quodlibet"]
@@ -181,7 +183,15 @@ myLogHook xmobar = dynamicLogWithPP $ defaultPP
     , ppUrgent = xmobarColor "white" "red"
     , ppVisible = xmobarColor "white" ""
     -- , ppHidden = wrap "(" ")"
-    , ppLayout = xmobarColor "grey" ""
+    , ppLayout = xmobarColor "grey" "" .
+        (\x -> case x of
+        "Full" -> "[ ]"
+        "ResizableTall" -> "[|]"
+        "Mirror ResizableTall" -> "[-]"
+        "Grid" -> "[+]"
+        "IM ReflectX IM Full" -> "[G]"
+        _ -> x
+        )
     , ppSep = " - "
     }
 
@@ -190,7 +200,9 @@ myLogHook xmobar = dynamicLogWithPP $ defaultPP
 
 myStartupHook = return ()
 
-main = do xmobar <- spawnPipe "xmobar"
+main = do 
+          xmobar <- spawnPipe "xmobar ~/.xmobarrc"
+          xmobar2 <- spawnPipe "xmobar ~/.xmobarrc2"
           xmonad $ defaultConfig {
                        terminal           = myTerminal,
                        focusFollowsMouse  = myFocusFollowsMouse,
@@ -203,7 +215,7 @@ main = do xmobar <- spawnPipe "xmobar"
                        keys               = myKeys,
                        mouseBindings      = myMouseBindings,
                        layoutHook         = myLayout,
-                       manageHook         = manageDocks <+> myManageHook,
+                       manageHook         = myManageHook <+> manageDocks,
                        startupHook        = myStartupHook,
                        logHook            = myLogHook xmobar
                      }

@@ -1,0 +1,16 @@
+Config { font = "-schumacher-clean-medium-r-normal--12-120-75-75-c-60-iso10646-1"
+    , bgColor = "black"
+    , fgColor = "grey"
+    , position = Static { xpos = 0, ypos = 0, width = 1440, height = 16 } 
+    , commands = [ Run Memory ["-L","0","-H","30","--normal","orange","--high","chocolate1","-t","Mem: <usedratio>%"] 10
+                 , Run Swap [] 10
+                 , Run Com "atitemp" [] "ati" 10
+                 , Run Com "nowplay" [] "np" 10
+                 , Run Date "%a %b %_d %H:%M" "date" 10
+                 , Run Network "eth0" ["-L","0","-H","32","--normal","orange","--high","chocolate1"] 10
+                 , Run Cpu ["-L","10","-H","50","--normal","orange","--high","chocolate1"] 10
+                 ]
+    , sepChar = "%"
+    , alignSep = "}{"
+    , template = "[%eth0%] [%cpu%] [%memory%] [GPU: %ati%C] } %np% { <fc=#ee9a00>%date%</fc>"
+    }

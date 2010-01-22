@@ -1,12 +1,10 @@
 #!/bin/bash
+
 # .xinitrc
 
 # Load Resources
 
 xrdb -merge ~/.Xdefaults &
-
-# Fix to trick xdg-open to use thunar instead of firefox
-export DE=xfce
 
 # Set up an icon tray
 

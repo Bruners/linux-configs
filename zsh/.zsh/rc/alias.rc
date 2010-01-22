@@ -1,0 +1,52 @@
+alias ll="ls -lah"
+alias rm="rm -i"
+alias cp="cp -i"
+alias ls="ls --color=auto"
+alias l="ls -ail"
+alias cl="clear"
+alias paludis="sudo paludis"
+alias lyd1="alsamixer -c1"
+alias lyd0="alsamixer -c0"
+alias ql="quodlibet"
+alias grep="grep --color"
+alias xp='xprop | grep "WM_WINDOW_ROLE\|WM_CLASS" && echo "WM_CLASS(STRING) = \"NAME\", \"CLASS\""'
+alias cvs="cvs -z3"
+alias reboot="shutdown -r now"
+alias shutdown="shutdown -h now"
+alias hostip="wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1"
+alias world="sudo paludis -i world"
+
+fans() {
+	if [ $1 ] ; then
+		aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ;
+		aticonfig --pplib-cmd "set fanspeed 0 $1" ;
+	else
+		aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ; 
+		aticonfig --pplib-cmd "set fanspeed 0 auto" ;
+	fi
+}
+
+# do a du -hs on each dir on current path
+alias lsdir="for dir in *;do;if [ -d \$dir ];then;du -hsL \$dir;fi;done"
+
+extract() {
+        if [ -f $1 ] ; then
+                case $1 in
+                        *.tar.bz2)      tar xvjf $1     ;;
+                        *.tar.gz)       tar xvzf $1     ;;
+                        *.bz2)          bunzip2 $1      ;;
+                        *.gz)           gunzip $1       ;;
+                        *.tar)          tar xvf $1      ;;
+                        *.tbz2)         tar xvjf $1     ;;
+                        *.tgz)          tar xvzf $1     ;;
+                        *.rar)          unrar e $1      ;;
+                        *.zip)          unzip $1        ;;
+                        *.ace)          unace x $1      ;;
+                        *.Z)            uncompress $1   ;;
+                        *.7z)           7z x $1         ;;
+                        *)              echo "don't know how to extract '$1'..." ;;
+                esac
+        else
+                echo "'$1' is not a valid file."
+        fi
+}

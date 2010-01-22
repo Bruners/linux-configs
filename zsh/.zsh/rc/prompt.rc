@@ -1,0 +1,22 @@
+# for have colors
+#autoload -U colors
+#colors
+
+# define your colors here (i hate white background)
+#host_color="red"
+#path_color="white"
+#date_color="white"
+
+#time="%D{%H:%M:%S}"
+#host="%{$fg[$host_color]%}%n@%m"
+#cpath="%{$fg[$path_color]%}%/"
+#end="%{$reset_color%}%% "
+
+#PS1="$time $host $cpath $end"
+
+setopt promptsubst
+
+autoload -U promptinit
+promptinit
+
+prompt wunjo

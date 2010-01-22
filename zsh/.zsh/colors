@@ -76,7 +76,7 @@ EXEC 01;32
 .php 01;36
 .php3 01;36
 .html 01;36
-.xml 01:36
+.xml 01;36
 
 # Sources
 .c 04;43;30

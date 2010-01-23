@@ -28,5 +28,4 @@ pulseaudio -D &
 urxvtd -q -f -o &
 pidgin &
 numlockx &
-fans 40 &
 xmonad

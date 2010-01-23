@@ -90,6 +90,7 @@ myKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((0         , 0x1008ff13), spawn "vol+"                      ) -- Raise volume
     , ((0         , 0x1008ff12), spawn "mute"                      ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
+    , ((mM        , xK_b      ), sendMessage ToggleStruts          )
     ]
     ++
     -- mod-[1..9], Switch to workspace N
@@ -173,27 +174,32 @@ myManageHook = composeAll . concat $
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
+
+-- urgent notification
+urgentConfig = UrgencyConfig { suppressWhen = Focused, remindWhen = Dont }
+
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 
-myLogHook xmobar = dynamicLogWithPP $ defaultPP 
-    { ppOutput = hPutStrLn xmobar
-    , ppCurrent = xmobarColor "orange" ""
-    , ppTitle = xmobarColor "green" "" . shorten 200
-    , ppUrgent = xmobarColor "white" "red"
-    , ppVisible = xmobarColor "white" ""
-    -- , ppHidden = wrap "(" ")"
-    , ppLayout = xmobarColor "grey" "" .
-        (\x -> case x of
-        "Full" -> "[ ]"
-        "ResizableTall" -> "[|]"
-        "Mirror ResizableTall" -> "[-]"
-        "Grid" -> "[+]"
-        "IM ReflectX IM Full" -> "[G]"
-        _ -> x
-        )
-    , ppSep = " - "
-    }
+myLogHook' xmobar1 xmobar2 = dynamicLogWithPP customPP { ppOutput = hPutStrLn xmobar1 }
+                          >> dynamicLogWithPP customPP { ppOutput = hPutStrLn xmobar2 }
+
+customPP = defaultPP { ppCurrent = xmobarColor "orange" ""
+                     , ppTitle = xmobarColor "green" "" . shorten 200
+                     , ppUrgent = xmobarColor "white" "red"
+                     , ppVisible = xmobarColor "white" ""
+                  -- , ppHidden = wrap "(" ")"
+                     , ppLayout = xmobarColor "grey" "" .
+                     (\x -> case x of
+                       "Full" -> "[ ]"
+                       "ResizableTall" -> "[|]"
+                       "Mirror ResizableTall" -> "[-]"
+                       "Grid" -> "[+]"
+                       "IM ReflectX IM Full" -> "[G]"
+                       _ -> x
+                     )
+                     , ppSep = " - "
+                     }
 
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.  
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
@@ -201,9 +207,9 @@ myLogHook xmobar = dynamicLogWithPP $ defaultPP
 myStartupHook = return ()
 
 main = do 
-          xmobar <- spawnPipe "xmobar ~/.xmobarrc"
-          xmobar2 <- spawnPipe "xmobar ~/.xmobarrc2"
-          xmonad $ defaultConfig {
+          xmobar1 <- spawnPipe "xmobar -x 0 ~/.xmobarrc"
+          xmobar2 <- spawnPipe "xmobar -x 1 ~/.xmobarrc2"
+          xmonad $ withUrgencyHookC FocusHook urgentConfig $ defaultConfig {
                        terminal           = myTerminal,
                        focusFollowsMouse  = myFocusFollowsMouse,
                        borderWidth        = myBorderWidth,
@@ -217,5 +223,5 @@ main = do
                        layoutHook         = myLayout,
                        manageHook         = myManageHook <+> manageDocks,
                        startupHook        = myStartupHook,
-                       logHook            = myLogHook xmobar
+                       logHook            = myLogHook' xmobar1 xmobar2
                      }

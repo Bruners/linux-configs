@@ -1,7 +1,7 @@
 Config { font = "xft:Terminus-8:style=Bold"
     , bgColor = "black"
     , fgColor = "grey"
-    , position = Top
+    , position = TopW L 93
     , lowerOnStart = True
     , commands = [ Run StdinReader
                  , Run Com "atitemp" [] "ati" 60
@@ -10,5 +10,5 @@ Config { font = "xft:Terminus-8:style=Bold"
                  ]
     , sepChar = "%"
     , alignSep = "}{"
-    , template = "%StdinReader% }{ %ENVA% / %ati%C <fc=#ee9a00>%date%</fc>"
+    , template = "%StdinReader% }{ %ENVA% / %ati%C <fc=#ee9a00>%date% </fc>"
     }

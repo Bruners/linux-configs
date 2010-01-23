@@ -175,10 +175,6 @@ myManageHook = composeAll . concat $
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
-
--- urgent notification
-urgentConfig = UrgencyConfig { suppressWhen = Focused, remindWhen = Dont }
-
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 
@@ -205,12 +201,12 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 
 myStartupHook = do
-                  spawnOnce "xmobar -x 1 ~/.xmobarrc2"
+                  spawnOnce "xmobar -x 1 ~/.xmobarrc2" -- Spawn our second xmobar on monitor 1
                   return ()
 
 main = do 
           xmobar1 <- spawnPipe "xmobar -x 0 ~/.xmobarrc"
-          xmonad $ withUrgencyHookC FocusHook urgentConfig $ defaultConfig { 
+          xmonad $ defaultConfig { 
                        terminal           = myTerminal,
                        focusFollowsMouse  = myFocusFollowsMouse,
                        borderWidth        = myBorderWidth,

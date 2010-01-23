@@ -22,7 +22,8 @@ import XMonad.Layout.ResizableTile
 import XMonad.Actions.CycleWS
 
 -- xmobar
-import XMonad.Util.Run
+import XMonad.Util.Run (hPutStrLn, spawnPipe)
+import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -181,10 +182,9 @@ urgentConfig = UrgencyConfig { suppressWhen = Focused, remindWhen = Dont }
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 
-myLogHook' xmobar1 xmobar2 = dynamicLogWithPP customPP { ppOutput = hPutStrLn xmobar1 }
-                          >> dynamicLogWithPP customPP { ppOutput = hPutStrLn xmobar2 }
-
-customPP = defaultPP { ppCurrent = xmobarColor "orange" ""
+myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
+                     { ppOutput = hPutStrLn xmobar1
+                     , ppCurrent = xmobarColor "orange" ""
                      , ppTitle = xmobarColor "green" "" . shorten 200
                      , ppUrgent = xmobarColor "white" "red"
                      , ppVisible = xmobarColor "white" ""
@@ -204,17 +204,17 @@ customPP = defaultPP { ppCurrent = xmobarColor "orange" ""
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.  
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 
-myStartupHook = return ()
+myStartupHook = do
+                  spawnOnce "xmobar -x 1 ~/.xmobarrc2"
+                  return ()
 
 main = do 
           xmobar1 <- spawnPipe "xmobar -x 0 ~/.xmobarrc"
-          xmobar2 <- spawnPipe "xmobar -x 1 ~/.xmobarrc2"
-          xmonad $ withUrgencyHookC FocusHook urgentConfig $ defaultConfig {
+          xmonad $ withUrgencyHookC FocusHook urgentConfig $ defaultConfig { 
                        terminal           = myTerminal,
                        focusFollowsMouse  = myFocusFollowsMouse,
                        borderWidth        = myBorderWidth,
                        modMask            = myModMask,
-                       --numlockMask        = myNumlockMask,
                        workspaces         = myWorkspaces,
                        normalBorderColor  = myNormalBorderColor,
                        focusedBorderColor = myFocusedBorderColor,
@@ -223,5 +223,5 @@ main = do
                        layoutHook         = myLayout,
                        manageHook         = myManageHook <+> manageDocks,
                        startupHook        = myStartupHook,
-                       logHook            = myLogHook' xmobar1 xmobar2
+                       logHook            = myLogHook xmobar1
                      }

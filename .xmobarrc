@@ -3,10 +3,10 @@ Config { font = "xft:Terminus-8:style=Bold"
     , fgColor = "grey"
     , position = Top
     , lowerOnStart = True
-    , commands = [ Run Com "atitemp" [] "ati" 60
+    , commands = [ Run StdinReader
+                 , Run Com "atitemp" [] "ati" 60
                  , Run Date "%a %b %_d %H:%M" "date" 10
                  , Run Weather "ENVA" ["-t","<station>: <tempC>C"] 3600
-                 , Run StdinReader
                  ]
     , sepChar = "%"
     , alignSep = "}{"

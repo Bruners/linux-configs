@@ -1,0 +1,3 @@
+cat ~/.quodlibet/np | xsel -p;
+cat ~/.quodlibet/np | xsel -s;
+cat ~/.quodlibet/np | xsel -b;

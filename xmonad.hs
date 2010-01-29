@@ -59,7 +59,7 @@ myDefaultGaps = [(18,0,0,0)]
 -- use xev to fin key codes
 myKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
-    , ((mM        , xK_p      ), spawn "run_dmenu"                 ) -- Launch dmenu
+    , ((mM        , xK_p      ), spawn "exe=`dmenu_path | dmenu -nb \"#000000\" -nf \"#ffffff\" -fn \"terminus-8\"` && eval \"exec $exe\"")  -- Launch dmenu
    -- , ((mM .|. sM , xK_p      ), spawn "PieDock"                   ) -- Spawn PieDock
     , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
@@ -81,8 +81,8 @@ myKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows
     , ((mM .|. sM , xK_q      ), io (exitWith ExitSuccess)         ) -- Quit xmonad
     , ((mM        , xK_q      ), restart "xmonad" True             ) -- Restart xmonad
-    , ((mM        , xK_Print  ), spawn "run_scrot"                 ) -- Capture with scrot
-    , ((cM        , xK_Print  ), spawn "run_cscrot"                ) -- Capture clicked
+    , ((mM        , xK_Print  ), spawn "run_scrot scr"             ) -- screenshot screen
+    , ((mM .|. sM , xK_Print  ), spawn "run_scrot win"             ) -- screenshot window or area
     , ((mM        , xK_Left   ), prevWS                            ) -- Cycle previous WS
     , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
     , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous

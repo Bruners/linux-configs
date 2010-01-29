@@ -15,6 +15,7 @@ alias reboot="shutdown -r now"
 alias shutdown="shutdown -h now"
 alias hostip="wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1"
 alias world="sudo paludis -i world"
+alias inquisitio="sudo inquisitio"
 
 fans() {
 	if [ $1 ] ; then

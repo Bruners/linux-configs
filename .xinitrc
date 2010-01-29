@@ -15,17 +15,16 @@ trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut t
 xsetroot -cursor_name left_ptr &
 xset m 0 0 &
 setxkbmap no &
-xmodmap ~/.Xmodmap &
+#xmodmap ~/.Xmodmap &
 
-#find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
-nitrogen --restore &
+find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
+#nitrogen --restore &
 # Launch apps
 # xscreensaver &
-ossxmix -b &
 thunar --daemon &
 deluge &
 pulseaudio -D &
 urxvtd -q -f -o &
-pidgin &
+#pidgin &
 numlockx &
-xmonad
+exec xmonad

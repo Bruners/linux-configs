@@ -1,4 +1,4 @@
-URxvt*font:			xft:Monospace:pixelsize=11:antialias=true:hinting=true
+URxvt*font:		xft:Monospace:pixelsize=11:antialias=true:hinting=true
 URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
 URxvt.depth: 32
 URxvt*shading:		30
@@ -16,7 +16,7 @@ URxvt*utmpInhibit:	true
 URxvt*scrollTtyOutput: false
 URxvt*scrollWithBuffer: false
 URxvt*scrollTtyKeypress: true
-URxvt*borderLess:	true
+!URxvt*borderLess:	true
 URxvt*skipBuiltinGlyphs: true
 URxvt*mouseWheelScrollPage: false
 URxvt*pointerBlank: true

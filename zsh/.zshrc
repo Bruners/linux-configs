@@ -25,6 +25,8 @@ bindkey "\e[3~" delete-char             # Delete
 # Activation
 compinit
 
+PATH=$PATH:/home/lasseb/.bin
+
 # Resource files
 for file in $HOME/.zsh/rc/*.rc; do
 	source $file

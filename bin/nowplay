@@ -1,1 +1,12 @@
-cat ~/.quodlibet/np
+#!/bin/sh
+# check if quodlibet is running, else print out n/a
+
+if [ `pgrep quodlibet` ];  then
+	if [ -f $HOME/.quodlibet/np ]; then
+		cat ~/.quodlibet/np
+	else
+		echo "np plugin missing"	
+	fi
+else
+	echo "n/a"
+fi

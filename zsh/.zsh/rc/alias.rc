@@ -16,6 +16,8 @@ alias shutdown="shutdown -h now"
 alias hostip="wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1"
 alias world="sudo paludis -i world"
 alias inquisitio="sudo inquisitio"
+alias pkvim="sudo vim /etc/paludis/keywords.conf"
+alias puvim="sudo vim /etc/paludis/use.conf"
 
 fans() {
 	if [ $1 ] ; then

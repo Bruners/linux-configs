@@ -154,7 +154,7 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className --> doCenterFloat | c <- myMatchCenterFloatsC ]
     ]
 
-  where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer"]
+  where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer", "Gpicview"]
         myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview"]
         myMatchAnywhereFloatsT = ["VLC", "vlc"]
 

@@ -17,8 +17,9 @@ xset m 0 0 &
 setxkbmap no &
 #xmodmap ~/.Xmodmap &
 
-find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
-#nitrogen --restore &
+#find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
+nitrogen --restore &
+
 # Launch apps
 # xscreensaver &
 thunar --daemon &

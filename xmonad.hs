@@ -41,16 +41,6 @@ myBorderWidth   = 1
 myModMask       = mod4Mask
 myNumlockMask   = mod2Mask
 
-myWS1 = "1:main"
-myWS2 = "2:www"
-myWS3 = "3:irssi"
-myWS4 = "4:games"
-myWS5 = "5:mp3"
-myWS6 = "6:oof"
-myWS7 = "7:gimp"
-myWS8 = "8"
-myWS9 = "9"
-
 myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9 ]
 myNormalBorderColor  = "#000000"
 myFocusedBorderColor = "#000000"
@@ -119,7 +109,7 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
-myLayout = onWorkspace myWS7 gimp $ standardLayouts
+myLayout = onWorkspace myWS5 gimp $ standardLayouts
   where
      standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| Grid ||| full)
 
@@ -134,6 +124,16 @@ myLayout = onWorkspace myWS7 gimp $ standardLayouts
 
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
+
+myWS1 = "1:main"
+myWS2 = "2:www"
+myWS3 = "3:irssi"
+myWS4 = "4:mp3"
+myWS5 = "5:gimp"
+myWS6 = "6:oof"
+myWS7 = "7:games"
+myWS8 = "8"
+myWS9 = "9"
 
 myManageHook = composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className --> doShift myWS1 | c <- myWS1ShiftC ]
@@ -163,10 +163,10 @@ myManageHook = composeAll . concat $
         myWS1ShiftC = []
         myWS2ShiftC = ["Firefox", "Namoroka"]
         myWS3ShiftC = ["Pidgin"]
-        myWS4ShiftC = ["Wine", "Heroes of Newerth"]
-        myWS5ShiftC = ["Spotify", "Quodlibet"]
+        myWS4ShiftC = ["Spotify", "Quodlibet"]
+        myWS5ShiftC = ["Gimp"]
         myWS6ShiftC = ["OpenOffice.org 3.1"]
-        myWS7ShiftC = ["Gimp"]
+        myWS7ShiftC = ["Wine", "Heroes of Newerth"]
         myWS8ShiftC = []
         myWS9ShiftC = []
         myIgnores = ["trayer"]

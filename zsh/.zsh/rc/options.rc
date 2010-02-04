@@ -6,4 +6,3 @@ setopt AUTOLIST
 setopt AUTOCD
 setopt PRINT_EIGHT_BIT
 setopt NONOMATCH
-setopt nonomatch

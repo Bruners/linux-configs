@@ -1,12 +1,12 @@
 #!/bin/sh
 # check if quodlibet is running, else print out n/a
 
-if [ `quodlibet --status | grep playing -c` = '1' ]; then
-	if [ -f $HOME/.quodlibet/np ]; then
-		cat ~/.quodlibet/np
-	else
-		echo "np plugin missing"	
-	fi
-else
-	echo "n/a"
-fi
+#if [ `quodlibet --status | grep playing -c` = '1' ]; then
+#	if [ -f $HOME/.quodlibet/np ]; then
+#		cat ~/.quodlibet/np
+#	else
+#		echo "np plugin missing"	
+#	fi
+#else
+#	echo "n/a"
+#fi

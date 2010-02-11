@@ -22,6 +22,7 @@ TERM con80x50
 TERM con80x60
 TERM xterm
 TERM rxvt
+TERM rxvt-unicode
 TERM vt100
 TERM Eterm
 
@@ -53,7 +54,7 @@ EXEC 01;32
 # (and any comments you want to add after a '#')
 
 # Archives
-.btm 01;32
+.btm 01;31
 .tar 01;31
 .tgz 01;31
 .arj 01;31
@@ -79,8 +80,15 @@ EXEC 01;32
 .xml 01;36
 
 # Sources
-.c 04;43;30
-.cpp 04;43;30
-.h 00;43;30
-.hpp 00;43;30
-.lua 04;43;30
+.c 01;34
+.cpp 01;34
+.h 01;34
+.hpp 01;34
+.lua 01;34
+
+### audio formats
+.ogg 01;31
+.mp3 01;31
+.flac 01;31
+.wav 01;31
+

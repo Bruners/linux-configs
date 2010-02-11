@@ -9,10 +9,9 @@ Config { font = "xft:Terminus-8:style=Bold"
                  , Run Date "%a %b %_d %H:%M" "date" 10
                  , Run Network "eth0" ["-L","0","-H","32","--normal","orange","--high","chocolate1"] 10
                  , Run Cpu ["-L","10","-H","50","--normal","orange","--high","chocolate1"] 10
-		 , Run CoreTemp ["-L","40","-H","60","-l","lightblue","-n","gray90","-h","red"] 50
-                 , Run Com "nowplay" [] "np" 10
+                 , Run CoreTemp ["-L","40","-H","60","-l","lightblue","-n","gray90","-h","red"] 50
                  ]
     , sepChar = "%"
     , alignSep = "}{"
-    , template = "[%eth0%] [%cpu%] [%memory%] [%coretemp%] [GPU: %ati%C] } %np% { <fc=#ee9a00>%date%</fc>"
+    , template = "[%eth0%] [%cpu%] [%memory%] [%coretemp%] [GPU: %ati%C] } { <fc=#ee9a00>%date%</fc>"
     }

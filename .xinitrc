@@ -26,7 +26,6 @@ nitrogen --restore &
 # Launch apps
 # xscreensaver &
 thunar --daemon &
-deluge &
 pulseaudio -D &
 urxvtd -q -f -o &
 #pidgin &

@@ -99,24 +99,17 @@ path "~/.PieDock/"
 
 # aliases
 # usage: alias [(name|class|title)] VALUE APPLICATION
-alias class "NEdit" nedit
-alias class "Xpdf" xpdf
-alias class "Firefox-bin" firefox
-alias class "Thunderbird-bin" thunderbird
-alias class "OpenOffice.org 2.0" oo
-alias class "MPlayer" mplayer
-alias "xterm" aterm
-alias "Blender" blender
-alias "realplay.bin" realplay
+#
+alias class "Firefox" firefox
+alias class "Heroes of Newerth" run_hon
+#alias class "OpenOffice.org 2.0" oo
+alias class "Mangler" mangler
 
 # sticky icons
 # usage: sticky APPLICATION [COMMAND]
-sticky aterm
-sticky nedit
-sticky opera "opera -notrayicon"
-sticky gimp
-sticky inkscape
-sticky oo "soffice"
+sticky firefox
+sticky mangler
+sticky run_hon
 
 # preload icons
 # usage: preload [(sticky|all|none)]

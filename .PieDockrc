@@ -1,0 +1,123 @@
+# window size
+# usage: size PIXELS
+size 256
+
+# observe Fitts' Law and make each pie-slice extend to the edge of the screen?
+# http://en.wikipedia.org/wiki/Fitts%27_law
+# usage: fitts (0|1)
+fitts 1
+
+# do you want to have an icon title in the middle of the pie?
+# usage: title (0|1)
+title 1
+
+# what font do you want to use for the title?
+# usage: font FAMILY SIZE [COLOR] [SHADOW]
+#font Impact 16.0 #ffffff #000000
+
+# zoom icons on mouse-over ?
+# usage: zoom VALUE
+# VALUE can be any float from 0.0 (no zoom) - 1.0 (full zoom)
+#zoom 0.3
+
+# should clicking in the middle of the menu have any effect?
+# usage: centre (Ignore|NearestIcon|Disappear|Toggle)
+centre Disappear
+
+# should triggers still work if some mask (like Num_Lock) is enabled?
+# if for some weird reason you don't want this, make sure you put this
+# statement BEFORE any "trigger" lines.
+# usage: ignore-mask KEY
+#ignore-mask Num_Lock
+
+# activation keys and (pointer) buttons
+# usage: trigger [CONTENTS] (button|key) [MODIFIER] (KEY|BUTTON)
+# available menu contents are;
+#   Stickies or Launchers - only shows sticky icons
+#   WindowList            - only shows open windows
+#   Mixed                 - shows both (running apps are marked)
+#
+# If you get "X Error of failed request:  BadAccess", somebody other program
+# have grabbed that key or button already.
+trigger Stickies button Mod4 3
+trigger button Mod1 4
+trigger button Mod1 5
+trigger key Mod4 Tab
+
+# button configuration or what the mouse-buttons do while the menu is open
+# usage: button [BUTTON] [ACTION]
+# available actions are:
+#   Launch       - start the program identified by that icon
+#   ShowNext     - show next window of icon, or launch if not running
+#   ShowPrevious - show previous of icon,    or launch if not running
+#   Hide         - hide next window of icon  (minimize / iconify)
+#   Close        - close next window of icon (might lose data!)
+#   SpinUp       - spin menu up              (rotate)
+#   SpinDown     - spin menu down            (rotate widdershins)
+#   SpinNext     - spin to next icon         (rotate)
+#   SpinPrevious - spin to previous icon     (rotate widdershins)
+#   Disappear    - hide pie menu
+#   Toggle       - switch Stickies/Launchers menu to WindowList, and vice versa
+button 1 ShowNext
+button 2 Toggle
+button 3 Launch
+button 4 SpinNext
+button 5 SpinPrevious
+
+# key configuration or what the keys on the keyboard do while the menu is open
+# usage: key KEYSYM ACTION
+# available actions: same as in button configuration
+key Escape Disappear
+key Return ShowNext
+key Up SpinNext
+key Down SpinPrevious
+
+# spin-step: how far we'll spin the menu on SpinUp/SpinDown
+# usage: spin-step [-0.75 ... 0.75]
+# default: 0.5 negative values reverse direction widdershins/deasil
+#spin-step -0.5
+
+# focused and unfocused alpha transparency
+# usage: (focused|unfocused) VALUE
+# VALUE 0..255 - lower values mean higher transparency, higher values mean
+# higher opacity
+focused 255
+unfocused 64
+
+# start radius of appearing animation
+# usage: start-radius VALUE
+# VALUE can be any float from 0.0 (start form centre) - 1.0 (no start animation)
+start-radius .9
+
+# active indicator or what should mark an icon as having windows
+# usage: active-indicator FILE [(left|center|right)] [(top|center|bottom)]
+active-indicator "~/.PieDock/active-indicator.png" right bottom
+
+# path to PNG files, the files must be named like the application
+# usage: path PATH
+path "~/.PieDock/"
+
+# aliases
+# usage: alias [(name|class|title)] VALUE APPLICATION
+alias class "NEdit" nedit
+alias class "Xpdf" xpdf
+alias class "Firefox-bin" firefox
+alias class "Thunderbird-bin" thunderbird
+alias class "OpenOffice.org 2.0" oo
+alias class "MPlayer" mplayer
+alias "xterm" aterm
+alias "Blender" blender
+alias "realplay.bin" realplay
+
+# sticky icons
+# usage: sticky APPLICATION [COMMAND]
+sticky aterm
+sticky nedit
+sticky opera "opera -notrayicon"
+sticky gimp
+sticky inkscape
+sticky oo "soffice"
+
+# preload icons
+# usage: preload [(sticky|all|none)]
+preload sticky

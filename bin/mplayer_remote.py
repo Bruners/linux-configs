@@ -1,5 +1,12 @@
 #!/usr/bin/env python
+# HOWTO:
+# | cd ~/.mplayer
+# | mkfifo rc
+# | chmod a+rw rc
+# | echo input:file=~/.mplayer/rc >> ~/.mplayer/config
+#
 # source http://bit-rot.blogspot.com/2009/07/mplayer-remote-control-using-cellphone.html
+#
 
 import curses.wrapper
 pipe_location="/home/lasseb/.mplayer/rc"

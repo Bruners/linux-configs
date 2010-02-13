@@ -23,7 +23,7 @@ def main(stdscr):
 	stdscr.addstr("Fullscreen on/off", green)
 	stdscr.addstr("\nN - ")
 	stdscr.addstr("Skip file", green)
-	stdscr.addstr("\nB - ")
+	stdscr.addstr("\nH - ")
 	stdscr.addstr("Previous file", green)
 	stdscr.addstr("\nJ - ")
 	stdscr.addstr("Jump subtitles", green)
@@ -60,7 +60,7 @@ def main(stdscr):
 			pipe.write("seek -600"+"\n")
 		elif c==ord('n'):
 			pipe.write("pt_step 1"+"\n")
-		elif c==ord('b'):
+		elif c==ord('h'):
 			pipe.write("pt_step -1"+"\n")
 		elif c==curses.KEY_UP:
 			pipe.write("volume +1"+"\n")

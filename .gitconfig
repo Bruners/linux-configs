@@ -1,0 +1,7 @@
+[user]
+	name = Bruners
+	email = bruners@gmail.com
+[color]
+	diff = auto
+	status = auto
+	branch = auto

@@ -28,6 +28,6 @@ nitrogen --restore &
 thunar --daemon &
 pulseaudio -D &
 urxvtd -q -f -o &
-#pidgin &
+pidgin &
 numlockx &
 exec xmonad

@@ -132,7 +132,7 @@ myWS4 = "4:mp3"
 myWS5 = "5:gimp"
 myWS6 = "6:oof"
 myWS7 = "7:games"
-myWS8 = "8"
+myWS8 = "8:wine"
 myWS9 = "9"
 
 myManageHook = composeAll . concat $
@@ -167,8 +167,8 @@ myManageHook = composeAll . concat $
         myWS4ShiftC = ["Spotify", "Quodlibet"]
         myWS5ShiftC = ["Gimp"]
         myWS6ShiftC = ["OpenOffice.org 3.1"]
-        myWS7ShiftC = ["Wine", "Heroes of Newerth"]
-        myWS8ShiftC = []
+        myWS7ShiftC = ["Heroes of Newerth"]
+        myWS8ShiftC = ["Wine"]
         myWS9ShiftC = []
         myIgnores = ["trayer"]
 

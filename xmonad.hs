@@ -81,7 +81,7 @@ myKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((0         , 0x1008ff13), spawn "vol+"                      ) -- Raise volume
     , ((0         , 0x1008ff12), spawn "mute"                      ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
-    , ((mM        , xK_b      ), sendMessage ToggleStruts          )
+    , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     ]
     ++
     -- mod-[1..9], Switch to workspace N

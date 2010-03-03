@@ -77,9 +77,9 @@ myKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
     , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
     , ((mM .|. sM , xK_Right  ), shiftToNext                       ) -- Move WS next WS
-    , ((0         , 0x1008ff11), spawn "vol-"                      ) -- Reduce volume
-    , ((0         , 0x1008ff13), spawn "vol+"                      ) -- Raise volume
-    , ((0         , 0x1008ff12), spawn "mute"                      ) -- Mute volume
+    , ((0         , 0x1008ff11), spawn "~/.bin/vol-"                      ) -- Reduce volume
+    , ((0         , 0x1008ff13), spawn "~/.bin/vol+"                      ) -- Raise volume
+    , ((0         , 0x1008ff12), spawn "~/.bin/mute"                      ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     ]

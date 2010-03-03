@@ -16,8 +16,8 @@ xsetroot -cursor_name left_ptr &
 xset m 0 0 &
 setxkbmap no &
 
-if [ -f $HOME/.Xmodmap ]; then
-    /usr/bin/xmodmap $HOME/.Xmodmap &
+if [ -f /home/lasseb/.Xmodmap ]; then
+    /usr/bin/xmodmap /home/lasseb/.Xmodmap &
 fi
 
 #find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &

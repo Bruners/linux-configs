@@ -3,7 +3,7 @@ URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
 URxvt.depth: 32
 URxvt*shading:		30
 URxvt*transparent:	true
-URxvt*saveLines:	2048
+URxvt*saveLines:	4096
 URxvt*visualBell:	true
 URxvt*scrollBar:	False
 URxvt*cursorColor:	#ffcc00
@@ -11,13 +11,13 @@ URxvt*loginShell:	true
 URxvt*termName:		rxvt-unicode
 URxvt*print-pipe:	cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
 URxvt*secondaryScroll:	true
-URxvt*mapAlert:		true
-URxvt*utmpInhibit:	true
+!URxvt*mapAlert:		true
+!URxvt*utmpInhibit:	true
 URxvt*scrollTtyOutput: false
-URxvt*scrollWithBuffer: false
+URxvt*scrollWithBuffer: true
 URxvt*scrollTtyKeypress: true
 !URxvt*borderLess:	true
-URxvt*skipBuiltinGlyphs: true
+!URxvt*skipBuiltinGlyphs: true
 URxvt*mouseWheelScrollPage: false
 URxvt*pointerBlank: true
 URxvt*pointerBlankDelay: 5
@@ -26,30 +26,11 @@ URxvt*keysym.Home: \033[1~
 URxvt*keysym.End: \033[4~
 URxvt*perl-lib:           /usr/lib/urxvt/perl/
 URxvt*perl-ext-common:    default,matcher
-URxvt*urlLauncher:        /usr/bin/firefox
+URxvt*urlLauncher:        /usr/bin/chromium
 URxvt*matcher.button:     1
-
-xcalc*font: -windows-dina-bold-r-normal--13-80-96-96-c-70-microsoft-cp1252
-xclock*update:            1
-xclock*analog:            false
-xclock*Foreground:        white
-xclock*background:        black
 
 Xcursor*theme: whiteglass
 Xcursor*size: 16
-
-xterm*eightBitInput: False
-xterm*font: -*-dina-medium-r-*-*-*-*-*-*-*-*-*-*
-xterm*dynamicColors: True
-xterm*utf8: 2
-xterm*saveLines: 32767
-xterm*scrollBar: False
-xterm*loginShell: True
-xterm*scrollTtyKeypress: True
-xterm*scrollTtyOutput: True
-xterm*jumpScroll: True
-xterm*mutiScroll: True
-xterm*toolBar: false
 
 xcalc*geometry:                        200x275
 xcalc.ti.bevel.background:             #111111

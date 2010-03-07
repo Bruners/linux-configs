@@ -14,11 +14,6 @@ trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut t
 
 xsetroot -cursor_name left_ptr &
 xset m 0 0 &
-setxkbmap no &
-
-if [ -f /home/lasseb/.Xmodmap ]; then
-    /usr/bin/xmodmap /home/lasseb/.Xmodmap &
-fi
 
 #find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
 nitrogen --restore &
@@ -30,4 +25,7 @@ pulseaudio -D &
 urxvtd -q -f -o &
 pidgin &
 numlockx &
+setxkbmap no &
+xmodmap /home/lasseb/.Xmodmap &
+
 exec xmonad

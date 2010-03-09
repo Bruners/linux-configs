@@ -27,5 +27,5 @@ pidgin &
 numlockx &
 setxkbmap no &
 xmodmap /home/lasseb/.Xmodmap &
-
+#/home/lasseb/.bin/xrscreens &
 exec xmonad

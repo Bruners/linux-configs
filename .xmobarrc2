@@ -1,7 +1,7 @@
 Config { font = "xft:Terminus-8:style=Bold"
     , bgColor = "black"
     , fgColor = "grey"
-    , position = Static { xpos = 0, ypos = 0, width = 1440, height = 15 }
+    , position = Top
     , lowerOnStart = True
     , commands = [ Run Memory ["-L","0","-H","30","--normal","orange","--high","chocolate1","-t","Mem: <usedratio>%"] 10
                  , Run Swap [] 10

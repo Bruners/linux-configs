@@ -260,9 +260,9 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
 
 mushimStartupHook = do
                      return ()
-armorStartupHook = do
+armorStartupHook =  do
                      spawnOnce "xmobar -x 1 ~/.xmobarrc2" -- Spawn our second xmobar on monitor 1
-                     return ()
+		     return ()
 
 main = do
           host <- fmap nodeName getSystemID
@@ -285,6 +285,6 @@ main = do
                       , startupHook        = (if host == "mushim" then
                                                mushimStartupHook
                                              else
-					       armorStartupHook)
+                                               armorStartupHook)
                       , logHook            = myLogHook xmobar1
                      }

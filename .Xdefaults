@@ -1,6 +1,6 @@
 URxvt*font:		xft:Monospace:pixelsize=11:antialias=true:hinting=true
 URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
-URxvt.depth: 32
+URxvt.depth: 24
 URxvt*shading:		30
 URxvt*transparent:	true
 URxvt*saveLines:	4096
@@ -25,7 +25,7 @@ URxvt*urgentOnBell:	true
 URxvt*keysym.Home: \033[1~
 URxvt*keysym.End: \033[4~
 URxvt*perl-lib:           /usr/lib/urxvt/perl/
-URxvt*perl-ext-common:    default,matcher
+URxvt*perl-ext-common:    matcher
 URxvt*urlLauncher:        /usr/bin/chromium
 URxvt*matcher.button:     1
 

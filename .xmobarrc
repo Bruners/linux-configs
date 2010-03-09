@@ -1,7 +1,7 @@
 Config { font = "xft:Terminus-8:style=Bold"
     , bgColor = "black"
     , fgColor = "grey"
-    , position = TopW L 93
+    , position = { xpos = 0, ypos = 1440, width = 1050, height = 15 }
     , lowerOnStart = True
     , commands = [ Run StdinReader
                  , Run Com "atitemp" [] "ati" 60

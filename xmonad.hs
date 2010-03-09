@@ -202,11 +202,11 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 
 myStartupHook = do
-                  spawnOnce "xmobar -x 1 ~/.xmobarrc2" -- Spawn our second xmobar on monitor 1
+                  spawnOnce "xmobar ~/.xmobarrc2" -- Spawn our second xmobar on monitor 1
                   return ()
 
 main = do 
-          xmobar1 <- spawnPipe "xmobar -x 0 ~/.xmobarrc"
+          xmobar1 <- spawnPipe "xmobar ~/.xmobarrc"
           xmonad $ defaultConfig { 
                        terminal           = myTerminal,
                        focusFollowsMouse  = myFocusFollowsMouse,

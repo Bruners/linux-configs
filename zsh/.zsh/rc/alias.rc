@@ -19,6 +19,7 @@ alias inquisitio="sudo inquisitio"
 alias pkvim="sudo vim /etc/paludis/keywords.conf"
 alias puvim="sudo vim /etc/paludis/use.conf"
 alias eix="sudo inquisitio"
+alias lss="qsize -a -k | sort -n -k 6"
 
 fans() {
 	if [ $1 ] ; then

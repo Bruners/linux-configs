@@ -1,0 +1,13 @@
+style "scroll"
+{
+    GtkScrollbar::slider-width        = 5
+    }
+
+    class "*" style "scroll"
+
+gtk-toolbar-style = GTK_TOOLBAR_ICONS
+gtk-toolbar-icon-size = GTK_ICON_SIZE_SMALL_TOOLBAR
+gtk-button-images=0
+gtk-menu-images=0
+gtk-menu-popup-delay=1
+gtk-icon-size="gtk-large-toolbar=16,16:gtk-small-toolbar=16,16:panel-menu=16,16:panel=16,16:gtk-button=16,16:gtk-dialog=24,24"

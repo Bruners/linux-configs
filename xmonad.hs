@@ -182,15 +182,15 @@ myLayout = onWorkspace myWS5 gimp $ standardLayouts
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
 
-myWS1 = "1:main"
-myWS2 = "2:www"
-myWS3 = "3:irssi"
-myWS4 = "4:mp3"
-myWS5 = "5:gimp"
-myWS6 = "6:oof"
-myWS7 = "7:games"
-myWS8 = "8:wine"
-myWS9 = "9"
+myWS1 = " 1:main "
+myWS2 = " 2:www "
+myWS3 = " 3:irssi "
+myWS4 = " 4:mp3 "
+myWS5 = " 5:gimp "
+myWS6 = " 6:oof "
+myWS7 = " 7:games "
+myWS8 = " 8:wine "
+myWS9 = " 9 "
 
 myManageHook = composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className --> doShift myWS1 | c <- myWS1ShiftC ]

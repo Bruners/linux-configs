@@ -18,6 +18,7 @@ alias world="sudo paludis -i world"
 alias inquisitio="sudo inquisitio"
 alias pkvim="sudo vim /etc/paludis/keywords.conf"
 alias puvim="sudo vim /etc/paludis/use.conf"
+alias pmvim="sudo vim /etc/paludis/package_unmask.conf"
 alias eix="sudo inquisitio"
 alias lss="qsize -a -k | sort -n -k 6"
 

@@ -21,11 +21,11 @@ nitrogen --restore &
 # Launch apps
 # xscreensaver &
 thunar --daemon &
-pulseaudio -D &
+#pulseaudio -D &
 urxvtd -q -f -o &
 pidgin &
 numlockx &
-setxkbmap no &
+setxkbmap no -model evdev &
 xmodmap /home/lasseb/.Xmodmap &
-#/home/lasseb/.bin/xrscreens &
+/home/lasseb/.bin/xrscreens &
 exec xmonad

@@ -18,6 +18,10 @@ import XMonad.Layout.Grid
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 
+-- Prompt.Shell replacement for dmenu
+import XMonad.Prompt
+import XMonad.Prompt.Shell
+
 -- Switch desktops
 
 import XMonad.Actions.CycleWS
@@ -50,7 +54,7 @@ myDmenu = "exe=`dmenu_path | dmenu -nb \"#000000\" -nf \"#ffffff\" -fn \"terminu
 -- use xev to fin key codes
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
-    , ((mM        , xK_p      ), spawn myDmenu                     )  -- Launch dmenu
+    , ((mM        , xK_p      ), shellPrompt defaultXPConfig       )  -- Launch dmenu
    -- , ((mM .|. sM , xK_p      ), spawn "PieDock"                   ) -- Spawn PieDock
     , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
@@ -78,9 +82,12 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
     , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
     , ((mM .|. sM , xK_Right  ), shiftToNext                       ) -- Move WS next WS
-    , ((0         , 0x1008ff11), spawn "~/.bin/vol-"               ) -- Reduce volume
-    , ((0         , 0x1008ff13), spawn "~/.bin/vol+"               ) -- Raise volume
-    , ((0         , 0x1008ff12), spawn "~/.bin/mute"               ) -- Mute volume
+    , ((0         , 0x1008ff11), spawn "~/.bin/oss4_hd_ctl -d 2"   ) -- Reduce volume
+    , ((0         , 0x1008ff13), spawn "~/.bin/oss4_hd_ctl -i 2"   ) -- Raise volume
+    , ((0         , 0x1008ff12), spawn "~/.bin/oss4_hd_ctl -t"     ) -- Mute volume
+    , ((mM        , 0x1008ff11), spawn "~/.bin/oss4_sb_ctl -d 2"   ) -- Reduce volume
+    , ((mM        , 0x1008ff13), spawn "~/.bin/oss4_sb_ctl -i 2"   ) -- Raise volume
+    , ((mM        , 0x1008ff12), spawn "~/.bin/oss4_sb_ctl -t"     ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     ]

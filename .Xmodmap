@@ -1,9 +1,4 @@
-remove Lock = Caps_Lock
-keysym Scroll_Lock = Caps_Lock
-keysym Caps_Lock = Scroll_Lock
-
-add Lock = Caps_Lock
-
+keycode 66 = XF86Launch1
 keycode  93 = XF86Launch1
 keycode 129 = XF86Launch8
 keycode 130 = XF86Launch9
@@ -51,3 +46,4 @@ keycode 246 = XF86iTouch
 keycode 247 = XF86Launch3
 keycode 249 = XF86ToDoList
 keycode 251 = XF86Calculater
+clear Lock

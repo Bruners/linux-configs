@@ -5,7 +5,7 @@
 # Load Resources
 
 xrdb -merge ~/.Xdefaults &
-
+setxkbmap no &
 # Set up an icon tray
 
 trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 9 --widthtype percent --transparent true --tint 0x000000 &
@@ -25,7 +25,7 @@ thunar --daemon &
 urxvtd -q -f -o &
 pidgin &
 numlockx &
-setxkbmap no -model evdev &
+xmodmap -e "clear Lock"
 xmodmap /home/lasseb/.Xmodmap &
-/home/lasseb/.bin/xrscreens &
+#/home/lasseb/.bin/xrscreens &
 exec xmonad

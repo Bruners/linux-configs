@@ -220,7 +220,7 @@ myManageHook = composeAll . concat $
     ]
 
   where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer", "Gpicview"]
-        myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview"]
+        myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar"]
         myMatchAnywhereFloatsT = ["VLC", "vlc"]
 
         myIBrowserFloat = ["Dialog", "Extension", "Browser", "Downloads"]

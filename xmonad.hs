@@ -54,7 +54,8 @@ myDmenu = "exe=`dmenu_path | dmenu -nb \"#000000\" -nf \"#ffffff\" -fn \"terminu
 -- use xev to fin key codes
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
-    , ((mM        , xK_p      ), shellPrompt defaultXPConfig       )  -- Launch dmenu
+    , ((mM        , xK_p      ), shellPrompt defaultXPConfig       )  -- Launch shellPromt
+    , ((mM .|. sM , xK_p      ), spawn myDmenu                     )  -- Launch dmenu
    -- , ((mM .|. sM , xK_p      ), spawn "PieDock"                   ) -- Spawn PieDock
     , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
@@ -110,7 +111,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
 
 mushimKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
-    , ((mM        , xK_p      ), spawn myDmenu                     )  -- Launch dmenu
+    , ((mM        , xK_p      ), spawn myDmenu                     ) -- Launch dmenu
     , ((mM .|. sM , xK_p      ), spawn "gmrun"                     ) -- Launch gmrun
     , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate through the available layout agorithms
@@ -199,19 +200,11 @@ myWS7 = " 7:games "
 myWS8 = " 8:wine "
 myWS9 = " 9 "
 
+
 myManageHook = composeAll . concat $
-    [ [ fmap ( c `isInfixOf`) className --> doShift myWS1 | c <- myWS1ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS2 | c <- myWS2ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS3 | c <- myWS3ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS4 | c <- myWS4ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS5 | c <- myWS5ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS6 | c <- myWS6ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS7 | c <- myWS7ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS8 | c <- myWS8ShiftC ]
-    , [ fmap ( c `isInfixOf`) className --> doShift myWS9 | c <- myWS9ShiftC ]
---    , [ isFullscreen --> doFullFloat ]
+    [ [ fmap ( c `isInfixOf`) className --> doShift myW | (myW,  cs) <- myWSShiftC, c <- cs ]
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
-    , [ className =? myIBrowser <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
+    , [ className =? myIBrowser <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
     , [ resource  =? "desktop_window" --> doIgnore ]
     , [ resource  =? "kdesktop"       --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className --> doFloat | c <- myMatchAnywhereFloatsC ]
@@ -225,17 +218,16 @@ myManageHook = composeAll . concat $
 
         myIBrowserFloat = ["Dialog", "Extension", "Browser", "Downloads"]
         myIBrowser = "Firefox"
-        myWS1ShiftC = []
-        myWS2ShiftC = ["Firefox", "Namoroka", "Chrome"]
-        myWS3ShiftC = ["Pidgin", "Mangler"]
-        myWS4ShiftC = ["Spotify", "Quodlibet"]
-        myWS5ShiftC = ["Gimp"]
-        myWS6ShiftC = ["OpenOffice.org 3.1"]
-        myWS7ShiftC = ["Heroes of Newerth"]
-        myWS8ShiftC = ["Wine"]
-        myWS9ShiftC = []
-        myIgnores = ["trayer"]
-
+        myWSShiftC = [ (myWS1, [])
+                     , (myWS2, ["Firefox", "Namoroka", "Chrome"])
+                     , (myWS3, ["Pidgin", "Mangler"])
+                     , (myWS4, ["Spotify", "Quodlibet"])
+                     , (myWS5, ["Gimp"])
+                     , (myWS6, ["OpenOffice.org 3.1"])
+                     , (myWS7, ["Heroes of Newerth"])
+                     , (myWS8, ["Wine"])
+                     , (myWS9, [])
+                     ]
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True

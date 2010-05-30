@@ -1,0 +1,41 @@
+#!/bin/bash
+
+EDITOR="sudo vim"
+
+UNMASK="u"
+PATH_UNMASK="/etc/paludis/package_unmask.conf"
+
+MASK="m"
+PATH_MASK="/etc/paludis/package_mask.conf"
+
+KEYWORDS="k"
+PATH_KEYWORDS="/etc/paludis/keywords.conf"
+
+USE="o"
+PATH_USE="/etc/paludis/use.conf"
+
+if [ "$1" = $UNMASK ]; then
+	$EDITOR $PATH_UNMASK;
+fi
+
+if [ "$1" = $MASK ]; then
+	$EDITOR $PATH_MASK;
+fi
+
+if [ "$1" = $KEYWORDS ]; then
+	$EDITOR $PATH_KEYWORDS;
+fi
+
+if [ "$1" = $USE ]; then
+        $EDITOR $PATH_USE;
+fi
+if [[ $# = 0 ]]; then
+	# Display a warning
+	echo "No file specified, valid options are:"
+	echo "${MASK} - ${PATH_MASK}"
+	echo "${UNMASK} - ${PATH_UNMASK}"
+	echo "${KEYWORDS} - ${PATH_KEYWORDS}"
+	echo "${USE} - ${PATH_USE}"
+fi
+
+

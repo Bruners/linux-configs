@@ -7,7 +7,7 @@ Config { font = "xft:Terminus-8:style=Bold"
                  , Run Swap [] 10
                  , Run Com "atitemp" [] "ati" 60
                  , Run Date "%a %b %_d %H:%M" "date" 10
-                 , Run Network "eth0" ["-L","0","-H","32","--normal","orange","--high","chocolate1"] 10
+                 , Run Network "wlan0" ["-L","0","-H","32","--normal","orange","--high","chocolate1"] 10
                  , Run Cpu ["-L","10","-H","50","--normal","orange","--high","chocolate1"] 10
                  , Run CoreTemp ["-L","40","-H","60","-l","lightblue","-n","gray90","-h","red"] 50
                  ]

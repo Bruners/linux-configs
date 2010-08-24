@@ -6,7 +6,7 @@ eval `dircolors $HOME/.zsh/colors`
 autoload -U zutil
 autoload -U compinit
 autoload -U complist
-
+zstyle ':completion::complete:*' use-cache 1
 # mad I know, prefering emacs bindings when I'm a vim user!
 bindkey -e
 

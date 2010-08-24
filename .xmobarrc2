@@ -13,5 +13,5 @@ Config { font = "xft:Terminus-8:style=Bold"
                  ]
     , sepChar = "%"
     , alignSep = "}{"
-    , template = "[%eth0%] [%cpu%] [%memory%] [%coretemp%] [GPU: %ati%C] } { <fc=#ee9a00>%date%</fc>"
+    , template = "[%wlan0%] [%cpu%] [%memory%] [%coretemp%] [GPU: %ati%C] } { <fc=#ee9a00>%date%</fc>"
     }

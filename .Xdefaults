@@ -1,8 +1,9 @@
 URxvt*font:		xft:Monospace:pixelsize=11:antialias=true:hinting=true
 URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
-URxvt.depth: 24
-URxvt*shading:		30
-URxvt*transparent:	true
+URxvt.depth: 32
+URxvt*background: rgba:0000/0000/0000/aaaa
+URxvt*shading:		15
+URxvt*transparent:	false
 URxvt*saveLines:	4096
 URxvt*visualBell:	true
 URxvt*scrollBar:	False
@@ -31,6 +32,8 @@ URxvt*matcher.button:     1
 
 Xcursor*theme: whiteglass
 Xcursor*size: 16
+
+!xcalc-----------------------------------------------------------------------
 
 xcalc*geometry:                        200x275
 xcalc.ti.bevel.background:             #111111
@@ -76,6 +79,7 @@ xcalc.ti.button38.background: #555595
 xcalc.ti.button39.background: #555595
 XCalc*Cursor:                 hand2
 XCalc*ShapeStyle:             rectangle
+
 
 x11-ssh-askpass*font:                   -*-dina-medium-r-*-*-12-*-*-*-*-*-*-*
 x11-ssh-askpass*background:             #000000

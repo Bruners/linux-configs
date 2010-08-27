@@ -21,11 +21,11 @@ nitrogen --restore &
 # Launch apps
 # xscreensaver &
 thunar --daemon &
-#pulseaudio -D &
+ossxmix -b &
+wicd-client &
 urxvtd -q -f -o &
 pidgin &
 numlockx &
 xmodmap -e "clear Lock"
 xmodmap /home/lasseb/.Xmodmap &
-#/home/lasseb/.bin/xrscreens &
 exec xmonad

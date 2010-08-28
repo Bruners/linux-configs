@@ -1,9 +1,9 @@
 URxvt*font:		xft:Monospace:pixelsize=11:antialias=true:hinting=true
 URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
-URxvt.depth: 32
+URxvt.depth: 24
 URxvt*background: rgba:0000/0000/0000/aaaa
-URxvt*shading:		15
-URxvt*transparent:	false
+URxvt*shading:		25
+URxvt*transparent:	true
 URxvt*saveLines:	4096
 URxvt*visualBell:	true
 URxvt*scrollBar:	False

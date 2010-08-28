@@ -174,12 +174,13 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
-myLayout = onWorkspace myWS5 gimp $ standardLayouts
+myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS5 gimp $ standardLayouts
   where
      standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     gimp  = avoidStruts $ withIM (0.11) (Role "gimp-toolbox") $
+     irc   = reflectHoriz $ withIM (0.20) (ClassName "Pidgin") $ tiled
+     gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
              withIM (0.15) (Role "gimp-dock") Full
      full = noBorders Full
@@ -202,25 +203,26 @@ myWS9 = " 9 "
 
 
 myManageHook = composeAll . concat $
-    [ [ fmap ( c `isInfixOf`) className --> doShift myW | (myW,  cs) <- myWSShiftC, c <- cs ]
+    [ [ fmap ( c `isInfixOf`) className --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
+    , [ fmap ( c `isInfixOf`) title --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
     , [ className =? myIBrowser <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
+    , [ className =? "Pidgin" <&&> fmap ( c `isInfixOf`) (stringProperty "WM_WINDOW_ROLE") --> doCenterFloat | c <- myPidginFloat ]
     , [ resource  =? "desktop_window" --> doIgnore ]
-    , [ resource  =? "kdesktop"       --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className --> doFloat | c <- myMatchAnywhereFloatsC ]
-    , [ fmap ( c `isInfixOf`) title     --> doFloat | c <- myMatchAnywhereFloatsT ]
+    , [ fmap ( c `isInfixOf`) title     --> doFloat | c <- myMatchAnywhereFloatsC ]
     , [ fmap ( c `isInfixOf`) className --> doCenterFloat | c <- myMatchCenterFloatsC ]
     ]
 
-  where myMatchAnywhereFloatsC = ["Google", "Pidgin", "Pavucontrol", "MPlayer", "Gpicview"]
+  where myMatchAnywhereFloatsC = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "VLC", "vlc"]
         myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar"]
-        myMatchAnywhereFloatsT = ["VLC", "vlc"]
 
-        myIBrowserFloat = ["Dialog", "Extension", "Browser", "Downloads"]
+        myIBrowserFloat = ["Dialog", "Extension", "Browser", "Download", "Manager"]
+        myPidginFloat = ["conversation", "accounts", "pounces", "certmgr"]
         myIBrowser = "Firefox"
-        myWSShiftC = [ (myWS1, [])
+        myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox", "Namoroka", "Chrome"])
-                     , (myWS3, ["Pidgin", "Mangler"])
+                     , (myWS3, ["IRC", "Pidgin", "Mangler"])
                      , (myWS4, ["Spotify", "Quodlibet"])
                      , (myWS5, ["Gimp"])
                      , (myWS6, ["OpenOffice.org 3.1"])
@@ -249,6 +251,7 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
                        "Mirror ResizableTall" -> "[-]"
                        "Grid" -> "[+]"
                        "IM ReflectX IM Full" -> "[G]"
+                       "ReflectX IM ResizableTall" -> "[@]"
                        _ -> x
                      )
                      , ppSep = " - "

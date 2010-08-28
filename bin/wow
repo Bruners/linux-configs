@@ -1,0 +1,3 @@
+#!/bin/bash
+wine /games/World\ of\ Warcraft/Wow.exe -opengl
+

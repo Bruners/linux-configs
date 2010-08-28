@@ -9,7 +9,7 @@ setxkbmap no &
 # Set up an icon tray
 
 trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 9 --widthtype percent --transparent true --tint 0x000000 &
-
+urxvtd -q -f -o &
 # Set background and cursor
 
 xsetroot -cursor_name left_ptr &
@@ -23,12 +23,11 @@ nitrogen --restore &
 thunar --daemon &
 ossxmix -b &
 wicd-client &
-urxvtd -q -f -o &
-pidgin &
 numlockx &
 xmodmap -e "clear Lock"
 xmodmap /home/lasseb/.Xmodmap &
 urxvt -name IRC &
+pidgin &
 #xcompmgr -sfF &
 #xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 exec xmonad

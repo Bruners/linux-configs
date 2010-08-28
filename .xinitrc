@@ -28,6 +28,7 @@ pidgin &
 numlockx &
 xmodmap -e "clear Lock"
 xmodmap /home/lasseb/.Xmodmap &
+urxvt -name IRC &
 #xcompmgr -sfF &
-xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
+#xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 exec xmonad

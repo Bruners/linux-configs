@@ -1,7 +1,7 @@
 URxvt*font:		xft:Monospace:pixelsize=11:antialias=true:hinting=true
 URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
-URxvt.depth: 24
-URxvt*background: rgba:0000/0000/0000/aaaa
+URxvt*depth: 		24
+URxvt*background: 	rgba:0000/0000/0000/aaaa
 URxvt*shading:		25
 URxvt*transparent:	true
 URxvt*saveLines:	4096
@@ -14,12 +14,12 @@ URxvt*print-pipe:	cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
 URxvt*secondaryScroll:	true
 !URxvt*mapAlert:		true
 !URxvt*utmpInhibit:	true
-URxvt*scrollTtyOutput: false
+URxvt*scrollTtyOutput: 	false
 URxvt*scrollWithBuffer: true
 URxvt*scrollTtyKeypress: true
 !URxvt*borderLess:	true
 !URxvt*skipBuiltinGlyphs: true
-URxvt*mouseWheelScrollPage: false
+!URxvt*mouseWheelScrollPage: true
 URxvt*pointerBlank: true
 URxvt*pointerBlankDelay: 5
 URxvt*urgentOnBell:	true
@@ -29,6 +29,8 @@ URxvt*perl-lib:           /usr/lib/urxvt/perl/
 URxvt*perl-ext-common:    matcher
 URxvt*urlLauncher:        /usr/bin/firefox
 URxvt*matcher.button:     1
+
+IRC*title:              IRC
 
 Xcursor*theme: whiteglass
 Xcursor*size: 16

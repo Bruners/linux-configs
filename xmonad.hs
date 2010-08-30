@@ -179,7 +179,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS5 gimp $ standa
      standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = reflectHoriz $ withIM (0.20) (ClassName "Pidgin") $ tiled
+     irc   = reflectHoriz $ withIM (0.20) (ClassName "Pidgin") $ standardLayouts
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
              withIM (0.15) (Role "gimp-dock") Full

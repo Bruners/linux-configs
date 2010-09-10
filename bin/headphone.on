@@ -1,0 +1,2 @@
+ossmix jack.int-speaker.mute ON
+ossmix jack.green.mute OFF

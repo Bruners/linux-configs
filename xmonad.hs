@@ -174,12 +174,12 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
-myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS5 gimp $ standardLayouts
+myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS5 gimp $ onWorkspace myWS7 full $ standardLayouts
   where
      standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = reflectHoriz $ withIM (0.20) (ClassName "Pidgin") $ standardLayouts
+     irc   = reflectHoriz $ withIM (0.20) (ClassName "Pidgin") $ reflectHoriz $ standardLayouts
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
              withIM (0.15) (Role "gimp-dock") Full
@@ -225,7 +225,7 @@ myManageHook = composeAll . concat $
                      , (myWS3, ["IRC", "Pidgin", "Mangler"])
                      , (myWS4, ["Spotify", "Quodlibet"])
                      , (myWS5, ["Gimp"])
-                     , (myWS6, ["OpenOffice.org 3.1"])
+                     , (myWS6, ["OpenOffice.org 3.2"])
                      , (myWS7, ["Heroes of Newerth"])
                      , (myWS8, ["Wine"])
                      , (myWS9, [])

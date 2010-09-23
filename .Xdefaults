@@ -29,6 +29,7 @@ URxvt*perl-lib:           /usr/lib/urxvt/perl/
 URxvt*perl-ext-common:    matcher
 URxvt*urlLauncher:        /usr/bin/firefox
 URxvt*matcher.button:     1
+URxvt*cutchars: `"()'*<>[]{|}
 
 IRC*title:              IRC
 

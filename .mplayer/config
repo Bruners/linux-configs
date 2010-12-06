@@ -4,3 +4,4 @@
 ao=oss
 input:file=/home/lasseb/.mplayer/rc
 menu=yes
+fs=yes

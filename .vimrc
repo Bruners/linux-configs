@@ -1,2 +1,2 @@
 syntax on
-colorscheme desert
+colorscheme neverland

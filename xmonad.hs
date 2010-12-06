@@ -17,6 +17,8 @@ import XMonad.Layout.Reflect
 import XMonad.Layout.Grid
 import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.ThreeColumns
+import XMonad.Layout.Tabbed
 
 -- Prompt.Shell replacement for dmenu
 import XMonad.Prompt
@@ -174,12 +176,17 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
-myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS5 gimp $ onWorkspace myWS7 full $ standardLayouts
+myTabConfig = defaultTheme { inactiveBorderColor = "#FF0000"
+                           , activeTextColor = "#00FF00"
+			   }
+
+myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| standardLayouts) $ onWorkspace myWS7 full $ standardLayouts
   where
-     standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| Grid ||| full)
+     standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
      irc   = reflectHoriz $ withIM (0.20) (ClassName "Pidgin") $ reflectHoriz $ standardLayouts
+     threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
              withIM (0.15) (Role "gimp-dock") Full
@@ -194,12 +201,12 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS5 gimp $ onWork
 myWS1 = " 1:main "
 myWS2 = " 2:www "
 myWS3 = " 3:irssi "
-myWS4 = " 4:mp3 "
-myWS5 = " 5:gimp "
-myWS6 = " 6:oof "
-myWS7 = " 7:games "
-myWS8 = " 8:wine "
-myWS9 = " 9 "
+myWS4 = " 4:code "
+myWS5 = " 5:mp3 "
+myWS6 = " 6:gimp "
+myWS7 = " 7:oof "
+myWS8 = " 8:games "
+myWS9 = " 9:wine "
 
 
 myManageHook = composeAll . concat $
@@ -215,7 +222,7 @@ myManageHook = composeAll . concat $
     ]
 
   where myMatchAnywhereFloatsC = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "VLC", "vlc"]
-        myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar"]
+        myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
 
         myIBrowserFloat = ["Dialog", "Extension", "Browser", "Download", "Manager"]
         myPidginFloat = ["conversation", "accounts", "pounces", "certmgr"]
@@ -223,12 +230,12 @@ myManageHook = composeAll . concat $
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox", "Namoroka", "Chrome"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler"])
-                     , (myWS4, ["Spotify", "Quodlibet"])
-                     , (myWS5, ["Gimp"])
-                     , (myWS6, ["OpenOffice.org 3.2"])
-                     , (myWS7, ["Heroes of Newerth"])
-                     , (myWS8, ["Wine"])
-                     , (myWS9, [])
+                     , (myWS4, [])
+		     , (myWS5, ["Spotify", "Quodlibet"])
+                     , (myWS6, ["Gimp"])
+                     , (myWS7, ["OpenOffice.org 3.2"])
+                     , (myWS8, ["Heroes of Newerth"])
+                     , (myWS9, ["Wine"])
                      ]
 
 myFocusFollowsMouse :: Bool
@@ -251,7 +258,9 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
                        "Mirror ResizableTall" -> "[-]"
                        "Grid" -> "[+]"
                        "IM ReflectX IM Full" -> "[G]"
-                       "ReflectX IM ResizableTall" -> "[@]"
+                       "ReflectX IM ReflectX ResizableTall" -> "[@]"
+		       "Tabbed Simplest" -> "[\"]"
+		       "ThreeCol" -> "[3]"
                        _ -> x
                      )
                      , ppSep = " - "

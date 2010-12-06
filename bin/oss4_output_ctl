@@ -1,0 +1,36 @@
+#!/bin/bash
+
+DSP="/dev/dsp"
+
+LINE="sudo ln -sf"
+
+SB="sb"
+SB_PATH="/dev/oss/oss_sblive0/pcm0"
+
+HD="hd"
+HD_PATH="/dev/oss/oss_hdaudio0/pcm0"
+
+if [ "$1" = $SB ]; then
+	echo "Dsp is set to:"
+	ossinfo -a | grep '/dev/dsp ->'
+	echo "Changing output to ${SB_PATH}"
+	$LINE $SB_PATH $DSP;
+fi
+
+if [ "$1" = $HD ]; then
+        echo "Dsp is set to:"
+        ossinfo -a | grep '/dev/dsp ->'
+        echo "Changing output to ${HD_PATH}"
+	$LINE $HD_PATH $DSP;
+fi
+
+if [[ $# = 0 ]]; then
+	# Display a warning
+	echo "No input specified, valid options are:"
+	echo "${SB} - ${SB_PATH}"
+	echo "${HD} - ${HD_PATH}"
+	echo "Current output is set to"
+	ossinfo -a | grep '/dev/dsp ->'
+fi
+
+

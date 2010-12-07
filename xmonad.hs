@@ -35,6 +35,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
+import XMonad.Hooks.Place
 import Data.List
 
 import qualified XMonad.StackSet as W
@@ -221,7 +222,7 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className --> doCenterFloat | c <- myMatchCenterFloatsC ]
     ]
 
-  where myMatchAnywhereFloatsC = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "VLC", "vlc"]
+  where myMatchAnywhereFloatsC = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "VLC", "vlc", "File-roller"]
         myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
 
         myIBrowserFloat = ["Dialog", "Extension", "Browser", "Download", "Manager"]
@@ -292,7 +293,7 @@ main = do
                                                armorKeys)
                       , mouseBindings      = myMouseBindings
                       , layoutHook         = myLayout
-                      , manageHook         = myManageHook <+> manageDocks
+                      , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks
                       , startupHook        = (if host == "mushim" then
                                                mushimStartupHook
                                              else

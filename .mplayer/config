@@ -1,10 +1,10 @@
 # Write your default config options here!
 #
 #
-vo=vdpau,xv,
-#vc=ffmpeg12vdpau,ffvc1vdpau,ffwmv3vdpau
-monitoraspect=16:9
+vo=vdpau,xv
+#vc=ffmpeg12vdpau,ffh264vdpau,ffodivxvdpau
+#monitoraspect=16:10
 ao=oss
 input:file=/home/lasseb/.mplayer/rc
-menu=yes
+#menu=yes
 fs=yes

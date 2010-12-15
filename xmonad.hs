@@ -19,6 +19,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Tabbed
+import XMonad.Util.Themes
 
 -- Prompt.Shell replacement for dmenu
 import XMonad.Prompt
@@ -177,8 +178,13 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
-myTabConfig = defaultTheme { inactiveBorderColor = "#FF0000"
-                           , activeTextColor = "#00FF00"
+myTabConfig = defaultTheme { activeColor         = "black"
+                           , activeBorderColor   = "black"
+                           , activeTextColor     = "#ee9a00"
+                           , inactiveColor       = "black"
+                           , inactiveBorderColor = "black"
+                           , inactiveTextColor   = "white"
+			   , decoHeight          = 10
 			   }
 
 myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| standardLayouts) $ onWorkspace myWS7 full $ standardLayouts
@@ -186,7 +192,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| sta
      standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = reflectHoriz $ withIM (0.20) (ClassName "Pidgin") $ reflectHoriz $ standardLayouts
+     irc   = reflectHoriz $ withIM (0.15) (ClassName "Pidgin") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
@@ -273,12 +279,12 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
 mushimStartupHook = do
                      return ()
 armorStartupHook =  do
-                     spawnOnce "xmobar -x 1 ~/.xmobarrc2" -- Spawn our second xmobar on monitor 1
+                     spawnOnce "xmobar -x 1 ~/.xmonad/xmobarrc2" -- Spawn our second xmobar on monitor 1
 		     return ()
 
 main = do
           host <- fmap nodeName getSystemID
-          xmobar1 <- spawnPipe "xmobar -x 0 ~/.xmobarrc"
+          xmobar1 <- spawnPipe "xmobar -x 0 ~/.xmonad/xmobarrc"
           xmonad $ defaultConfig 
                       { terminal           = myTerminal
                       , focusFollowsMouse  = myFocusFollowsMouse

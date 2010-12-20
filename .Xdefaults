@@ -4,7 +4,7 @@ URxvt*depth: 		32
 URxvt*background: 	rgba:0000/0000/0000/aaaa
 URxvt*shading:		25
 URxvt*transparent:	false
-URxvt*saveLines:	4096
+URxvt*saveLines:	8192
 URxvt*visualBell:	true
 URxvt*scrollBar:	False
 URxvt*cursorColor:	#ffcc00

@@ -180,11 +180,11 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
 myTabConfig = defaultTheme { activeColor         = "black"
                            , activeBorderColor   = "black"
-                           , activeTextColor     = "#ee9a00"
+                           , activeTextColor     = "#black"
                            , inactiveColor       = "black"
                            , inactiveBorderColor = "black"
-                           , inactiveTextColor   = "white"
-			   , decoHeight          = 10
+                           , inactiveTextColor   = "#ee9a00"
+			   , decoHeight          = 12
 			   }
 
 myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| standardLayouts) $ onWorkspace myWS7 full $ standardLayouts

@@ -11,3 +11,16 @@ gtk-button-images=0
 gtk-menu-images=0
 gtk-menu-popup-delay=1
 gtk-icon-size="gtk-large-toolbar=16,16:gtk-small-toolbar=16,16:panel-menu=16,16:panel=16,16:gtk-button=16,16:gtk-dialog=24,24"
+
+pixmap_path "~/.themes/"
+style "my-blist" {
+bg_pixmap[NORMAL] = "pidgin-background.png"
+text[NORMAL] = "#ffffff"
+#this makes the text white, if you want black, take this code:
+#text[NORMAL] = "#000000"
+bg[NORMAL] = "#8C8C8C"
+base[NORMAL] = "#8C8C8C"
+GtkTreeView::odd_row_color = ""
+GtkTreeView::even_row_color = ""
+}
+widget "*pidgin_blist_treeview" style "my-blist"

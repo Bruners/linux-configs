@@ -21,6 +21,7 @@ alias pmvim="sudo vim /etc/paludis/package_unmask.conf"
 alias eix="sudo cave search"
 alias lss="qsize -a -k | sort -n -k 6"
 alias randep="find . | mplayer -fs -shuffle -playlist -"
+alias allep"=find . | mplayer -fs -playlist -"
 
 fans() {
 	if [ $1 ] ; then

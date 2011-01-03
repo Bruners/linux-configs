@@ -50,7 +50,7 @@ myBorderWidth   = 1
 myModMask       = mod4Mask
 myNumlockMask   = mod2Mask
 
-myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9 ]
+myWorkspaces = [ myWS0, myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9 ]
 myNormalBorderColor  = "#000000"
 myFocusedBorderColor = "#000000"
 myDefaultGaps = [(18,0,0,0)]
@@ -95,12 +95,13 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , 0x1008ff12), spawn "~/.bin/oss4_sb_ctl -t"     ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
+    , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
     ]
     ++
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
     [((m .|. mM, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_0 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
@@ -154,7 +155,7 @@ mushimKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     -- mod-shift-[1..9], Move client to workspace N
     --
     [((m .|. mM, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_0 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
 
@@ -205,6 +206,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| sta
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
 
+myWS0 = " 0:p2p"
 myWS1 = " 1:main "
 myWS2 = " 2:www "
 myWS3 = " 3:irssi "
@@ -223,15 +225,14 @@ myManageHook = composeAll . concat $
     , [ className =? myIBrowser <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
     , [ className =? "Pidgin" <&&> fmap ( c `isInfixOf`) (stringProperty "WM_WINDOW_ROLE") --> doCenterFloat | c <- myPidginFloat ]
     , [ resource  =? "desktop_window" --> doIgnore ]
-    , [ fmap ( c `isInfixOf`) className --> doFloat | c <- myMatchAnywhereFloatsC ]
-    , [ fmap ( c `isInfixOf`) title     --> doFloat | c <- myMatchAnywhereFloatsC ]
-    , [ fmap ( c `isInfixOf`) className --> doCenterFloat | c <- myMatchCenterFloatsC ]
+    , [ fmap ( c `isInfixOf`) className --> doFloat | c <- myMatchAnywhereFloats ]
+    , [ fmap ( c `isInfixOf`) title     --> doFloat | c <- myMatchAnywhereFloats ]
+    , [ fmap ( c `isInfixOf`) className --> doCenterFloat | c <- myMatchCenterFloats ]
     ]
 
-  where myMatchAnywhereFloatsC = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "VLC", "vlc", "File-roller"]
-        myMatchCenterFloatsC = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
-
-        myIBrowserFloat = ["Dialog", "Extension", "Browser", "Download", "Manager"]
+  where myMatchAnywhereFloats = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "VLC", "vlc", "File-roller"]
+        myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
+        myIBrowserFloat = ["Dialog", "Extension", "Browser", "Download", "Manager", "Places"]
         myPidginFloat = ["conversation", "accounts", "pounces", "certmgr"]
         myIBrowser = "Firefox"
         myWSShift = [ (myWS1, [])

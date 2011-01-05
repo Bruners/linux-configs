@@ -1,0 +1,8 @@
+table Icon
+  Caption: Warcraft 3
+  Icon: /home/lasseb/.idesktop/wc3.png
+  X: 1969
+  Y: 229
+  Command[0]: env WINEPREFIX="/home/lasseb/.wine" wine "Z:\games\Warcraft III\Warcraft III.exe"
+end
+

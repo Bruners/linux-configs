@@ -1,0 +1,10 @@
+table Icon
+  Caption: Spotifty
+  Icon: /home/lasseb/.local/share/icons/bdbf_spotify.0.png
+  Width: 48
+  Height: 48
+  X: 1969
+  Y: 149
+  Command[0]: spotify
+end
+

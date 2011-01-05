@@ -1,0 +1,8 @@
+table Icon
+  Caption: Heroes of Newerth
+  Icon: /home/lasseb/.idesktop/hon.png
+  X: 1969
+  Y: 389
+  Command[0]: /games/hon/hon.sh
+end
+

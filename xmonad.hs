@@ -179,6 +179,10 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 --    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
+--
+-- Color config for the tabbed layout
+--
+
 myTabConfig = defaultTheme { activeColor         = "black"
                            , activeBorderColor   = "black"
                            , activeTextColor     = "#black"
@@ -203,8 +207,9 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| sta
      ratio   = 1/2
      delta   = 3/100
 
--- To find the property name associated with a program, use xprop | grep WM_CLASS
--- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
+-- 
+-- Workspace variables for easy renaming
+--
 
 myWS0 = " 0:p2p"
 myWS1 = " 1:main "
@@ -218,11 +223,13 @@ myWS8 = " 8:games "
 myWS9 = " 9:wine "
 
 
+-- To find the property name associated with a program, use xprop | grep WM_CLASS
+-- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
+
 myManageHook = composeAll . concat $
-    [ [ fmap ( c `isInfixOf`) className --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
-    , [ fmap ( c `isInfixOf`) title --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
+    [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
-    , [ className =? myIBrowser <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
+    , [ className =? "Firefox" <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
     , [ className =? "Pidgin" <&&> fmap ( c `isInfixOf`) (stringProperty "WM_WINDOW_ROLE") --> doCenterFloat | c <- myPidginFloat ]
     , [ resource  =? "desktop_window" --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat | c <- myMatchAnywhereFloats ]
@@ -233,7 +240,6 @@ myManageHook = composeAll . concat $
         myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
         myIBrowserFloat = ["Dialog", "Extension", "Browser", "Download", "Manager", "Places"]
         myPidginFloat = ["conversation", "accounts", "pounces", "certmgr"]
-        myIBrowser = "Firefox"
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox", "Namoroka", "Chrome"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler"])

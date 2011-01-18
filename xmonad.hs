@@ -229,8 +229,7 @@ myWS9 = " 9:wine "
 myManageHook = composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
-    , [ className =? "Firefox" <&&> fmap ( c `isInfixOf`) resource --> doFloat | c <- myIBrowserFloat ]
-    , [ className =? "Pidgin" <&&> fmap ( c `isInfixOf`) (stringProperty "WM_WINDOW_ROLE") --> doCenterFloat | c <- myPidginFloat ]
+    , [ classNotRole (cnf) --> doCenterFloat | (cnf) <- windowFloats ]
     , [ resource  =? "desktop_window" --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat | c <- myMatchAnywhereFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat | c <- myMatchCenterFloats ]
@@ -238,8 +237,10 @@ myManageHook = composeAll . concat $
 
   where myMatchAnywhereFloats = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
         myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
-        myIBrowserFloat = ["Dialog", "Extension", "Browser", "Download", "Manager", "Places"]
-        myPidginFloat = ["conversation", "accounts", "pounces", "certmgr"]
+        classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r <||> resource /=? r
+        windowFloats = [ ("Firefox", "browser")
+                       , ("Pidgin", "buddy_list")
+                       ]
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox", "Namoroka", "Chrome"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler"])

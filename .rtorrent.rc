@@ -1,0 +1,66 @@
+#scgi_local = /home/lasseb/.rtorrent/rpc.socket
+scgi_port = :5000
+
+# Global upload and download rate in KiB. "0" for unlimited.
+upload_rate = 10
+download_rate = 400
+
+# Maximum number of simultanious uploads per torrent.
+max_uploads = 8
+
+# Default directory to save the downloaded torrents before they are completed
+directory = /home/lasseb/.rtorrent/incomplete
+
+# Default session directory. Make sure you don't run multiple instance of rtorrent using the same session directory.
+session = ~/.rtorrent/session
+
+# If you don't want it to automatically start the torrent, change 'load_start' to 'load'
+schedule = watch_directory_1,5,5,"load_start=~/.rtorrent/watch/*.torrent,d.set_custom5=~/.rtorrent/complete/"
+schedule = tied_directory,10,10,start_tied=
+schedule = untied_directory,10,10,close_untied=
+schedule = low_diskspace,5,60,close_low_diskspace=100M
+system.method.set_key = event.download.finished,move_complete,"execute=mv,-u,$d.get_base_path=,$d.get_custom5= ;d.set_directory=$d.get_custom5="
+schedule = filter_active,30,30,"view_filter = active,\"or={d.get_up_rate=,d.get_down_rate=}\""
+
+ratio.enable=
+ratio.min.set=200
+ratio.max.set=300
+ratio.upload.set=20M
+
+system.method.set = group.seeding.ratio.command, d.close=
+encoding_list = UTF-8
+port_range = 38000-38100
+
+use_udp_trackers = yes
+
+# Encryption options, set to none (default) or any combination of the following:
+# allow_incoming, try_outgoing, require, require_RC4, enable_retry, prefer_plaintext
+#
+# encryption = allow_incoming,enable_retry,prefer_plaintext
+encryption = allow_incoming,try_outgoing,enable_retry,require_RC4
+
+# Enable DHT support for trackerless torrents or when all trackers are down.
+# May be set to "disable" (completely disable DHT), "off" (do not start DHT),
+# "auto" (start and stop DHT as needed), or "on" (start DHT immediately).
+# The default is "off". For DHT to work, a session directory must be defined.
+# 
+# dht = auto
+
+# UDP port to use for DHT. 
+# 
+# dht_port = 38105
+
+# Enable peer exchange (for torrents not marked private)
+#
+# peer_exchange = yes
+
+# The following option allow for a hash check whenever a torrent is complete or whenever rTorrent is restarted.
+# This will make sure there are no errors with your acquired/seeding files.
+check_hash = yes
+
+# Available color options:
+# done_fg_color, done_bg_color, active_fg_color, active_bg_color
+# -1 = terminal default 0 = black 1 = red 2 = green
+# 3 = yellow 4 = blue 5 = magenta 6 = cyan 7 = white
+done_fg_color = 2
+active_fg_color = 1

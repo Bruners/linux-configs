@@ -1,0 +1,5 @@
+# sources environment-specific apps
+source "$SCREEN_CONF_DIR/$SCREEN_CONF"
+term screen-256color
+terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+

@@ -21,8 +21,8 @@ alias pmvim="sudo vim /etc/paludis/package_unmask.conf"
 alias eix="sudo cave search"
 alias lss="qsize -a -k | sort -n -k 6"
 alias randep="find . | mplayer -fs -shuffle -playlist -"
-alias allep"=find . | mplayer -fs -playlist -"
-
+alias allep="find . | mplayer -fs -playlist -"
+alias rtorrent="SCREEN_CONF=rtorrent screen -S rtorrent -D -R rtorrent"
 fans() {
 	if [ $1 ] ; then
 		aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ;

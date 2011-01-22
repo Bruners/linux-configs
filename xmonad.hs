@@ -276,13 +276,14 @@ myFocusFollowsMouse = True
 _fg_color = "#909090"
 _bg_color = "#303030"
 _hd_color = "#606060"
+_or_color = "#ee9a00"
 
 myLogHook dzen1 = dynamicLogWithPP $ defaultPP
                      { ppCurrent         = dzenColor "white"   "brown" . pad
                      , ppHidden          = dzenColor _fg_color "" . pad . noScratchPad
                      , ppHiddenNoWindows = dzenColor _hd_color "" . pad . noScratchPad
                      , ppVisible         = dzenColor "white"   "" . pad
-                     , ppUrgent          = dzenColor "white"   "red" . pad . dzenStrip
+                     , ppUrgent          = dzenColor "white"   _or_color . pad . dzenStrip
                      , ppTitle           = dzenColor "green"   "" . shorten 100 . pad
                      , ppWsSep           = ""
                      , ppSep             = " "

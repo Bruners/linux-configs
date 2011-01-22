@@ -4,7 +4,6 @@ import System.Exit
 -- module to get host information
 import System.Posix.Unistd
 -- For Xinerama
-
 import Graphics.X11.Xlib
 import Graphics.X11.Xinerama
 
@@ -26,10 +25,13 @@ import XMonad.Prompt
 import XMonad.Prompt.Shell
 
 -- Switch desktops
-
 import XMonad.Actions.CycleWS
 
--- xmobar
+-- Scratchpad
+import XMonad.Util.Scratchpad
+
+-- Dzen
+import Dzen
 import XMonad.Util.Run (hPutStrLn, spawnPipe)
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog
@@ -49,8 +51,8 @@ myBorderWidth   = 1
 
 myModMask       = mod4Mask
 myNumlockMask   = mod2Mask
+myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
 
-myWorkspaces = [ myWS0, myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9 ]
 myNormalBorderColor  = "#000000"
 myFocusedBorderColor = "#000000"
 myDefaultGaps = [(18,0,0,0)]
@@ -96,12 +98,13 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
+    , ((cM        , xK_Tab    ), sP                                ) -- Spawn a scratchpad terminal
     ]
     ++
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
     [((m .|. mM, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_0 .. xK_9]
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
@@ -113,6 +116,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
 	where 
 	   sM = shiftMask
 	   cM = controlMask
+           sP = scratchpadSpawnActionTerminal "urxvtc -background '#303030'"
 
 mushimKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
@@ -211,16 +215,17 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| sta
 -- Workspace variables for easy renaming
 --
 
-myWS0 = " 0:p2p"
-myWS1 = " 1:main "
-myWS2 = " 2:www "
-myWS3 = " 3:irssi "
-myWS4 = " 4:code "
-myWS5 = " 5:mp3 "
-myWS6 = " 6:gimp "
-myWS7 = " 7:oof "
-myWS8 = " 8:games "
-myWS9 = " 9:wine "
+myWS0  = "0:p2p"
+myWS1  = "1:main"
+myWS2  = "2:www"
+myWS3  = "3:irssi"
+myWS4  = "4:code"
+myWS5  = "5:mp3"
+myWS6  = "6:gimp"
+myWS7  = "7:oof"
+myWS8  = "8:games"
+myWS9  = "9:wine"
+myWS10 = "0:p2p"
 
 
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
@@ -259,14 +264,16 @@ myFocusFollowsMouse = True
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 
-myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
-                     { ppOutput = hPutStrLn xmobar1
-                     , ppCurrent = xmobarColor "white" "brown"
-                     , ppTitle = xmobarColor "green" "" . shorten 200
-                     , ppUrgent = xmobarColor "white" "red"
-                     , ppVisible = xmobarColor "white" ""
-                  -- , ppHidden = wrap "(" ")"
-                     , ppLayout = xmobarColor "grey" "" .
+myLogHook dzen1 = dynamicLogWithPP $ defaultPP
+                     { ppCurrent         = dzenColor "white"   "brown" . pad
+                     , ppHidden          = dzenColor "#909090" "" . pad . noScratchPad
+                     , ppHiddenNoWindows = dzenColor "#606060" "" . pad . noScratchPad
+                     , ppVisible         = dzenColor "white"   "" . pad
+                     , ppUrgent          = dzenColor "white"   "red" . pad . dzenStrip
+                     , ppTitle           = dzenColor "green"   "" . shorten 100 . pad
+                     , ppWsSep           = ""
+                     , ppSep             = " "
+                     , ppLayout          = dzenColor "#909090" "" .
                      (\x -> case x of
                        "Full" -> "[ ]"
                        "ResizableTall" -> "[|]"
@@ -274,12 +281,45 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
                        "Grid" -> "[+]"
                        "IM ReflectX IM Full" -> "[G]"
                        "ReflectX IM ReflectX ResizableTall" -> "[@]"
-		       "Tabbed Simplest" -> "[\"]"
-		       "ThreeCol" -> "[3]"
+                       "Tabbed Simplest" -> "[\"]"
+                       "ThreeCol" -> "[3]"
                        _ -> x
                      )
-                     , ppSep = " - "
+                     , ppOutput            = hPutStrLn dzen1
                      }
+                     where
+                       noScratchPad ws = if ws == "NSP" then "" else ws
+
+-- StatusBars
+
+myLeftBar :: DzenConf
+myLeftBar = defaultDzen
+    -- use the default as a base and override width and colors
+    { width       = 1920
+    , fg_color    = "#909090"
+    , bg_color    = "#303030"
+    }
+
+myRightBar :: DzenConf
+myRightBar = myLeftBar
+    -- use the left one as a base and override just the x position and width
+    { x_position = 1920
+    , width      = 1920
+   , alignment  = RightAlign
+    }
+
+
+-- Scratchpad
+
+manageScratchPad :: ManageHook
+manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
+
+  where
+
+    h = 0.1     -- terminal height, 10%
+    w = 1       -- terminal width, 100%
+    t = 200     -- distance from top edge, 90%
+    l = 200     -- distance from left edge, 0%
 
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.  
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
@@ -287,13 +327,13 @@ myLogHook xmobar1 = dynamicLogWithPP $ defaultPP
 mushimStartupHook = do
                      return ()
 armorStartupHook =  do
-                     spawnOnce "xmobar -x 1 ~/.xmonad/xmobarrc2" -- Spawn our second xmobar on monitor 1
 		     return ()
 
 main = do
           host <- fmap nodeName getSystemID
-          xmobar1 <- spawnPipe "xmobar -x 0 ~/.xmonad/xmobarrc"
-          xmonad $ defaultConfig 
+          dzen1 <- spawnDzen myLeftBar
+          spawnDzen myRightBar
+          xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal
                       , focusFollowsMouse  = myFocusFollowsMouse
                       , borderWidth        = myBorderWidth
@@ -307,10 +347,10 @@ main = do
                                                armorKeys)
                       , mouseBindings      = myMouseBindings
                       , layoutHook         = myLayout
-                      , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks
+                      , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks <+> manageScratchPad
                       , startupHook        = (if host == "mushim" then
                                                mushimStartupHook
                                              else
                                                armorStartupHook)
-                      , logHook            = myLogHook xmobar1
+                      , logHook            = myLogHook dzen1
                      }

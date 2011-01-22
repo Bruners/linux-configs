@@ -8,7 +8,7 @@ xrdb -merge ~/.Xdefaults &
 setxkbmap no &
 
 # Set up an icon tray
-trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 9 --widthtype percent --transparent true --tint 0x303030 &
+trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 10 --widthtype percent --transparent true --tint 0x303030 &
 
 # Start urxvt daemon
 urxvtd -q -f -o &

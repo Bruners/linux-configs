@@ -295,20 +295,27 @@ myLogHook dzen1 = dynamicLogWithPP $ defaultPP
 
 -- StatusBars
 
-myLeftBar :: DzenConf
-myLeftBar = defaultDzen
+myLeftBar1 :: DzenConf
+myLeftBar1 = defaultDzen
     -- use the default as a base and override width and colors
-    { width       = 1920
+    { width       = 960
     , fg_color    = "#909090"
     , bg_color    = "#303030"
     }
 
-myRightBar :: DzenConf
-myRightBar = myLeftBar
+myLeftBar2 :: DzenConf
+myLeftBar2 = myLeftBar1
+    { x_position  = 960
+    , width       = 960
+    , alignment   = RightAlign
+    }
+
+myRightBar1 :: DzenConf
+myRightBar1 = myLeftBar2
     -- use the left one as a base and override just the x position and width
     { x_position = 1920
-    , width      = 1920
-   , alignment  = RightAlign
+    , width      = 1769
+    , alignment  = RightAlign
     }
 
 
@@ -334,8 +341,9 @@ armorStartupHook =  do
 main :: IO ()
 main = do
           host <- fmap nodeName getSystemID
-          dzen1 <- spawnDzen myLeftBar
-          spawn $ "conky -c /home/lasseb/.xmonad/dzen_conkyrc | " ++ dzen myRightBar
+          dzen1 <- spawnDzen myLeftBar1
+          spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar2
+          spawn $ "conky -c /home/lasseb/.xmonad/dzen_right1 | " ++ dzen myRightBar1
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal
                       , focusFollowsMouse  = myFocusFollowsMouse

@@ -1,0 +1,21 @@
+# conkyrc file for dzen
+###
+
+background no
+out_to_console yes
+out_to_x no
+override_utf8_locale yes
+update_interval 1
+total_run_times 0
+
+TEXT
+${if_existing /home/lasseb/.quodlibet/current} \
+^fg(\#87CEEB)${exec quodlibet --print-playing "<title>"}^fg() by \
+^fg(\#999444)${exec quodlibet --print-playing "<artist>"}^fg() from \
+^fg(\#449922)${exec quodlibet --print-playing "<album>"}^fg() \
+${endif} \
+Cpu: ^fg(\#FF9090)${cpu}%^fg() \
+Mem: ^fg(\#FF9090)${memperc}%^fg() \
+Gpu: ^fg(\#FF9090)${execi 60 nvidia-settings -query GPUCoreTemp | perl -ne 'print $1 if /GPUCoreTemp.*?: (\d+)./;'}°C^fg() \
+Net: ^fg(\#FF9090)${downspeedf wlan0} / ${upspeedf wlan0}^fg()  \
+^fg(\#ee9a00)${time %H:%M:%S }^fg()

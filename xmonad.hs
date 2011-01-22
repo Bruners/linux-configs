@@ -99,6 +99,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
     , ((cM        , xK_Tab    ), sP                                ) -- Spawn a scratchpad terminal
+    , ((mM        , xK_0      ), windows $ W.view myWS10           ) -- Move to workspace 10
     ]
     ++
     -- mod-[1..9], Switch to workspace N
@@ -107,6 +108,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
     ++
+
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     [((m .|. mM, key), screenWorkspace sc >>= flip whenJust (windows . f))
@@ -190,16 +192,20 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- Color config for the tabbed layout
 --
 
-myTabConfig = defaultTheme { activeColor         = "black"
-                           , activeBorderColor   = "black"
-                           , activeTextColor     = "#black"
-                           , inactiveColor       = "black"
-                           , inactiveBorderColor = "black"
+myTabConfig = defaultTheme { activeColor         = _fg_color
+                           , activeBorderColor   = _fg_color
+                           , activeTextColor     = _bg_color
+                           , inactiveColor       = _bg_color
+                           , inactiveBorderColor = _bg_color
                            , inactiveTextColor   = "#ee9a00"
-			   , decoHeight          = 12
-			   }
+                           , decoHeight          = 13
+                           }
 
-myLayout = avoidStruts $ onWorkspace myWS3 irc $ onWorkspace myWS6 (gimp ||| standardLayouts) $ onWorkspace myWS7 full $ standardLayouts
+myLayout = avoidStruts $ onWorkspace myWS3 irc $ 
+                         onWorkspace myWS6 (gimp ||| standardLayouts) $ 
+                         onWorkspace myWS7 full $ 
+                         onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
+                         standardLayouts
   where
      standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
@@ -267,16 +273,20 @@ myFocusFollowsMouse = True
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 
+_fg_color = "#909090"
+_bg_color = "#303030"
+_hd_color = "#606060"
+
 myLogHook dzen1 = dynamicLogWithPP $ defaultPP
                      { ppCurrent         = dzenColor "white"   "brown" . pad
-                     , ppHidden          = dzenColor "#909090" "" . pad . noScratchPad
-                     , ppHiddenNoWindows = dzenColor "#606060" "" . pad . noScratchPad
+                     , ppHidden          = dzenColor _fg_color "" . pad . noScratchPad
+                     , ppHiddenNoWindows = dzenColor _hd_color "" . pad . noScratchPad
                      , ppVisible         = dzenColor "white"   "" . pad
                      , ppUrgent          = dzenColor "white"   "red" . pad . dzenStrip
                      , ppTitle           = dzenColor "green"   "" . shorten 100 . pad
                      , ppWsSep           = ""
                      , ppSep             = " "
-                     , ppLayout          = dzenColor "#909090" "" .
+                     , ppLayout          = dzenColor _fg_color "" .
                      (\x -> case x of
                        "Full" -> "[ ]"
                        "ResizableTall" -> "[|]"
@@ -299,8 +309,8 @@ myLeftBar1 :: DzenConf
 myLeftBar1 = defaultDzen
     -- use the default as a base and override width and colors
     { width       = 960
-    , fg_color    = "#909090"
-    , bg_color    = "#303030"
+    , fg_color    = _fg_color
+    , bg_color    = _bg_color
     }
 
 myLeftBar2 :: DzenConf

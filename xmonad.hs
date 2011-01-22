@@ -231,13 +231,14 @@ myManageHook = composeAll . concat $
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
     , [ classNotRole (cnf) --> doCenterFloat | (cnf) <- windowFloats ]
     , [ resource  =? "desktop_window" --> doIgnore ]
+    , [ resource  =? "idesk" --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat | c <- myMatchAnywhereFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat | c <- myMatchCenterFloats ]
     ]
 
   where myMatchAnywhereFloats = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
         myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
-        classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r <||> resource /=? r
+        classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser")
                        , ("Pidgin", "buddy_list")
                        ]

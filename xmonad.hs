@@ -34,7 +34,7 @@ import XMonad.Util.Scratchpad
 import Dzen
 import XMonad.Util.Run (hPutStrLn, spawnPipe)
 import XMonad.Util.SpawnOnce
-import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.DynamicLog hiding (dzen)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
@@ -82,7 +82,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)        ) -- Increment windows
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows
     , ((mM .|. sM , xK_q      ), io (exitWith ExitSuccess)         ) -- Quit xmonad
-    , ((mM        , xK_q      ), restart "xmonad" True             ) -- Restart xmonad
+    , ((mM        , xK_q      ), myRestart                         ) -- Restart xmonad
     , ((mM        , xK_Print  ), spawn "run_scrot scr"             ) -- Screenshot screen
     , ((mM .|. sM , xK_Print  ), spawn "run_scrot win"             ) -- Screenshot window or area
     , ((mM        , xK_Left   ), prevWS                            ) -- Cycle previous WS
@@ -117,6 +117,9 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
 	   sM = shiftMask
 	   cM = controlMask
            sP = scratchpadSpawnActionTerminal "urxvtc -background '#303030'"
+           myRestart = spawn $ "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
+                               "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
+                               "xmonad --recompile && xmonad --restart"
 
 mushimKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
@@ -328,11 +331,11 @@ mushimStartupHook = do
                      return ()
 armorStartupHook =  do
 		     return ()
-
+main :: IO ()
 main = do
           host <- fmap nodeName getSystemID
           dzen1 <- spawnDzen myLeftBar
-          spawnDzen myRightBar
+          spawn $ "conky -c /home/lasseb/.xmonad/dzen_conkyrc | " ++ dzen myRightBar
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal
                       , focusFollowsMouse  = myFocusFollowsMouse

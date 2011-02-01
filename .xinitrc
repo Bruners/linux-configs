@@ -36,7 +36,8 @@ numlockx &
 (sleep 3 && xmodmap -e "clear Lock") &
 (sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
 (sleep 3 && urxvt -name IRC) &
-pidgin &
+#pidgin &
+empathy
 #xcompmgr -sfF &
 #xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 cairo-compmgr &

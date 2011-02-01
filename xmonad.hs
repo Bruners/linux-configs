@@ -210,7 +210,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
      standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = reflectHoriz $ withIM (0.15) (ClassName "Pidgin") $ reflectHoriz $ standardLayouts
+     irc   = reflectHoriz $ withIM (0.15) (ClassName "Empathy") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
@@ -255,10 +255,11 @@ myManageHook = composeAll . concat $
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser")
                        , ("Pidgin", "buddy_list")
-                       ]
+                       , ("Empathy", "contact_list")
+		       ]
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox", "Namoroka", "Chrome"])
-                     , (myWS3, ["IRC", "Pidgin", "Mangler"])
+                     , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
                      , (myWS4, [])
 		     , (myWS5, ["Spotify", "Quodlibet"])
                      , (myWS6, ["Gimp"])

@@ -251,7 +251,7 @@ myManageHook = composeAll . concat $
     ]
 
   where myMatchAnywhereFloats = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
-        myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm"]
+        myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Gmpc"]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser")
                        , ("Pidgin", "buddy_list")
@@ -309,26 +309,37 @@ myLogHook dzen1 = dynamicLogWithPP $ defaultPP
 myLeftBar1 :: DzenConf
 myLeftBar1 = defaultDzen
     -- use the default as a base and override width and colors
-    { width       = 960
-    , fg_color    = _fg_color
-    , bg_color    = _bg_color
+    { Dzen.width       = 960
+    , Dzen.height      = 18
+    , Dzen.fg_color    = _fg_color
+    , Dzen.bg_color    = _bg_color
     }
 
 myLeftBar2 :: DzenConf
 myLeftBar2 = myLeftBar1
-    { x_position  = 960
-    , width       = 960
-    , alignment   = RightAlign
+    { Dzen.x_position  = 960
+    , Dzen.width       = 960
+    , Dzen.height      = 18
+    , Dzen.alignment   = RightAlign
     }
 
 myRightBar1 :: DzenConf
 myRightBar1 = myLeftBar2
     -- use the left one as a base and override just the x position and width
-    { x_position = 1920
-    , width      = 1769
-    , alignment  = RightAlign
+    { Dzen.x_position = 1920
+    , Dzen.width      = 960
+    , Dzen.height     = 18
+    , Dzen.alignment  = LeftAlign
     }
 
+myRightBar2 :: DzenConf
+myRightBar2 = myRightBar1
+    -- use the left one as a base and override just the x position and width
+    { Dzen.x_position = 2880
+    , Dzen.width      = 807
+    , Dzen.height     = 18
+    , Dzen.alignment  = RightAlign
+    } 
 
 -- Scratchpad
 
@@ -354,7 +365,8 @@ main = do
           host <- fmap nodeName getSystemID
           dzen1 <- spawnDzen myLeftBar1
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar2
-          spawn $ "conky -c /home/lasseb/.xmonad/dzen_right1 | " ++ dzen myRightBar1
+          spawn $ "/home/lasseb/.bin/dzen_mpd.sh"
+          spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar2
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal
                       , focusFollowsMouse  = myFocusFollowsMouse

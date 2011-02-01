@@ -1,3 +1,5 @@
+#!/bin/sh
+#
 # conkyrc file for dzen
 ###
 
@@ -7,16 +9,9 @@ out_to_x no
 override_utf8_locale yes
 update_interval 1
 total_run_times 0
+GDBAR=gdbar
 
 TEXT
-${if_existing /home/lasseb/.quodlibet/current} \
-^i(.share/icons/dzen/play.xbm) \
-^fg(\#87CEEB)${exec quodlibet --print-playing "<title>"}^fg() by \
-^fg(\#999444)${exec quodlibet --print-playing "<artist>"}^fg() from \
-^fg(\#449922)${exec quodlibet --print-playing "<album>"}^fg() \
-${endif} \
-^fg(\#eeffcc)^i(.share/icons/dzen/cpu.xbm) ^fg(\#BBBBBB)${cpu}%^fg() \
-^fg(\#eeffcc)^i(.share/icons/dzen/mem.xbm) ^fg(\#BBBBBB)${memperc}%^fg() \
-^fg(\#eeffcc)^i(.share/icons/dzen/temp.xbm) ^fg(\#BBBBBB)${execi 60 nvidia-settings -query GPUCoreTemp | perl -ne 'print $1 if /GPUCoreTemp.*?: (\d+)./;'}°C^fg() \
-^fg(\#eeffcc)^i(.share/icons/dzen/net_down_03.xbm) ^fg(\#BBBBBB)${downspeedf wlan0}^fg(\#eeffcc) ^i(.share/icons/dzen/net_up_03.xbm) ^fg(\#BBBBBB)${upspeedf wlan0}^fg() \
-^fg(\#eeffcc)^i(.share/icons/dzen/clock.xbm) ^fg(\#ee9a00)${time %a %d/%m/%y %H:%M:%S }^fg()
+^i(.share/icons/dzen/drive-harddisk-2_16x16.xpm) ${hddtemp /dev/sda} \
+^i(.share/icons/dzen/ac.xbm) ${hddtemp /dev/sda} \
+^i(.share/icons/dzen/ac.xbm) ${hddtemp /dev/sda} \

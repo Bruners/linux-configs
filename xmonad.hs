@@ -203,7 +203,7 @@ myTabConfig = defaultTheme { activeColor         = _fg_color
 
 myLayout = avoidStruts $ onWorkspace myWS3 irc $ 
                          onWorkspace myWS6 (gimp ||| standardLayouts) $ 
-                         onWorkspace myWS7 full $ 
+                         onWorkspace myWS8 full $ 
                          onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          standardLayouts
   where
@@ -279,7 +279,7 @@ _bg_color = "#303030"
 _hd_color = "#606060"
 _or_color = "#ee9a00"
 
-myLogHook dzen1 = dynamicLogWithPP $ defaultPP
+myLogHook h = dynamicLogWithPP $ defaultPP
                      { ppCurrent         = dzenColor "white"   "brown" . pad
                      , ppHidden          = dzenColor _fg_color "" . pad . noScratchPad
                      , ppHiddenNoWindows = dzenColor _hd_color "" . pad . noScratchPad
@@ -300,18 +300,30 @@ myLogHook dzen1 = dynamicLogWithPP $ defaultPP
                        "ThreeCol" -> "[3]"
                        _ -> x
                      )
-                     , ppOutput            = hPutStrLn dzen1
+                     , ppOutput            = hPutStrLn h
                      }
                      where
                        noScratchPad ws = if ws == "NSP" then "" else ws
 
 -- StatusBars
+--
+-- x_position :: Int
+-- y_position :: Int
+-- width      :: Int
+-- height     :: Int
+-- alignment  :: TextAlign (LeftAlign, RightAlign, Centered)
+-- font       :: String
+-- fg_color   :: String
+-- bg_color   :: String
+-- exec       :: String
+-- addargs    :: [String]
+--
 
 myLeftBar1 :: DzenConf
 myLeftBar1 = defaultDzen
     -- use the default as a base and override width and colors
     { Dzen.width       = 960
-    , Dzen.height      = 18
+    , Dzen.height      = 22
     , Dzen.fg_color    = _fg_color
     , Dzen.bg_color    = _bg_color
     }
@@ -320,25 +332,32 @@ myLeftBar2 :: DzenConf
 myLeftBar2 = myLeftBar1
     { Dzen.x_position  = 960
     , Dzen.width       = 960
-    , Dzen.height      = 18
+    , Dzen.height      = 22
     , Dzen.alignment   = RightAlign
     }
 
 myRightBar1 :: DzenConf
 myRightBar1 = myLeftBar2
-    -- use the left one as a base and override just the x position and width
     { Dzen.x_position = 1920
-    , Dzen.width      = 960
-    , Dzen.height     = 18
+    , Dzen.width      = 640
+    , Dzen.height     = 22
     , Dzen.alignment  = LeftAlign
     }
 
 myRightBar2 :: DzenConf
 myRightBar2 = myRightBar1
+    { Dzen.x_position = 2560
+    , Dzen.width      = 640
+    , Dzen.height     = 22
+    , Dzen.alignment  = Centered
+    }
+
+myRightBar3 :: DzenConf
+myRightBar3 = myRightBar2
     -- use the left one as a base and override just the x position and width
-    { Dzen.x_position = 2880
-    , Dzen.width      = 807
-    , Dzen.height     = 18
+    { Dzen.x_position = 3200
+    , Dzen.width      = 487
+    , Dzen.height     = 22
     , Dzen.alignment  = RightAlign
     } 
 
@@ -367,7 +386,8 @@ main = do
           dzen1 <- spawnDzen myLeftBar1
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar2
           spawn $ "/home/lasseb/.bin/dzen_mpd.sh"
-          spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar2
+          spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myRightBar2
+          spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal
                       , focusFollowsMouse  = myFocusFollowsMouse

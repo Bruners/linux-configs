@@ -3,12 +3,12 @@
 # .xinitrc
 
 # Load Resources
-
+export PATH=/home/lasseb/.bin:$PATH
 xrdb -merge ~/.Xdefaults &
 setxkbmap no &
 
 # Set up an icon tray
-trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 17 --widthtype percent --transparent true --tint 0x303030 &
+trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 22 --widthtype percent --transparent true --tint 0x303030 &
 
 # Start urxvt daemon
 urxvtd -q -f -o &
@@ -36,8 +36,8 @@ numlockx &
 (sleep 3 && xmodmap -e "clear Lock") &
 (sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
 (sleep 3 && urxvt -name IRC) &
+(sleep 3 && empathy) &
 #pidgin &
-empathy &
 #xcompmgr -sfF &
 #xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 cairo-compmgr &

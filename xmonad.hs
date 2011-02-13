@@ -258,7 +258,7 @@ myManageHook = composeAll . concat $
                        , ("Empathy", "contact_list")
 		       ]
         myWSShift = [ (myWS1, [])
-                     , (myWS2, ["Firefox", "Namoroka", "Chrome"])
+                     , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
                      , (myWS4, [])
 		     , (myWS5, ["Spotify", "Quodlibet"])

@@ -263,7 +263,7 @@ myManageHook = composeAll . concat $
                      , (myWS4, [])
 		     , (myWS5, ["Spotify", "Quodlibet"])
                      , (myWS6, ["Gimp"])
-                     , (myWS7, ["OpenOffice.org 3.2"])
+                     , (myWS7, ["OpenOffice.org 3.2", "libreoffice-startcenter"])
                      , (myWS8, ["Heroes of Newerth"])
                      , (myWS9, ["Wine"])
                      ]

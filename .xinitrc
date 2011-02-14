@@ -11,9 +11,9 @@ setxkbmap no &
 trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 22 --widthtype percent --transparent true --tint 0x303030 &
 
 # Start urxvt daemon
-urxvtd -q -f -o &
+urxvtd --quiet --fork --opendisplay &
 
-# Set background and cursor
+# Set cursor
 xsetroot -cursor_name left_ptr &
 
 # Set mouse acceleration and threshold (m acc thr) and screensaver (s on/off) and dpms off
@@ -23,12 +23,11 @@ xset m 0 0 s off -dpms &
 setterm -blank 0 &
 
 #find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
-nitrogen --restore &
+#nitrogen --restore &
 
 # Launch apps
 # xscreensaver &
-#thunar --daemon &
-idesk &
+pcmanfm --daemon-mode --desktop &
 udiskie &
 ossxmix -b &
 wicd-client &

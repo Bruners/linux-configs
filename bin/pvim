@@ -14,6 +14,9 @@ PATH_KEYWORDS="/etc/paludis/keywords.conf"
 USE="o"
 PATH_USE="/etc/paludis/use.conf"
 
+BASHRC="b"
+PATH_BASHRC="/etc/paludis/bashrc"
+
 if [ "$1" = $UNMASK ]; then
 	$EDITOR $PATH_UNMASK;
 fi
@@ -28,6 +31,10 @@ fi
 
 if [ "$1" = $USE ]; then
         $EDITOR $PATH_USE;
+fi
+
+if [ "$1" = $BASHRC ]; then
+	$EDITOR $PATH_BASHRC;
 fi
 if [[ $# = 0 ]]; then
 	# Display a warning

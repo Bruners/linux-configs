@@ -41,7 +41,7 @@ NORMAL 00	# global default, although everything should be something.
 FILE 00 	# normal file
 DIR 01;34 	# directory
 LINK 01;35 	# symbolic link
-FIFO 40;33	# pipe
+FIFO 40;32;04	# pipe
 SOCK 01;35	# socket
 BLK 40;33;01	# block device driver
 CHR 40;33;01 	# character device driver
@@ -78,6 +78,23 @@ EXEC 01;32
 .php3 01;36
 .html 01;36
 .xml 01;36
+
+# image formats
+.jpg 01;33
+.png 01;33
+.gif 01;33
+.bmp 01;33
+.ppm 01;33
+.tga 01;33
+.xbm 01;33
+.xpm 01;33
+.tif 01;33
+.png 01;33
+.mpg 01;33
+.avi 01;33
+.fli 01;33
+.gl 01;33
+.dl 01;33
 
 # Sources
 .c 01;32

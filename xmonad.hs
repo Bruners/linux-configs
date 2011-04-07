@@ -255,12 +255,12 @@ myManageHook = composeAll . concat $
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser")
                        , ("Pidgin", "buddy_list")
-                       , ("Empathy", "contact_list")
+                  --     , ("Empathy", "contact_list")
 		       ]
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
-                     , (myWS4, [])
+                     , (myWS4, ["VirtualBox"])
 		     , (myWS5, ["Spotify", "Quodlibet"])
                      , (myWS6, ["Gimp"])
                      , (myWS7, ["OpenOffice.org 3.2", "libreoffice-startcenter"])

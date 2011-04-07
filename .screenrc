@@ -1,5 +1,22 @@
 # sources environment-specific apps
 source "$SCREEN_CONF_DIR/$SCREEN_CONF"
+
+autodetach on
+attrcolor b ".I"
+vbell off
+bell_msg '^G'
 term screen-256color
-terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+startup_message off
+deflogin on
+defbce on
+defflow off
+defshell $SHELL
+defscrollback 5000
+defutf8 on
+encoding UTF-8
+termcapinfo rxvt-256color ti@:te@
+termcapinfo rxvt-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+
+sorendition '= dY'
+hardstatus alwayslastline '%{= B}//%{= W}%H%{= B}/%{= W}%n%{= B}/%{= W}%t %= %{= B}//%{= W}%d %M %C%{= B}//'
 

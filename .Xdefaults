@@ -3,6 +3,11 @@ Xft.hinting:   true
 Xft.rgba:      rgb
 Xft.hintstyle: hintfull
 
+#include "/home/lasseb/.xcolors/solarized.xcolors"
+!#include "/home/lasseb/.xcolors/bruners.xcolors"
+!#include "/home/lasseb/.xcolors/ir_black.xcolors"
+
+
 !URxvt*font:     -*-anonymous-medium-*-*-*-12-*-*-*-*-*-*-*
 !URxvt*boldFont: -*-anonymous-*-*-*-12-*-*-*-*-*-*-*
 
@@ -12,7 +17,7 @@ URxvt*depth: 		32
 URxvt*background: 	rgba:0000/0000/0000/aaaa
 URxvt*shading:		25
 URxvt*transparent:	false
-URxvt*saveLines:	8192
+URxvt*saveLines:	32767
 URxvt*visualBell:	true
 URxvt*scrollBar:	False
 URxvt*cursorColor:	#ffcc00
@@ -43,22 +48,3 @@ IRC*title:              IRC
 
 Xcursor*theme: bluecurve
 Xcursor*size: 16
-
-*background: rgb:00/00/00
-*foreground: rgb:ff/ff/ff
-*color0:     rgb:00/00/00
-*color1:     rgb:d3/62/65
-*color2:     rgb:ae/ce/91
-*color3:     rgb:e7/e1/8c
-*color4:     rgb:7a/7a/b0
-*color5:     rgb:96/3c/59
-*color6:     rgb:41/81/79
-*color7:     rgb:be/be/be
-*color8:     rgb:66/66/66
-*color9:     rgb:ef/81/71
-*color10:    rgb:e5/f7/79
-*color11:    rgb:ff/f7/96
-*color12:    rgb:41/86/be
-*color13:    rgb:ef/9e/be
-*color14:    rgb:71/be/be
-*color15:    rgb:ff/ff/ff

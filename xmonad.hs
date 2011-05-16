@@ -41,6 +41,8 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.Place
 import Data.List
 
+import XMonad.Hooks.SetWMName
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -112,7 +114,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     [((m .|. mM, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+        | (key, sc) <- zip [xK_e, xK_w, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 	where 
@@ -377,9 +379,11 @@ manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 
 mushimStartupHook = do
+                     setWMName "LG3D"
                      return ()
 armorStartupHook =  do
-		     return ()
+                     setWMName "LG3D"
+                     return ()
 main :: IO ()
 main = do
           host <- fmap nodeName getSystemID

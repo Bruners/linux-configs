@@ -23,11 +23,11 @@ xset m 0 0 s off -dpms &
 setterm -blank 0 &
 
 #find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
-#nitrogen --restore &
+nitrogen --restore &
 
 # Launch apps
 # xscreensaver &
-pcmanfm --daemon-mode --desktop &
+#pcmanfm --daemon-mode --desktop &
 udiskie &
 ossxmix -b &
 wicd-client &
@@ -35,9 +35,9 @@ numlockx &
 (sleep 3 && xmodmap -e "clear Lock") &
 (sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
 (sleep 3 && urxvt -name IRC) &
-(sleep 3 && empathy) &
+#(sleep 3 && empathy) &
 #pidgin &
 #xcompmgr -sfF &
 #xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 cairo-compmgr &
-exec dbus-launch ck-launch-session xmonad
+exec ck-launch-session dbus-launch xmonad

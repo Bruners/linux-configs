@@ -1,2 +1,2 @@
 #!/bin/bash
-mount -t smbfs -o //10.51.1.210/downloads /home/lasseb/nabla
+mount -t smbfs //10.0.2.15/Users/Bruners/Desktop/LAN /home/lasseb/LAN/win7

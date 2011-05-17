@@ -1,0 +1,3 @@
+#/bin/sh
+
+wine ~/Upload/Warcraft3/Frozen\ Throne.exe -opengl

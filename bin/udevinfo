@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for node in /dev/input/event?; do
+        udevinfo -ap $(udevinfo -q path -n ${node})
+done|less

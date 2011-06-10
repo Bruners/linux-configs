@@ -209,7 +209,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
                          onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          standardLayouts
   where
-     standardLayouts = avoidStruts $ (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
+     standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
      irc   = reflectHoriz $ withIM (0.15) (ClassName "Empathy") $ reflectHoriz $ standardLayouts
@@ -260,7 +260,7 @@ myManageHook = composeAll . concat $
                   --     , ("Empathy", "contact_list")
 		       ]
         myWSShift = [ (myWS1, [])
-                     , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera"])
+                     , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera", "Chromium-browser"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
                      , (myWS4, ["VirtualBox"])
 		     , (myWS5, ["Spotify", "Quodlibet"])

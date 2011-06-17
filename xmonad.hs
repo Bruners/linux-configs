@@ -333,7 +333,15 @@ myLeftBar1 = defaultDzen
 myLeftBar2 :: DzenConf
 myLeftBar2 = myLeftBar1
     { Dzen.x_position  = 960
-    , Dzen.width       = 960
+    , Dzen.width       = 480
+    , Dzen.height      = 22
+    , Dzen.alignment   = RightAlign
+    }
+
+myLeftBar3 :: DzenConf
+myLeftBar3 = myLeftBar2
+    { Dzen.x_position  = 1440
+    , Dzen.width       = 480
     , Dzen.height      = 22
     , Dzen.alignment   = RightAlign
     }
@@ -344,6 +352,7 @@ myRightBar1 = myLeftBar2
     , Dzen.width      = 640
     , Dzen.height     = 22
     , Dzen.alignment  = LeftAlign
+    , Dzen.exec       = "button4=exec:mpc -h 192.168.58.110 seek +5;button5=exec:mpc -h 192.168.58.110 seek -5;button1=exec:mpc -h 192.168.58.110 prev;button3=exec:mpc -h 192.168.58.110 next;button2=exec:mpc -h 192.168.58.110 toggle"
     }
 
 myRightBar2 :: DzenConf
@@ -388,9 +397,10 @@ main :: IO ()
 main = do
           host <- fmap nodeName getSystemID
           dzen1 <- spawnDzen myLeftBar1
-          spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar2
-          spawn $ "/home/lasseb/.bin/dzen_mpd.sh"
-          spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myRightBar2
+          spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myLeftBar2
+          spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar3
+          spawn $ "/home/lasseb/.bin/dzen_mpd.sh | " ++ dzen myRightBar1
+          spawn $ "python /home/lasseb/.xmonad/notin.py | " ++ dzen myRightBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal

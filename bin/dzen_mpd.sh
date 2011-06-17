@@ -16,21 +16,21 @@ GH=7
 GW=50
 GFG='#a8a3f7'
 GBG='#111'
-FW="mpc seek +5"      # 5 sec forwards
-RW="mpc seek -5"      # 5 sec backwards
-NEXTS="mpc next"      # previous song
-PREVS="mpc prev"      # next song
-TOGGS="mpc toggle"    # play/pause
+FW="mpc -h 192.168.58.110 seek +5"      # 5 sec forwards
+RW="mpc -h 192.168.58.110 seek -5"      # 5 sec backwards
+NEXTS="mpc -h 192.168.58.110 next"      # previous song
+PREVS="mpc -h 192.168.58.110 prev"      # next song
+TOGGS="mpc -h 192.168.58.110 toggle"    # play/pause
  
 CAPTION="^i(/home/lasseb/.share/icons/dzen/play.xbm)"
  
 MAXPOS="100"
  
 while true; do
-  POS=`mpc | sed -ne 's/^.*(\([0-9]*\)%).*$/\1/p'`
+  POS=`mpc -h 192.168.58.110 | sed -ne 's/^.*(\([0-9]*\)%).*$/\1/p'`
   POSM="$POS $MAXPOS"
   echo -n "$CAPTION "
-  echo "`mpc | sed -n '1p'`" | tr '\n' ' '
+  echo "`mpc -h 192.168.58.110 | sed -n '1p'`" | tr '\n' ' '
   echo "$POSM" | gdbar -h $GH -w $GW -fg $GFG -bg $GBG
   sleep 1;
-done | dzen2 -ta l -tw $W -h $H -x $X -y $Y -fg $FG -bg $BG -fn $FN -e "button4=exec:$RW;button5=exec:$FW;button1=exec:$PREVS;button3=exec:$NEXTS;button2=exec:$TOGGS"
+done #| dzen2 -ta l -tw $W -h $H -x $X -y $Y -fg $FG -bg $BG -fn $FN -e "button4=exec:$RW;button5=exec:$FW;button1=exec:$PREVS;button3=exec:$NEXTS;button2=exec:$TOGGS"

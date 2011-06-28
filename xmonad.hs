@@ -42,6 +42,7 @@ import XMonad.Hooks.Place
 import Data.List
 
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.EwmhDesktops
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -49,15 +50,14 @@ import qualified Data.Map        as M
 import System.IO
 
 myTerminal = "urxvtc"
-myBorderWidth   = 1
+myBorderWidth   = 2
 
 myModMask       = mod4Mask
-myNumlockMask   = mod2Mask
 myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
 
 myNormalBorderColor  = "#000000"
-myFocusedBorderColor = "#000000"
-myDefaultGaps = [(18,0,0,0)]
+myFocusedBorderColor = "#333333"
+myDefaultGaps = [(22,0,0,0)]
 myDmenu = "exe=`dmenu_path | dmenu -nb \"#000000\" -nf \"#ffffff\" -fn \"terminus-8\"` && eval \"exec $exe\""
 -- use xev to fin key codes
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
@@ -343,8 +343,9 @@ main = do
           spawn $ "/home/lasseb/.bin/dzen_mpd.sh | " ++ dzen myRightBar1
           spawn $ "python /home/lasseb/.xmonad/notin.py | " ++ dzen myRightBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
-          xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
+          xmonad $ withUrgencyHook NoUrgencyHook $ ewmh defaultConfig 
                       { terminal           = myTerminal
+                      , handleEventHook    = fullscreenEventHook
                       , focusFollowsMouse  = myFocusFollowsMouse
                       , borderWidth        = myBorderWidth
                       , modMask            = myModMask

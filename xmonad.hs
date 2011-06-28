@@ -201,8 +201,6 @@ myManageHook = composeAll . concat $
         myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Gmpc"]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser")
-                       , ("Pidgin", "buddy_list")
-                  --     , ("Empathy", "contact_list")
 		       ]
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera", "Chromium-browser"])

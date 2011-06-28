@@ -2,7 +2,7 @@
 import XMonad
 import System.Exit
 -- module to get host information
-import System.Posix.Unistd
+--import System.Posix.Unistd
 -- For Xinerama
 import Graphics.X11.Xlib
 import Graphics.X11.Xinerama
@@ -125,61 +125,6 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
                                "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
                                "xmonad --recompile && xmonad --restart"
 
-mushimKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
-    [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
-    , ((mM        , xK_p      ), spawn myDmenu                     ) -- Launch dmenu
-    , ((mM .|. sM , xK_p      ), spawn "gmrun"                     ) -- Launch gmrun
-    , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
-    , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate through the available layout agorithms
-    , ((mM .|. sM , xK_space  ), setLayout $ XMonad.layoutHook conf) -- Reset the layouts on the current workspace to default
-    , ((mM        , xK_n      ), refresh                           ) -- Resize viewed windows to the correct size
-    , ((mM        , xK_Tab    ), windows W.focusDown               ) -- Move focus to the next window
-    , ((mM        , xK_j      ), windows W.focusDown               ) -- Move Foucs to the next window
-    , ((mM        , xK_k      ), windows W.focusUp                 ) -- Move focus to the previous window
-    , ((mM        , xK_m      ), windows W.focusMaster             ) -- Move focus to the master window
-    , ((mM        , xK_Return ), windows W.swapMaster              ) -- Swap the focused window and the master window
-    , ((mM .|. sM , xK_j      ), windows W.swapDown                ) -- Swap the focused window with the next window
-    , ((mM .|. sM , xK_k      ), windows W.swapUp                  ) -- Swap the focused window with the previous window
-    , ((mM        , xK_h      ), sendMessage Shrink                ) -- Shrink the master area
-    , ((mM        , xK_l      ), sendMessage Expand                ) -- Expand the master area
-    , ((mM        , xK_t      ), withFocused $ windows . W.sink    ) -- Push window back into tiling
-    , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)        ) -- Increment the number of windows in the master area
-    , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement the number of windows in the master area
-    , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- Toggle xmobar gap
-    , ((mM .|. sM , xK_q      ), io (exitWith ExitSuccess)         ) -- Quit xmonad
-    , ((mM        , xK_q      ), restart "xmonad" True             ) -- Restart xmonad
-    , ((mM        , xK_Print  ), spawn "run_scrot scr"             ) -- Screenshot screen
-    , ((mM .|. sM , xK_Print  ), spawn "run_scrot win"             ) -- Screenshot window or area
-    , ((mM        , xK_Left   ), prevWS                            ) -- Cycle previous WS
-    , ((mM        , xK_Right  ), nextWS                            ) -- Cycle next WS
-    , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
-    , ((mM .|. sM , xK_Right  ), shiftToNext                       ) -- Move WS next WS
-    , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
-    , ((0         , 0x1008ff13), spawn "~/bin/ossvol -i 1"         ) -- Raise volume
-    , ((0         , 0x1008ff11), spawn "~/bin/ossvol -d 1"         ) -- Reduce volume
-    , ((0         , 0x1008ff12), spawn "~/bin/ossvol -t"           ) -- Mute volume
-    ]
-    ++
-
-    --
-    -- mod-[1..9], Switch to workspace N
-    -- mod-shift-[1..9], Move client to workspace N
-    --
-    [((m .|. mM, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_0 .. xK_9]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
-
-    --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
-    [((m .|. mM, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
-        where sM = shiftMask
-              cM = controlMask
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
@@ -387,15 +332,11 @@ manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.  
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 
-mushimStartupHook = do
-                     setWMName "LG3D"
-                     return ()
 armorStartupHook =  do
                      setWMName "LG3D"
                      return ()
 main :: IO ()
 main = do
-          host <- fmap nodeName getSystemID
           dzen1 <- spawnDzen myLeftBar1
           spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myLeftBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar3
@@ -410,16 +351,10 @@ main = do
                       , workspaces         = myWorkspaces
                       , normalBorderColor  = myNormalBorderColor
                       , focusedBorderColor = myFocusedBorderColor
-                      , keys               = (if host == "mushim" then
-                                               mushimKeys
-                                             else
-                                               armorKeys)
+                      , keys               = armorKeys
                       , mouseBindings      = myMouseBindings
                       , layoutHook         = myLayout
                       , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks <+> manageScratchPad
-                      , startupHook        = (if host == "mushim" then
-                                               mushimStartupHook
-                                             else
-                                               armorStartupHook)
+                      , startupHook        = armorStartupHook
                       , logHook            = myLogHook dzen1
                      }

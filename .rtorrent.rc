@@ -23,8 +23,8 @@ system.method.set_key = event.download.finished,move_complete,"execute=mv,-u,$d.
 schedule = filter_active,30,30,"view_filter = active,\"or={d.get_up_rate=,d.get_down_rate=}\""
 
 ratio.enable=
-ratio.min.set=200
-ratio.max.set=300
+ratio.min.set=300
+ratio.max.set=400
 ratio.upload.set=20M
 
 system.method.set = group.seeding.ratio.command, d.close=

@@ -152,12 +152,14 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
                          onWorkspace myWS6 (gimp ||| standardLayouts) $ 
                          onWorkspace myWS8 full $ 
                          onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
+                         onWorkspace myWS4 (stream ||| standardLayouts) $
                          standardLayouts
   where
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
      irc   = reflectHoriz $ withIM (0.15) (ClassName "Empathy") $ reflectHoriz $ standardLayouts
+     stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
@@ -172,10 +174,10 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
 --
 
 myWS0  = "0:p2p"
-myWS1  = "1:main"
+myWS1  = "1:code"
 myWS2  = "2:www"
 myWS3  = "3:irssi"
-myWS4  = "4:code"
+myWS4  = "4:stream"
 myWS5  = "5:mp3"
 myWS6  = "6:gimp"
 myWS7  = "7:oof"
@@ -203,9 +205,9 @@ myManageHook = composeAll . concat $
         windowFloats = [ ("Firefox", "browser")
 		       ]
         myWSShift = [ (myWS1, [])
-                     , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera", "Chromium-browser"])
+                     , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
-                     , (myWS4, ["VirtualBox"])
+                     , (myWS4, ["VirtualBox", "Chromium-browser"])
 		     , (myWS5, ["Spotify", "Quodlibet"])
                      , (myWS6, ["Gimp"])
                      , (myWS7, ["OpenOffice.org 3.2", "libreoffice-startcenter"])
@@ -341,7 +343,7 @@ main = do
           spawn $ "/home/lasseb/.bin/dzen_mpd.sh | " ++ dzen myRightBar1
           spawn $ "python /home/lasseb/.xmonad/notin.py | " ++ dzen myRightBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
-          xmonad $ withUrgencyHook NoUrgencyHook $ ewmh defaultConfig 
+          xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal
                       , handleEventHook    = fullscreenEventHook
                       , focusFollowsMouse  = myFocusFollowsMouse

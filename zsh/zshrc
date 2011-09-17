@@ -7,9 +7,9 @@ autoload -U zutil
 autoload -U compinit
 autoload -U complist
 zstyle ':completion::complete:*' use-cache 1
+
 # mad I know, prefering emacs bindings when I'm a vim user!
 bindkey -e
-
 #bindkey '\e[A' history-search-backward
 #bindkey '\e[B' history-search-forward
 bindkey '^K' kill-whole-line
@@ -22,8 +22,25 @@ bindkey "\e[3~" delete-char             # Delete
 #bindkey '\eOH' beginning-of-line
 #bindkey '\eOF' end-of-line
 
-# Activation
 compinit
+
+setopt promptsubst
+setopt CORRECT
+setopt ALWAYS_TO_END
+setopt NOTIFY
+setopt NOBEEP
+setopt AUTOLIST
+setopt AUTOCD
+setopt PRINT_EIGHT_BIT
+setopt NONOMATCH
+setopt PRINT_EXIT_VALUE
+
+#Load the prompt theme system
+autoload -U promptinit
+promptinit
+
+# Use the wunjo prompt theme
+prompt wunjo
 
 # Resource files
 for file in $HOME/.zsh/rc/*.rc; do

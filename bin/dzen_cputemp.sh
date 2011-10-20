@@ -13,10 +13,10 @@ Y=0
 
 CAPTION="^fg(#eeffcc)^i(/home/lasseb/.share/icons/dzen/cpu.xbm)^fg()"
 INTERVAL=4
-CORE0_TEMP=/sys/class/hwmon/hwmon0/device/temp2_input
-CORE1_TEMP=/sys/class/hwmon/hwmon0/device/temp3_input
-CORE2_TEMP=/sys/class/hwmon/hwmon0/device/temp4_input
-CORE3_TEMP=/sys/class/hwmon/hwmon0/device/temp5_input
+CORE0_TEMP=/sys/devices/platform/coretemp.0/temp1_input
+CORE1_TEMP=/sys/devices/platform/coretemp.1/temp1_input
+CORE2_TEMP=/sys/devices/platform/coretemp.2/temp1_input
+CORE3_TEMP=/sys/devices/platform/coretemp.3/temp1_input
 
 while true; do
 	CORE0="`cat $CORE0_TEMP`"

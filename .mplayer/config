@@ -6,11 +6,11 @@ vo=vdpau,xv
 vc=ffmpeg12vdpau,ffwmv3vdpau,ffvc1vdpau,ffh264vdpau,ffodivxvdpau,
 vf-clr=yes
 monitoraspect=16:9
-ao=oss,pulse
+ao=oss
 input:file=/home/lasseb/.mplayer/rc
 #menu=yes
 fs=yes
-xineramascreen=0
+
 # Pretend to be Window Media Player.
 # Fixes playback when playlist and media file use the same URL.
 #user-agent=NSPlayer/4.1.0.3856

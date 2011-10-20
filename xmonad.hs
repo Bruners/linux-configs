@@ -33,7 +33,7 @@ import XMonad.Util.Scratchpad
 -- Dzen
 import Dzen
 import XMonad.Util.Run (hPutStrLn, spawnPipe)
---import XMonad.Util.SpawnOnce
+import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog hiding (dzen)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -41,9 +41,8 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.Place
 import Data.List
 
---import XMonad.Hooks.SetWMName
 import XMonad.Hooks.SetWMName
----import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.EwmhDesktops
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -206,10 +205,10 @@ myManageHook = composeAll . concat $
         windowFloats = [ ("Firefox", "browser")
 		       ]
         myWSShift = [ (myWS1, [])
-                     , (myWS2, ["Firefox"])
+                     , (myWS2, ["Firefox", "Namoroka", "Chrome", "Opera"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
-                     , (myWS4, ["VirtualBox", "Chromium-browser", "Opera"])
-		     , (myWS5, ["Spotify", "Quodlibet", "Gmpc"])
+                     , (myWS4, ["VirtualBox", "Chromium-browser"])
+		     , (myWS5, ["Spotify", "Quodlibet"])
                      , (myWS6, ["Gimp"])
                      , (myWS7, ["OpenOffice.org 3.2", "libreoffice-startcenter"])
                      , (myWS8, ["Heroes of Newerth"])
@@ -346,7 +345,7 @@ main = do
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal
-                      --, handleEventHook    = fullscreenEventHook
+                      , handleEventHook    = fullscreenEventHook
                       , focusFollowsMouse  = myFocusFollowsMouse
                       , borderWidth        = myBorderWidth
                       , modMask            = myModMask

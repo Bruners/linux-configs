@@ -29,8 +29,7 @@ nitrogen --restore &
 # xscreensaver &
 #pcmanfm --daemon-mode --desktop &
 udiskie &
-#ossxmix -b &
-pulseaudio -D &
+ossxmix -b &
 wicd-client &
 numlockx &
 (sleep 3 && xmodmap -e "clear Lock") &

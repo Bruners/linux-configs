@@ -4,15 +4,15 @@ Xft.rgba:      rgb
 Xft.hintstyle: hintfull
 
 #include "/home/lasseb/.xcolors/solarized.xcolors"
-!#include "/home/lasseb/.xcolors/bruners.xcolors"
-!#include "/home/lasseb/.xcolors/ir_black.xcolors"
 
+!URxvt*font:		xft:Monospace:pixelsize=11:antialias=true:hinting=true
+!URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
 
-!URxvt*font:     -*-anonymous-medium-*-*-*-12-*-*-*-*-*-*-*
-!URxvt*boldFont: -*-anonymous-*-*-*-12-*-*-*-*-*-*-*
+URxvt*font: xft:Anonymous Pro:antialias=true:hinting=true:pixelsize=11
+URxvt*boldFont: xft:Anonymous Pro B:antialias=true:hinting=true:pixelsize=11
+URxvt*italicFont: xft:Anonymous Pro I:antialias=true:hinting=true:pixelsize=11
+URxvt*bolditalicFont: xft:Anonymous Pro BI:antialias=true:hinting=true:pixelsize=11
 
-URxvt*font:		xft:Monospace:pixelsize=11:antialias=true:hinting=true
-URxvt*boldFont:		xft:Monospace:pixelsize=11:bold:antialias=true:hinting=true
 URxvt*depth: 		32
 URxvt*background: 	rgba:0000/0000/0000/aaaa
 URxvt*shading:		25

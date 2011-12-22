@@ -50,5 +50,5 @@ URxvt*cutchars: `"()'*<>[]{|}
 
 IRC*title:              IRC
 
-Xcursor*theme: bluecurve
-Xcursor*size: 16
+Xcursor.theme: Obsidian
+Xcursor*size: 24

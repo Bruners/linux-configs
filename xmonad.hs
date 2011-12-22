@@ -41,7 +41,6 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.Place
 import Data.List
 
---import XMonad.Hooks.SetWMName
 import XMonad.Hooks.SetWMName
 ---import XMonad.Hooks.EwmhDesktops
 
@@ -65,7 +64,6 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
     , ((mM        , xK_p      ), shellPrompt defaultXPConfig       )  -- Launch shellPromt
     , ((mM .|. sM , xK_p      ), spawn myDmenu                     )  -- Launch dmenu
-   -- , ((mM .|. sM , xK_p      ), spawn "PieDock"                   ) -- Spawn PieDock
     , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
     , ((mM .|. sM , xK_space  ), setLayout $ XMonad.layoutHook conf) -- Reset the layouts
@@ -84,20 +82,17 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_t      ), withFocused $ windows . W.sink    ) -- Push back into tiling
     , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)        ) -- Increment windows
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows
-    , ((mM .|. sM , xK_q      ), io (exitWith ExitSuccess)         ) -- Quit xmonad
-    , ((mM        , xK_q      ), myRestart                         ) -- Restart xmonad
+    , ((mM .|. sM , xK_F12    ), io (exitWith ExitSuccess)         ) -- Quit xmonad
+    , ((mM        , xK_F12    ), myRestart                         ) -- Restart xmonad
     , ((mM        , xK_Print  ), spawn "run_scrot scr"             ) -- Screenshot screen
     , ((mM .|. sM , xK_Print  ), spawn "run_scrot win"             ) -- Screenshot window or area
     , ((mM        , xK_Left   ), prevWS                            ) -- Cycle previous WS
     , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
     , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
     , ((mM .|. sM , xK_Right  ), shiftToNext                       ) -- Move WS next WS
-    , ((0         , 0x1008ff11), spawn "~/.bin/oss4_hd_ctl -d 2"   ) -- Reduce volume
-    , ((0         , 0x1008ff13), spawn "~/.bin/oss4_hd_ctl -i 2"   ) -- Raise volume
-    , ((0         , 0x1008ff12), spawn "~/.bin/oss4_hd_ctl -t"     ) -- Mute volume
-    --, ((0         , 0x1008ff11), spawn "~/.bin/oss4_sb_ctl -d 2"   ) -- Reduce volume
-    --, ((0         , 0x1008ff13), spawn "~/.bin/oss4_sb_ctl -i 2"   ) -- Raise volume
-    --, ((0         , 0x1008ff12), spawn "~/.bin/oss4_sb_ctl -t"     ) -- Mute volume
+    , ((0         , 0x1008ff11), spawn "~/.bin/oss4_ctl -d 2"      ) -- Reduce volume
+    , ((0         , 0x1008ff13), spawn "~/.bin/oss4_ctl -i 2"      ) -- Raise volume
+    , ((0         , 0x1008ff12), spawn "~/.bin/oss4_ctl -t"        ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
@@ -151,6 +146,7 @@ myTabConfig = defaultTheme { activeColor         = _fg_color
 
 myLayout = avoidStruts $ onWorkspace myWS3 irc $ 
                          onWorkspace myWS6 (gimp ||| standardLayouts) $ 
+                         onWorkspace myWS5 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS8 full $ 
                          onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS4 (stream ||| standardLayouts) $
@@ -209,7 +205,7 @@ myManageHook = composeAll . concat $
                      , (myWS2, ["Firefox"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
                      , (myWS4, ["VirtualBox", "Chromium-browser", "Opera"])
-		     , (myWS5, ["Spotify", "Quodlibet", "Gmpc"])
+                     , (myWS5, ["Spotify", "Quodlibet", "Gmpc", "Ossmix"])
                      , (myWS6, ["Gimp"])
                      , (myWS7, ["OpenOffice.org 3.2", "libreoffice-startcenter"])
                      , (myWS8, ["Heroes of Newerth"])

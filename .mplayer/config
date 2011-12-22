@@ -1,3 +1,4 @@
+
 [default]
 # Write your default config options here!
 #
@@ -27,3 +28,6 @@ xineramascreen=0
 # Fixes playback of some NSV streams
 #user-agent="Winamp NSV Player/5.12 (ultravox/2.0)"
 
+[gnome-mplayer]
+msglevel=all=5
+vo=vdpau

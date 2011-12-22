@@ -26,18 +26,17 @@ setterm -blank 0 &
 nitrogen --restore &
 
 # Launch apps
-# xscreensaver &
 #pcmanfm --daemon-mode --desktop &
 udiskie &
-#ossxmix -b &
-pulseaudio -D &
-wicd-client &
+ossxmix -b &
+#pulseaudio -D &
+wicd-client -t &
+blueman-applet &
 numlockx &
 (sleep 3 && xmodmap -e "clear Lock") &
 (sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
 (sleep 3 && urxvt -name IRC) &
 (sleep 3 && empathy) &
-#pidgin &
 #xcompmgr -sfF &
 #xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
 cairo-compmgr &

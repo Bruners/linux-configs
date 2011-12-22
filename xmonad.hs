@@ -92,12 +92,12 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
     , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
     , ((mM .|. sM , xK_Right  ), shiftToNext                       ) -- Move WS next WS
-    , ((mM        , 0x1008ff11), spawn "~/.bin/oss4_hd_ctl -d 2"   ) -- Reduce volume
-    , ((mM        , 0x1008ff13), spawn "~/.bin/oss4_hd_ctl -i 2"   ) -- Raise volume
-    , ((mM        , 0x1008ff12), spawn "~/.bin/oss4_hd_ctl -t"     ) -- Mute volume
-    , ((0         , 0x1008ff11), spawn "~/.bin/oss4_sb_ctl -d 2"   ) -- Reduce volume
-    , ((0         , 0x1008ff13), spawn "~/.bin/oss4_sb_ctl -i 2"   ) -- Raise volume
-    , ((0         , 0x1008ff12), spawn "~/.bin/oss4_sb_ctl -t"     ) -- Mute volume
+    , ((0         , 0x1008ff11), spawn "~/.bin/oss4_hd_ctl -d 2"   ) -- Reduce volume
+    , ((0         , 0x1008ff13), spawn "~/.bin/oss4_hd_ctl -i 2"   ) -- Raise volume
+    , ((0         , 0x1008ff12), spawn "~/.bin/oss4_hd_ctl -t"     ) -- Mute volume
+    --, ((0         , 0x1008ff11), spawn "~/.bin/oss4_sb_ctl -d 2"   ) -- Reduce volume
+    --, ((0         , 0x1008ff13), spawn "~/.bin/oss4_sb_ctl -i 2"   ) -- Raise volume
+    --, ((0         , 0x1008ff12), spawn "~/.bin/oss4_sb_ctl -t"     ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
@@ -285,20 +285,20 @@ myLeftBar2 = myLeftBar1
     }
 
 myLeftBar3 :: DzenConf
-myLeftBar3 = myLeftBar2
-    { Dzen.x_position  = 1440
-    , Dzen.width       = 480
+myLeftBar3 = myLeftBar1
+    { Dzen.x_position  = 960
+    , Dzen.width       = 960
     , Dzen.height      = 22
     , Dzen.alignment   = RightAlign
     }
 
 myRightBar1 :: DzenConf
-myRightBar1 = myLeftBar2
+myRightBar1 = myLeftBar3
     { Dzen.x_position = 1920
     , Dzen.width      = 640
     , Dzen.height     = 22
     , Dzen.alignment  = LeftAlign
-    , Dzen.exec       = "button4=exec:mpc -h 192.168.58.110 seek +5;button5=exec:mpc -h 192.168.58.110 seek -5;button1=exec:mpc -h 192.168.58.110 prev;button3=exec:mpc -h 192.168.58.110 next;button2=exec:mpc -h 192.168.58.110 toggle"
+    , Dzen.exec       = "button4=exec:mpc seek +5;button5=exec:mpc seek -5;button1=exec:mpc prev;button3=exec:mpc next;button2=exec:mpc toggle"
     }
 
 myRightBar2 :: DzenConf
@@ -339,10 +339,11 @@ armorStartupHook =  do
 main :: IO ()
 main = do
           dzen1 <- spawnDzen myLeftBar1
-          spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myLeftBar2
+    --      spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myLeftBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar3
+-- Right
           spawn $ "/home/lasseb/.bin/dzen_mpd.sh | " ++ dzen myRightBar1
-          spawn $ "python /home/lasseb/.xmonad/notin.py | " ++ dzen myRightBar2
+          spawn $ "/home/lasseb/.bin/dzen_cputemp.sh  | " ++ dzen myRightBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
                       { terminal           = myTerminal

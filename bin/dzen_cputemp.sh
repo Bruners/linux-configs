@@ -1,7 +1,8 @@
 #!/bin/sh
 #
 # A script that prints CPU temperature for all cores into dzen
-#
+#echo -e "$TEMP1°C $TEMP2°C $TEMP3°C $TEMP4°C"
+
  
 FN='-xos4-terminus-*-*-*-*-12-*-*-*-*-*-*-*'
 BG='#333333'
@@ -27,7 +28,9 @@ while true; do
 	TEMP3="`expr $CORE2 / 1000`"
 	CORE3="`cat $CORE3_TEMP`"
 	TEMP4="`expr $CORE3 / 1000`"
-	echo -n "$CAPTION "
-	echo -e "$TEMP1°C $TEMP2°C $TEMP3°C $TEMP4°C"
+	ALL="`expr $TEMP1 + $TEMP2 + $TEMP3 + $TEMP4`"
+	AVG="`expr $ALL / 4`"
+#	echo -n "$CAPTION "
+	echo -e "$AVG"
 	sleep $INTERVAL;
 done #| dzen2 -ta c -tw $W -h $H -x $X -y $Y -fg $FG -bg $BG -fn $FN

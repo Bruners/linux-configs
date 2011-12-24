@@ -28,7 +28,7 @@ nitrogen --restore &
 # Launch apps
 #pcmanfm --daemon-mode --desktop &
 udiskie &
-ossxmix -b &
+ossxmix &
 #pulseaudio -D &
 wicd-client -t &
 blueman-applet &

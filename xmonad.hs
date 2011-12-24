@@ -155,7 +155,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = reflectHoriz $ withIM (0.15) (ClassName "Empathy") $ reflectHoriz $ standardLayouts
+     irc   = withIM (0.15) (ClassName "Empathy") $ reflectHoriz $ withIM (0.20) (ClassName "Mumble") $ standardLayouts
      stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
@@ -203,9 +203,9 @@ myManageHook = composeAll . concat $
 		       ]
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox"])
-                     , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy"])
+                     , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy", "Mumble"])
                      , (myWS4, ["VirtualBox", "Chromium-browser", "Opera"])
-                     , (myWS5, ["Spotify", "Quodlibet", "Gmpc", "Ossmix"])
+                     , (myWS5, ["Spotify", "Quodlibet", "Gmpc", "Ossxmix"])
                      , (myWS6, ["Gimp"])
                      , (myWS7, ["OpenOffice.org 3.2", "libreoffice-startcenter"])
                      , (myWS8, ["Heroes of Newerth"])

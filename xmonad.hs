@@ -96,7 +96,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
-    , ((cM        , xK_Tab    ), sP                                ) -- Spawn a scratchpad terminal
+    , ((cM        , xK_bar    ), sP                                ) -- Spawn a scratchpad terminal
     , ((mM        , xK_0      ), windows $ W.view myWS10           ) -- Move to workspace 10
     ]
     ++

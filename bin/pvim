@@ -1,48 +1,101 @@
 #!/bin/bash
+#
+# A simple script to quickly open Paludis .conf files
+#
 
-EDITOR="sudo vim"
+# Check if running as root, call sudo if not
+VIMCMD="vim"
+if [ "$(whoami)" != "root" ]; then
+    VIMCMD="sudo $VIMCMD"
+fi
 
+# Exherbo or gentoo configuration
+DIST="exherbo"
+
+# Short names, full names and paths to .conf files
 UNMASK="u"
+UNMASK_F="unmask"
 PATH_UNMASK="/etc/paludis/package_unmask.conf"
 
 MASK="m"
+MASK_F="mask"
 PATH_MASK="/etc/paludis/package_mask.conf"
 
-KEYWORDS="k"
-PATH_KEYWORDS="/etc/paludis/keywords.conf"
-
-USE="o"
-PATH_USE="/etc/paludis/use.conf"
+GENERAL="g"
+GENERAL_F="general"
+PATH_GENERAL="/etc/paludis/general.conf"
 
 BASHRC="b"
+BASHRC_F="bashrc"
 PATH_BASHRC="/etc/paludis/bashrc"
 
-if [ "$1" = $UNMASK ]; then
-	$EDITOR $PATH_UNMASK;
+LICENCES="l"
+LICENCES_F="licences"
+PATH_LICENCES="/etc/paludis/licences.conf"
+
+# Gentoo and Exherbo got some differences
+if [ "$DIST" = 'exherbo' ]; then
+    PLATFORMS="p"
+    PLATFORMS_F="platforms"
+    PATH_PLATFORMS="/etc/paludis/platforms.conf"
+
+    OPTIONS="o"
+    OPTIONS_F="options"
+    PATH_OPTIONS="/etc/paludis/options.conf"
+
+    LICENCES="l"
+    LICENCES_F="licences"
+    PATH_LICENCES="/etc/paludis/liceces.conf"
 fi
 
-if [ "$1" = $MASK ]; then
-	$EDITOR $PATH_MASK;
+if [ "$DIST" = 'gentoo' ]; then
+    PLATFORMS="k"
+    PLATFORMS_F="keywords"
+    PATH_PLATFORMS="/etc/paludis/keywords.conf"
+
+    OPTIONS="k"
+    OPTIONS_F="keywords"
+    PATH_OPTIONS="/etc/paludis/use.conf"
+
+    LICENCES="l"
+    LICENCES_F="licenses"
+    PATH_LICENCES="/etc/paludis/licenses.conf"
 fi
 
-if [ "$1" = $KEYWORDS ]; then
-	$EDITOR $PATH_KEYWORDS;
-fi
+ESC_SEQ="\x1b["
+COL1=$ESC_SEQ"34;49m"
+COL2=$ESC_SEQ"33;49m"
+COL_RESET=$ESC_SEQ"33;00m"
 
-if [ "$1" = $USE ]; then
-        $EDITOR $PATH_USE;
-fi
-
-if [ "$1" = $BASHRC ]; then
-	$EDITOR $PATH_BASHRC;
-fi
-if [[ $# = 0 ]]; then
-	# Display a warning
-	echo "No file specified, valid options are:"
-	echo "${MASK} - ${PATH_MASK}"
-	echo "${UNMASK} - ${PATH_UNMASK}"
-	echo "${KEYWORDS} - ${PATH_KEYWORDS}"
-	echo "${USE} - ${PATH_USE}"
-fi
-
-
+case "$1" in
+    *)
+        # Display some info
+        echo -e $COL1"Unrecognized option or nothing specified, valid options are:"
+        echo -e $COL2"${GENERAL} / ${GENERAL_F}"$COL_RESET" - opens ${PATH_GENERAL}"
+        echo -e $COL2"${UNMASK} / ${UNMASK_F}"$COL_RESET" - opens ${PATH_UNMASK}"
+        echo -e $COL2"${MASK} / ${MASK_F}"$COL_RESET" - opens ${PATH_MASK}"
+        echo -e $COL2"${PLATFORMS} / ${PLATFORMS_F}"$COL_RESET" = opens ${PATH_PLATFORMS}"
+        echo -e $COL2"${OPTIONS} / ${OPTIONS_F}"$COL_RESET" = opens ${PATH_OPTIONS}"
+        echo -e $COL2"${BASHRC} / ${BASHRC_F}"$COL_RESET" = opens ${PATH_BASHRC}"
+        echo -e $COL2"${LICENCES} / ${LICENCES_F}"$COL_RESET" = opens ${PATH_LICENCES}"
+        ;;
+    $GENERAL|$GENERAL_F)
+        $VIMCMD $PATH_GENERAL
+        ;;
+    $UNMASK|$UNMASK_F)
+        $VIMCMD $PATH_UNMASK
+        ;;
+    $MASK|$UNMASK_F)
+        $VIMCMD $PATH_MASK
+        ;;
+    $PLATFORMS|$PLATFORMS_F)
+        $VIMCMD $PATH_PLATFORMS
+        ;;
+    $OPTIONS|$OPTIONS_F)
+        $VIMCMD $PATH_OPTIONS
+        ;;
+    $BASHRC|$BASHRC_F)
+        $VIMCMD $PATH_BASHRC
+        ;;
+esac
+exit 0

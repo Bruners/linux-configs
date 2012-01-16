@@ -12,17 +12,17 @@ alias shutdown="shutdown -h now"
 alias hostip="wget http://checkip.dyndns.org/ -O - -o /dev/null | cut -d: -f 2 | cut -d\< -f 1"
 alias eix="sudo cave search"
 alias lss="qsize -a -k | sort -n -k 6"
-alias randep="find . | mplayer2 -fs -shuffle -playlist -"
+alias randep="find . | mplayer -fs -shuffle -playlist -"
 alias rtorrent="SCREEN_CONF=rtorrent screen -S rtorrent -D -R rtorrent"
 alias update_python="sudo python-updater -c 'xargs cave resolve -Cs -1zx'"
 fans() {
-	if [ $1 ] ; then
-		aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ;
-		aticonfig --pplib-cmd "set fanspeed 0 $1" ;
-	else
-		aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ; 
-		aticonfig --pplib-cmd "set fanspeed 0 auto" ;
-	fi
+    if [ $1 ] ; then
+        aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ;
+        aticonfig --pplib-cmd "set fanspeed 0 $1" ;
+    else
+        aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ;
+        aticonfig --pplib-cmd "set fanspeed 0 auto" ;
+    fi
 }
 
 # do a du -hs on each dir on current path

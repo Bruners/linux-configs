@@ -45,7 +45,7 @@ if [ "$DIST" = 'exherbo' ]; then
 
     LICENCES="l"
     LICENCES_F="licences"
-    PATH_LICENCES="/etc/paludis/liceces.conf"
+    PATH_LICENCES="/etc/paludis/licences.conf"
 fi
 
 if [ "$DIST" = 'gentoo' ]; then
@@ -67,18 +67,19 @@ COL1=$ESC_SEQ"34;49m"
 COL2=$ESC_SEQ"33;49m"
 COL_RESET=$ESC_SEQ"33;00m"
 
+function helptext {
+# Display some info
+    echo -e $COL1"Unrecognized option or nothing specified, valid options are:"
+    echo -e $COL2"${GENERAL} / ${GENERAL_F}"$COL_RESET" - opens ${PATH_GENERAL}"
+    echo -e $COL2"${UNMASK} / ${UNMASK_F}"$COL_RESET" - opens ${PATH_UNMASK}"
+    echo -e $COL2"${MASK} / ${MASK_F}"$COL_RESET" - opens ${PATH_MASK}"
+    echo -e $COL2"${PLATFORMS} / ${PLATFORMS_F}"$COL_RESET" = opens ${PATH_PLATFORMS}"
+    echo -e $COL2"${OPTIONS} / ${OPTIONS_F}"$COL_RESET" = opens ${PATH_OPTIONS}"
+    echo -e $COL2"${BASHRC} / ${BASHRC_F}"$COL_RESET" = opens ${PATH_BASHRC}"
+    echo -e $COL2"${LICENCES} / ${LICENCES_F}"$COL_RESET" = opens ${PATH_LICENCES}"
+}
+
 case "$1" in
-    *)
-        # Display some info
-        echo -e $COL1"Unrecognized option or nothing specified, valid options are:"
-        echo -e $COL2"${GENERAL} / ${GENERAL_F}"$COL_RESET" - opens ${PATH_GENERAL}"
-        echo -e $COL2"${UNMASK} / ${UNMASK_F}"$COL_RESET" - opens ${PATH_UNMASK}"
-        echo -e $COL2"${MASK} / ${MASK_F}"$COL_RESET" - opens ${PATH_MASK}"
-        echo -e $COL2"${PLATFORMS} / ${PLATFORMS_F}"$COL_RESET" = opens ${PATH_PLATFORMS}"
-        echo -e $COL2"${OPTIONS} / ${OPTIONS_F}"$COL_RESET" = opens ${PATH_OPTIONS}"
-        echo -e $COL2"${BASHRC} / ${BASHRC_F}"$COL_RESET" = opens ${PATH_BASHRC}"
-        echo -e $COL2"${LICENCES} / ${LICENCES_F}"$COL_RESET" = opens ${PATH_LICENCES}"
-        ;;
     $GENERAL|$GENERAL_F)
         $VIMCMD $PATH_GENERAL
         ;;
@@ -96,6 +97,13 @@ case "$1" in
         ;;
     $BASHRC|$BASHRC_F)
         $VIMCMD $PATH_BASHRC
+        ;;
+    $LICENCES|$LICENCES_F)
+        $VIMCMD $PATH_LICENCES
+        ;;
+    *)
+        # Display some help
+        helptext
         ;;
 esac
 exit 0

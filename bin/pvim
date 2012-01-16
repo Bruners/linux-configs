@@ -53,8 +53,8 @@ if [ "$DIST" = 'gentoo' ]; then
     PLATFORMS_F="keywords"
     PATH_PLATFORMS="/etc/paludis/keywords.conf"
 
-    OPTIONS="k"
-    OPTIONS_F="keywords"
+    OPTIONS="o"
+    OPTIONS_F="use"
     PATH_OPTIONS="/etc/paludis/use.conf"
 
     LICENCES="l"

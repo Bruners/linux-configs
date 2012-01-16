@@ -50,7 +50,7 @@ import qualified Data.Map        as M
 import System.IO
 
 myTerminal = "urxvtc"
-myBorderWidth   = 2
+myBorderWidth   = 0
 
 myModMask       = mod4Mask
 myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
@@ -113,11 +113,11 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
         | (key, sc) <- zip [xK_e, xK_w, xK_r] [0..]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
-	where 
-	   sM = shiftMask
-	   cM = controlMask
-           sP = scratchpadSpawnActionTerminal "urxvtc -background '#303030'"
-           myRestart = spawn $ "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
+    where
+        sM = shiftMask
+        cM = controlMask
+        sP = scratchpadSpawnActionTerminal "urxvtc -background '#303030'"
+        myRestart = spawn $ "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
                                "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
                                "xmonad --recompile && xmonad --restart"
 
@@ -144,10 +144,10 @@ myTabConfig = defaultTheme { activeColor         = _fg_color
                            , decoHeight          = 13
                            }
 
-myLayout = avoidStruts $ onWorkspace myWS3 irc $ 
-                         onWorkspace myWS6 (gimp ||| standardLayouts) $ 
+myLayout = avoidStruts $ onWorkspace myWS3 irc $
+                         onWorkspace myWS6 (gimp ||| standardLayouts) $
                          onWorkspace myWS5 (tabbed shrinkText myTabConfig ||| standardLayouts) $
-                         onWorkspace myWS8 full $ 
+                         onWorkspace myWS8 full $
                          onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS4 (stream ||| standardLayouts) $
                          standardLayouts
@@ -155,7 +155,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = withIM (0.15) (ClassName "Empathy") $ reflectHoriz $ withIM (0.20) (ClassName "Mumble") $ standardLayouts
+     irc   = withIM (0.15) (Role "buddy_list") $ reflectVert $ withIM (0.20) (ClassName "Mumble") $ standardLayouts
      stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
@@ -166,7 +166,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
      ratio   = 1/2
      delta   = 3/100
 
--- 
+--
 -- Workspace variables for easy renaming
 --
 
@@ -199,8 +199,7 @@ myManageHook = composeAll . concat $
   where myMatchAnywhereFloats = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
         myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Gmpc"]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
-        windowFloats = [ ("Firefox", "browser")
-		       ]
+        windowFloats = [ ("Firefox", "browser") ]
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy", "Mumble"])
@@ -312,7 +311,7 @@ myRightBar3 = myRightBar2
     , Dzen.width      = 487
     , Dzen.height     = 22
     , Dzen.alignment  = RightAlign
-    } 
+    }
 
 -- Scratchpad
 
@@ -326,7 +325,7 @@ manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
     t = 200     -- distance from top edge, 90%
     l = 200     -- distance from left edge, 0%
 
--- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.  
+-- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 
 armorStartupHook =  do
@@ -335,13 +334,13 @@ armorStartupHook =  do
 main :: IO ()
 main = do
           dzen1 <- spawnDzen myLeftBar1
-    --      spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myLeftBar2
+          --spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myLeftBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar3
 -- Right
           spawn $ "/home/lasseb/.bin/dzen_mpd.sh | " ++ dzen myRightBar1
           spawn $ "/home/lasseb/.bin/dzen_cputemp.sh  | " ++ dzen myRightBar2
           spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
-          xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig 
+          xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
                       { terminal           = myTerminal
                       --, handleEventHook    = fullscreenEventHook
                       , focusFollowsMouse  = myFocusFollowsMouse

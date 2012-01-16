@@ -4,7 +4,7 @@
 #
 # (c) 2007, by Jochen Schweizer
 # with help from Robert Manea
- 
+
 FN='-xos4-terminus-*-*-*-*-12-*-*-*-*-*-*-*'
 BG='#333333'
 FG='#a8a3f7'
@@ -21,11 +21,11 @@ RW="mpc seek -5"      # 5 sec backwards
 NEXTS="mpc next"      # previous song
 PREVS="mpc prev"      # next song
 TOGGS="mpc toggle"    # play/pause
- 
+
 CAPTION="^i(/home/lasseb/.share/icons/dzen/play.xbm)"
- 
+
 MAXPOS="100"
- 
+
 while true; do
   POS=`mpc | sed -ne 's/^.*(\([0-9]*\)%).*$/\1/p'`
   POSM="$POS $MAXPOS"

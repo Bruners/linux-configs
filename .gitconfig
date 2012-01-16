@@ -1,7 +1,14 @@
 [user]
-	name = Bruners
-	email = bruners@gmail.com
+    name = Lasse Brun
+    mail = bruners@gmail.com
+    email = <bruners@gmail.com>
 [color]
-	diff = auto
-	status = auto
-	branch = auto
+    diff = auto
+    status = auto
+    branch = auto
+    ui = true
+[diff]
+    renames = copy
+[core]
+    autocrlf = true
+    excludesfile = /home/lasseb/github/.global_ignore

@@ -1,5 +1,5 @@
 #scgi_local = /home/lasseb/.rtorrent/rpc.socket
-scgi_port = :5000
+#scgi_port = :5000
 
 # Global upload and download rate in KiB. "0" for unlimited.
 upload_rate = 150
@@ -15,15 +15,26 @@ directory = /home/lasseb/.rtorrent/incomplete
 session = ~/.rtorrent/session
 
 # If you don't want it to automatically start the torrent, change 'load_start' to 'load'
-schedule = watch_directory_1,5,5,"load_start=~/.rtorrent/watch/*.torrent,d.set_custom5=~/.rtorrent/complete/"
+#schedule = watch_directory_1,5,5,"load_start=~/.rtorrent/watch/*.torrent,d.set_custom5=~/.rtorrent/complete/"
+
+schedule = watch_directory_1,10,10,"load_start=~/.rtorrent/watch/*.torrent,d.set_custom1=~/.rtorrent/complete"
+schedule = watch_directory_2,10,10,"load_start=~/.rtorrent/watch/music/*.torrent,d.set_custom1=~/Music/torrent"
+
+system.method.insert=checkdirs1,simple,"not=\"$equal={d.get_custom1=,d.get_base_path=}\""
+system.method.insert=movecheck1,simple,"and={checkdirs1=,d.get_complete=,d.get_custom1=}"
+system.method.insert=movedir1,simple,"d.set_directory=$d.get_custom1=;execute=mv,-u,$d.get_base_path=,$d.get_custom1=;d.set_custom1=;d.stop=;d.start="
+system.method.set_key=event.download.hash_done,move_hashed1,"branch={$movecheck1=,movedir1=}"
+
 schedule = tied_directory,10,10,start_tied=
 schedule = untied_directory,10,10,close_untied=
 schedule = low_diskspace,5,60,close_low_diskspace=100M
-system.method.set_key = event.download.finished,move_complete,"execute=mv,-u,$d.get_base_path=,$d.get_custom5= ;d.set_directory=$d.get_custom5="
+
+#system.method.set_key = event.download.finished,move_complete,"execute=mv,-u,$d.get_base_path=,$d.get_custom5= ;d.set_directory=$d.get_custom5="
+
 schedule = filter_active,30,30,"view_filter = active,\"or={d.get_up_rate=,d.get_down_rate=}\""
 
 ratio.enable=
-ratio.min.set=600
+ratio.min.set=1000
 ratio.max.set=0
 ratio.upload.set=20M
 

@@ -1,54 +1,56 @@
 Xft.lcdfilter: lcddefault
 Xft.dpi: 96
-Xft.rgba: rgba
-Xft.hinting: true
-Xft.hintstyle: hintlight
-Xft.antialias: true
+Xft.rgba: rgb
+Xft.hinting: 1
+Xft.hintstyle: hintfull
+Xft.antialias: 1
+Xft.autohit: 0
 
 #include "/home/lasseb/.xcolors/solarized.xcolors"
 
-URxvt*font: xft:Inconsolata:regular:autohint=true:pixelsize=13
-URxvt*boldFont: xft:Inconsolata:bold:autohint=true:pixelsize=13
-URxvt*italicFont: xft:Inconsolata:italic:autohint=true:pixelsize=13
-URxvt*boldItalicFont: xft:Inconsolata:bold:italic:autohint=true:pixelsize=13
-
-!URxvt*font: xft:Anonymous Pro:antialias=true:hinting=false:pixelsize=13
-!URxvt*boldFont: xft:Anonymous Pro B:antialias=true:hinting=false:pixelsize=13
-!URxvt*italicFont: xft:Anonymous Pro I:antialias=true:hinting=false:pixelsize=13
-!URxvt*bolditalicFont: xft:Anonymous Pro BI:antialias=true:hinting=false:pixelsize=13
-
-URxvt*depth: 		32
-URxvt*background: 	rgba:0000/0000/0000/aaaa
-URxvt*shading:		25
-URxvt*transparent:	false
-URxvt*saveLines:	32767
-URxvt*visualBell:	true
-URxvt*scrollBar:	False
-URxvt*cursorColor:	#ffcc00
-URxvt*loginShell:	true
-URxvt*termName:		rxvt-unicode
-URxvt*print-pipe:	cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
-URxvt*secondaryScroll:	true
-!URxvt*mapAlert:		true
-!URxvt*utmpInhibit:	true
-URxvt*scrollTtyOutput: 	false
-URxvt*scrollWithBuffer: true
-URxvt*scrollTtyKeypress: true
-!URxvt*borderLess:	true
-!URxvt*skipBuiltinGlyphs: true
-!URxvt*mouseWheelScrollPage: true
-URxvt*pointerBlank: true
-URxvt*pointerBlankDelay: 5
-URxvt*urgentOnBell:	true
+URxvt*transparent: true
+URxvt*shading: 10
+URxvt*depth: 32
+URxvt*background: rgba:1111/1111/1111/dddd
+URxvt*font: -*-proggyclean-medium-r-normal--13-*-*-*-*-*-*-*
 URxvt*keysym.Home: \033[1~
 URxvt*keysym.End: \033[4~
-URxvt*perl-lib:           /usr/lib/urxvt/perl/
-URxvt*perl-ext-common:    matcher
-URxvt*urlLauncher:        /usr/bin/firefox
-URxvt*matcher.button:     1
-URxvt*cutchars: `"()'*<>[]{|}
+URxvt.geometry: 100x30
 
-IRC*title:              IRC
+URxvt*saveLines: 2048
+URxvt*inheritPixmap: false
+URxvt*visualBell: true
+URxvt*scrollBar: 0
+
+URxvt*cursorColor: #ff9900
+URxvt*cursorColor2: #454638
+URxvt*cursorBlink: false
+
+!urxvt.underlineColor: #999999
+URxvt*underlineColor: #c0c0c0
+URxvt.colorIT: #bbbbbb
+URxvt.colorBD: #ffffff
+
+URxvt*loginShell: true
+URxvt*print-pipe: cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
+URxvt.jumpScroll: true
+
+URxvt*scrollTtyOutput: false
+URxvt*scrollWithBuffer: true
+URxvt*scrollTtyKeypress: true
+
+URxvt*pointerBlank: true
+URxvt*pointerBlankDelay: 5
+
+URxvt*urgentOnBell: true
+
+URxvt*perl-ext-common: matcher
+URxvt*urlLauncher: /usr/bin/firefox
+URxvt*matcher.button: 1
+!URxvt*cutchars: `"()'*<>[]{|}
+
+URxvt*xftAntialias: false
+IRC*title: IRC
 
 Xcursor.theme: Obsidian
 Xcursor*size: 24

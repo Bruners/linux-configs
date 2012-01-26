@@ -1,1 +1,1 @@
-screen -t torrents rtorrent
+screen -t torrents rtorrent -o http_capath=/etc/ssl/certs

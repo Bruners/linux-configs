@@ -1,8 +1,0 @@
-table Icon
-  Caption: Frozen Throne
-  Icon: /home/lasseb/.idesktop/wc3ft.png
-  X: 1969
-  Y: 309
-  Command[0]: env WINEPREFIX="/home/lasseb/.wine" wine "Z:\games\Warcraft III\Frozen Throne.exe"
-end
-

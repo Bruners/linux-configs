@@ -6,14 +6,14 @@
 
 FN='-xos4-terminus-*-*-*-*-12-*-*-*-*-*-*-*'
 BG='#333333'
-FG='#BBBBBB'
+FG='white'
 W=640
 H=22
 X=2560
 Y=0
 
-CAPTION="^fg(#eeffcc)^i(/home/lasseb/.share/icons/dzen/cpu.xbm)^fg()"
-INTERVAL=4
+CAPTION="^fg(violet)^i(/home/lasseb/.share/icons/dzen/cpu.xbm)^fg(white)"
+INTERVAL=5
 CORE0_TEMP=/sys/class/hwmon/hwmon0/device/temp2_input
 CORE1_TEMP=/sys/class/hwmon/hwmon0/device/temp3_input
 CORE2_TEMP=/sys/class/hwmon/hwmon0/device/temp4_input

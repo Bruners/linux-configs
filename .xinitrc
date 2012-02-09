@@ -8,7 +8,7 @@ xrdb -merge ~/.Xdefaults &
 setxkbmap no &
 
 # Set up an icon tray
-#trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 4 --height 22 --widthtype percent --transparent true --tint 0x303030 &
+trayer --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 8 --height 22 --widthtype percent --transparent true --tint 0x303030 &
 
 # Start urxvt daemon
 urxvtd --quiet --fork --opendisplay &
@@ -25,19 +25,13 @@ setterm -blank 0 &
 find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
 
 # Launch apps
-#pcmanfm --daemon-mode --desktop &
 udiskie &
-#ossxmix &
-#pulseaudio -D &
-#wicd-client &
-#g15macro &
+ossxmix &
+wicd-client -t &
 blueman-applet &
-#numlockx &
 (sleep 3 && xmodmap -e "clear Lock") &
 (sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
 (sleep 3 && urxvt -name IRC) &
 (sleep 3 && pidgin) &
-#xcompmgr -sfF &
-xcompmgr -c -t-5 -l-5 -r4.2 -o.55 &
-#cairo-compmgr &
+xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C &
 exec ck-launch-session dbus-launch xmonad

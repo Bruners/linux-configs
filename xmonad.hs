@@ -84,8 +84,8 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows
     , ((mM .|. sM , xK_F12    ), io (exitWith ExitSuccess)         ) -- Quit xmonad
     , ((mM        , xK_F12    ), myRestart                         ) -- Restart xmonad
-    , ((mM        , xK_Print  ), spawn "run_scrot scr"             ) -- Screenshot screen
-    , ((mM .|. sM , xK_Print  ), spawn "run_scrot win"             ) -- Screenshot window or area
+    , ((mM        , xK_Print  ), spawn "screenshot scr"            ) -- Screenshot screen
+    , ((mM .|. sM , xK_Print  ), spawn "screenshot win"            ) -- Screenshot window or area
     , ((mM        , xK_Left   ), prevWS                            ) -- Cycle previous WS
     , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
     , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
@@ -155,7 +155,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = withIM (0.15) (Role "buddy_list") $ reflectVert $ withIM (0.20) (ClassName "Mumble") $ standardLayouts
+     irc   = reflectVert $ withIM (0.10) (Role "buddy_list") $ withIM (0.15) (ClassName "Mumble") $ standardLayouts
      stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
@@ -189,6 +189,7 @@ myWS10 = "0:p2p"
 myManageHook = composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
+    , [ isDialog --> doCenterFloat ]
     , [ classNotRole (cnf) --> doCenterFloat | (cnf) <- windowFloats ]
     , [ resource  =? "desktop_window" --> doIgnore ]
     , [ resource  =? "idesk" --> doIgnore ]

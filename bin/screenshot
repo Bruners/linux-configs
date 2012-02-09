@@ -1,37 +1,54 @@
 #!/bin/bash
 
-DIR="${HOME}/Pictures/scrot/"
+DIR="${HOME}/Pictures/scrot"
 DATE="$(date +%Y-%m-%d@%H.%M.%S)"
 NAME="${DIR}/${DATE}.jpg"
 LOG="${DIR}/screenshots.log"
 
-# Check if the dir to store the screenshots exists, else create it:
-if [ ! -d "${DIR}" ]; then
-    mkdir -p "${DIR}";
-fi
+WARNING=red
+NORMAL=white
+HILIGHT=yellow
 
-# Screenshot a selected window
-if [ "$1" = "win" ]; then
-    import -quality 95 "${NAME}";
-fi
+# 1-100
+QUALITY="95"
 
-# Screenshot the entire screen
-if [ "$1" = "scr" ]; then
-    import -quality 95 -window root "${NAME}";
-fi
+RUN="/usr/bin/import -quality ${QUALITY}"
 
-# Screenshot a selected area
-if [ "$1" = "area" ]; then
-    import -quality 95 "${NAME}";
-fi
-
-if [[ $# = 0 ]]; then
-    # Display a warning if no area defined
-    echo "No screenshot area has been specified. Screenshot not taken."
-    echo "${DATE}: No screenshot area has been defined. Screenshot not taken." >> "${LOG}"
+if [ 'pkg-config libaosd' ]; then
+    OSD="/usr/bin/aosd_cat -n 'sans 20 bold' -o 3000 -R -f 300 -u 1000 -o 1000 -x -800 -y 1 -p 1 -t 0 "
 else
-    # Save the screenshot in the directory and edit the log
-    echo "${NAME}" >> "${LOG}"
+    OSD=""
 fi
 
+function write_log {
+        feh $NAME &
+        echo -e "Saving screenshot to ${NAME}" | $OSD -R $HILIGHT &
+        echo -e "${NAME}" >> $LOG &
+}
+
+# Check if the dir to store the screenshots exists, else create it:
+if [ ! -d "$DIR" ]; then
+    mkdir -p $DIR
+fi
+
+function error {
+    # Display a warning if no area defined
+    echo -e "No zone selected.^MMm+Scr = Entire screen^MMm+Sm+Scr = Window or area" | $OSD -l 3 -R $WARNING
+}
+
+case "$1" in
+    "win")
+        $RUN $NAME
+        write_log
+        ;;
+    "scr")
+        $RUN -window root $NAME
+        write_log
+        ;;
+    *)
+        error
+        ;;
+esac
+
+exit 0
 

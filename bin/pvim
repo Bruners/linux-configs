@@ -33,6 +33,9 @@ LICENCES="l"
 LICENCES_F="licences"
 PATH_LICENCES="/etc/paludis/licences.conf"
 
+HELP="-h"
+HELP_F="--help"
+
 # Gentoo and Exherbo got some differences
 if [ "$DIST" = 'exherbo' ]; then
     PLATFORMS="p"
@@ -62,24 +65,29 @@ if [ "$DIST" = 'gentoo' ]; then
     PATH_LICENCES="/etc/paludis/licenses.conf"
 fi
 
-ESC_SEQ="\x1b["
-COL1=$ESC_SEQ"34;49m"
-COL2=$ESC_SEQ"33;49m"
-COL_RESET=$ESC_SEQ"33;00m"
+# Set default colours, adapted from eclectic
+COLOUR_HI="\033[1;34m"
+COLOUR_NORMAL="\033[00m"
+COLOUR_WARN="\033[1;31m"
 
+# Display some info on how to use
 function helptext {
-# Display some info
-    echo -e $COL1"Unrecognized option or nothing specified, valid options are:"
-    echo -e $COL2"${GENERAL} / ${GENERAL_F}"$COL_RESET" - opens ${PATH_GENERAL}"
-    echo -e $COL2"${UNMASK} / ${UNMASK_F}"$COL_RESET" - opens ${PATH_UNMASK}"
-    echo -e $COL2"${MASK} / ${MASK_F}"$COL_RESET" - opens ${PATH_MASK}"
-    echo -e $COL2"${PLATFORMS} / ${PLATFORMS_F}"$COL_RESET" = opens ${PATH_PLATFORMS}"
-    echo -e $COL2"${OPTIONS} / ${OPTIONS_F}"$COL_RESET" = opens ${PATH_OPTIONS}"
-    echo -e $COL2"${BASHRC} / ${BASHRC_F}"$COL_RESET" = opens ${PATH_BASHRC}"
-    echo -e $COL2"${LICENCES} / ${LICENCES_F}"$COL_RESET" = opens ${PATH_LICENCES}"
+    echo -e $COLOUR_HI"Usage: pvim option\n\nValid options are:"
+    echo -e $COLOUR_HI"${GENERAL} / ${GENERAL_F}"$COLOUR_NORMAL" - opens ${PATH_GENERAL}"
+    echo -e $COLOUR_HI"${UNMASK} / ${UNMASK_F}"$COLOUR_NORMAL" - opens ${PATH_UNMASK}"
+    echo -e $COLOUR_HI"${MASK} / ${MASK_F}"$COLOUR_NORMAL" - opens ${PATH_MASK}"
+    echo -e $COLOUR_HI"${PLATFORMS} / ${PLATFORMS_F}"$COLOUR_NORMAL" = opens ${PATH_PLATFORMS}"
+    echo -e $COLOUR_HI"${OPTIONS} / ${OPTIONS_F}"$COLOUR_NORMAL" = opens ${PATH_OPTIONS}"
+    echo -e $COLOUR_HI"${BASHRC} / ${BASHRC_F}"$COLOUR_NORMAL" = opens ${PATH_BASHRC}"
+    echo -e $COLOUR_HI"${LICENCES} / ${LICENCES_F}"$COLOUR_NORMAL" = opens ${PATH_LICENCES}"
+    echo ""
+    echo -e $COLOUR_HI"${HELP} / ${HELP_F}"$COLOUR_NORMAL" = shows help information"
 }
 
 case "$1" in
+    "")
+        helptext
+        ;;
     $GENERAL|$GENERAL_F)
         $VIMCMD $PATH_GENERAL
         ;;
@@ -101,8 +109,11 @@ case "$1" in
     $LICENCES|$LICENCES_F)
         $VIMCMD $PATH_LICENCES
         ;;
+    $HELP|$HELP_F)
+        helptext
+        ;;
     *)
-        # Display some help
+        echo -e $COLOUR_WARN"Unrecognized option"
         helptext
         ;;
 esac

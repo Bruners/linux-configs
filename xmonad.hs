@@ -84,6 +84,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows
     , ((mM .|. sM , xK_F12    ), io (exitWith ExitSuccess)         ) -- Quit xmonad
     , ((mM        , xK_F12    ), myRestart                         ) -- Restart xmonad
+    , ((0         , xK_Print  ), spawn "screenshot"                ) -- Screenshot
     , ((mM        , xK_Print  ), spawn "screenshot scr"            ) -- Screenshot screen
     , ((mM .|. sM , xK_Print  ), spawn "screenshot win"            ) -- Screenshot window or area
     , ((mM        , xK_Left   ), prevWS                            ) -- Cycle previous WS

@@ -1,49 +1,120 @@
-#!/bin/bash
+#!/bin/sh
+# Copyright 2012 Lasse Brun <bruners@gmail.com>
+# Distributed under the terms of the GNU General Public License V2
+#
+# A small script made to take screenshots, three ways.. the whole thing or the active window or a selectable part.
+# The script utilize ImageMagic, Feh and libaosd.
 
-DIR="${HOME}/Pictures/scrot"
-DATE="$(date +%Y-%m-%d@%H.%M.%S)"
-NAME="${DIR}/${DATE}.jpg"
-LOG="${DIR}/screenshots.log"
+#### Configuration ####
+# ImageMagic JPEG/PNG compression level and image type, see man import for more info
+# 1-100 Higher is better: default JPEG=92 PNG=75
+IM_QUALITY="95"
+# Image color type: TrueColor, Grayscale, Palette
+IM_TYPE="TrueColor"
+# Image file type: jpg, png
+IM_FILE="jpg"
+# ImageMagic import path
+IMPORT_PATH="/usr/bin/import"
 
-WARNING=red
-NORMAL=white
-HILIGHT=yellow
+# Directory to save screenshots in
+SAVE_TO_DIR="${HOME}/Pictures/scrot"
 
-# 1-100
-QUALITY="95"
+# Name format, here date+time is used
+NAME_FORMAT="$(date +%Y-%m-%d@%H.%M.%S)"
 
-RUN="/usr/bin/import -quality ${QUALITY}"
+# Log all screenshot writes: yes/no
+ENABLE_LOG="yes"
+# Directory to write log file
+LOG_PATH="${SAVE_TO_DIR}/screenshots.log"
 
-if [ 'pkg-config libaosd' ]; then
-    OSD="/usr/bin/aosd_cat -n 'sans 20 bold' -o 3000 -R -f 300 -u 1000 -o 1000 -x -800 -y 1 -p 1 -t 0 "
-else
-    OSD=""
-fi
+# Enable OSD output; yes/no
+ENABLE_AOSD="yes"
+# aosd_cat font settings
+AOSD_FONT="sans 20 bold"
+# Sets fade in time -> time to show in full opacity -> fade out time
+AOSD_FADE_IN="300"
+AOSD_FADE_FULL="2000"
+AOSD_FADE_OUT="1000"
+# Sets initial position: [0-8] 0=top-left, 8= bottom-right
+AOSD_POSITION="1"
+# Sets x/y-axis offset: supports negative values
+AOSD_YOFFSET="1"
+AOSD_XOFFSET="800"
+# Sets transperancy: 0=none, 1=fake, 2=composite
+AOSD_TRANS="0"
+# aosd_cat path
+AOSDCAT_PATH="/usr/bin/aosd_cat"
 
-function write_log {
-        feh $NAME &
-        echo -e "Saving screenshot to ${NAME}" | $OSD -R $HILIGHT &
-        echo -e "${NAME}" >> $LOG &
+# Enable showing screenshot with image viewer in FEH_PATH: yes/no
+ENABLE_FEH="yes"
+# Feh path or other image viewer
+FEH_PATH="/usr/bin/feh"
+
+#### / Configuration ####
+
+WARNING="red"
+NORMAL="white"
+HILIGHT="yellow"
+SAVE_STRING="${SAVE_TO_DIR}/${NAME_FORMAT}.${IM_FILE}"
+IM_RUN="${IMPORT_PATH} -quality ${IM_QUALITY} -type ${IM_TYPE}"
+IM_RUN_WIN="${IM_RUN} ${SAVE_STRING}"
+IM_RUN_SCR="${IM_RUN} -window root ${SAVE_STRING}"
+AOSD_RUN="${AOSDCAT_PATH} --font='${AOSD_FONT}' --fade-in=${AOSD_FADE_IN} --fade-full=${AOSD_FADE_FULL} --fade-out=${AOSD_FADE_OUT} --y-offset=${AOSD_YOFFSET} --x-offset=${AOSD_XOFFSET} --position=${AOSD_POSITION} --transparency=${AOSD_TRANS}"
+AOSD_RUN_WARNING="${AOSD_RUN} --fore-color=${WARNING}"
+AOSD_RUN_HILIGHT="${AOSD_RUN} --fore-color=${HILIGHT}"
+AOSD_RUN_NORMAL="${AOSD_RUN} --fore-color=${NORMAL}"
+
+TAKE_SHOT_STRING="Saving screenshot to ${SAVE_STRING}"
+TAKE_SHOT_ERROR="No screenshot area has been specified. Screenshot not taken.\rMm+Src = Entire screen\rNn+Sm+Scr = Window or area"
+FEH_OUT_STRING="Opening screenshot in feh"
+MISSING_STRING="Directory not found, make sure to set SAVE_TO_DIR, currently set to $SAVE_TO_DIR"
+aosd_out () {
+    if [ "${ENABLE_AOSD}" = "yes" ]; then
+        local run="\$AOSD_RUN_$2"
+        `echo -e "${1}" | eval $run`
+    else
+        echo "$1"
+    fi
 }
 
-# Check if the dir to store the screenshots exists, else create it:
-if [ ! -d "$DIR" ]; then
-    mkdir -p $DIR
-fi
+log_out () {
+    if [ "$ENABLE_LOG" = "yes" ]; then
+        echo -e "${1}" >> $LOG_PATH
+    fi
+}
 
-function error {
+feh_out () {
+    if [ "$ENABLE_FEH" = "yes" ]; then
+        aosd_out "$FEH_OUT_STRING" "HILIGHT" &
+        feh $1 &
+    fi
+}
+
+error () {
     # Display a warning if no area defined
-    echo -e "No zone selected.^MMm+Scr = Entire screen^MMm+Sm+Scr = Window or area" | $OSD -l 3 -R $WARNING
+    aosd_out "$TAKE_SHOT_ERROR" "WARNING" &
 }
 
+take_shot () {
+    if [ ! -d $SAVE_TO_DIR ]; then
+        aosd_out "$MISSING_STRING" "WARNING" &
+    else
+        if [ "$1" = "win" ]; then
+            $IM_RUN_WIN
+        elif [ "$1" = "scr" ]; then
+            $IM_RUN_SCR
+        fi
+        aosd_out "$3" "$2" &
+        log_out "$SAVE_STRING" &
+        feh_out "$SAVE_STRING" &
+    fi
+}
 case "$1" in
     "win")
-        $RUN $NAME
-        write_log
+        take_shot $1 "NORMAL" "$TAKE_SHOT_STRING"
         ;;
     "scr")
-        $RUN -window root $NAME
-        write_log
+        take_shot $1 "NORMAL" "$TAKE_SHOT_STRING"
         ;;
     *)
         error
@@ -51,4 +122,3 @@ case "$1" in
 esac
 
 exit 0
-

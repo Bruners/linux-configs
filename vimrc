@@ -15,7 +15,7 @@ set noswapfile
 set nobackup
 
 " Indenting
-"set autoindent
+set autoindent
 " Enable smart indenting
 set smartindent
 
@@ -23,12 +23,12 @@ set smartindent
 set smarttab
 " <tab> == 4 spaces
 set tabstop=3
-set softtabstop=0
+set softtabstop=4
 " no spaces for tabbing
-set noexpandtab
+set expandtab
 
 " Number of spaces to use for indenting
-set shiftwidth=3
+set shiftwidth=4
 
 " UTF-8 encoding
 set encoding=utf-8

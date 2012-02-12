@@ -26,27 +26,21 @@ vol_func () {
         if [ "$volume" = "0.0" ]; then
             OUT="Unmuting: Volume set to $(ossmix $OSS_CONTROL 15 | awk '{print $8}' | cut -f1 -d.)"
         else
-            OUT="Muting: $(ossmix $OSS_CONTROL 0 | awk '{print $8}' | cut -f1 -d.)"
+            OUT="Muting: $(ossmix $OSS_CONTROL 0 &> /dev/null)"
         fi
     elif [ $1 == "INC" ]; then
         OUT="Volume: $(ossmix $OSS_CONTROL -- +$2 | awk '{print $8}' | cut -f1 -d.)"
     elif [ $1 == "DEC" ]; then
         OUT="Volume: $(ossmix $OSS_CONTROL -- -$2 | awk '{print $8}' | cut -f1 -d.)"
     fi
-    echo "Volume=[$volume]"
     aosd_out "$OUT" "$1" &
 }
 
-if [ $2 ]; then
-    case $1 in
-        INC)
-            vol_func "$1" "$2"
-            ;;
-        DEC)
-            vol_func "$1" "$2"
-            ;;
-        MUT)
-            vol_func "$1" "$2"
-    esac
+if [[ -z "$@" ]]; then
+    echo "Need at least one argument"
+    exit 1
+else
+    vol_func "$1" "$2"
+    exit 0
 fi
-exit 0
+

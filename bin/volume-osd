@@ -1,0 +1,52 @@
+#!/bin/sh
+# Copyright 2012 Lasse Brun <bruners@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
+
+AOSD_RUN="/usr/bin/aosd_cat -n 'Verdana 30' -o 3000 -f 0"
+AOSD_RUN_INC="$AOSD_RUN -R green"
+AOSD_RUN_DEC="$AOSD_RUN -R yellow"
+AOSD_RUN_MUT="$AOSD_RUN -R red"
+
+OSS_CONTROL="vmix0-outvol"
+
+aosd_out () {
+    killall aosd_cat &> /dev/null
+    if [ "$2" = "INC" ]; then
+        echo -e ${1} | $AOSD_RUN_INC
+    elif [ "$2" = "DEC" ]; then
+        echo -e ${1} | $AOSD_RUN_DEC
+    elif [ "$2" = "MUT" ]; then
+        echo -e ${1} | $AOSD_RUN_MUT
+    fi
+}
+
+vol_func () {
+    local volume="$(ossmix $OSS_CONTROL | awk '{print $10}')"
+    if [ $1 == "MUT" ]; then
+        if [ "$volume" = "0.0" ]; then
+            OUT="Unmuting: Volume set to $(ossmix $OSS_CONTROL 15 | awk '{print $8}' | cut -f1 -d.)"
+        else
+            OUT="Muting: $(ossmix $OSS_CONTROL 0 | awk '{print $8}' | cut -f1 -d.)"
+        fi
+    elif [ $1 == "INC" ]; then
+        OUT="Volume: $(ossmix $OSS_CONTROL -- +$2 | awk '{print $8}' | cut -f1 -d.)"
+    elif [ $1 == "DEC" ]; then
+        OUT="Volume: $(ossmix $OSS_CONTROL -- -$2 | awk '{print $8}' | cut -f1 -d.)"
+    fi
+    echo "Volume=[$volume]"
+    aosd_out "$OUT" "$1" &
+}
+
+if [ $2 ]; then
+    case $1 in
+        INC)
+            vol_func "$1" "$2"
+            ;;
+        DEC)
+            vol_func "$1" "$2"
+            ;;
+        MUT)
+            vol_func "$1" "$2"
+    esac
+fi
+exit 0

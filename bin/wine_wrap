@@ -1,0 +1,17 @@
+#!/bin/sh
+
+WINE_PATH="/usr/bin/wine"
+
+case "$1" in
+    "bf2")
+        $WINE_PATH /games/BF2/BF2.exe
+        ;;
+    "wc3")
+        $WINE_PATH /games/Warcraft\ III/Frozen\ Throne.exe -opengl
+        ;;
+    "wow")
+        $WINE_PATH /games/WoW/Wow.exe -opengl
+        ;;
+esac
+exit 0
+

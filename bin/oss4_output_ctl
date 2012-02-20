@@ -1,36 +1,65 @@
-#!/bin/bash
+#!/bin/sh
+# Copyright 2012 Lasse Brun <bruners@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
 
 DSP="/dev/dsp"
+LNCMD="ln -sf"
+OSSINFO_PATH="/usr/bin/ossinfo"
 
-LINE="sudo ln -sf"
-
-SB="sb"
-SB_PATH="/dev/oss/oss_sblive0/pcm0"
-
-HD="hd"
-HD_PATH="/dev/oss/oss_hdaudio0/pcm0"
-
-if [ "$1" = $SB ]; then
-	echo "Dsp is set to:"
-	ossinfo -a | grep '/dev/dsp ->'
-	echo "Changing output to ${SB_PATH}"
-	$LINE $SB_PATH $DSP;
+# Check if running as root, call sudo if not
+if [ "$(whoami)" != "root" ]; then
+    LNCMD="sudo $LNCMD"
 fi
 
-if [ "$1" = $HD ]; then
-        echo "Dsp is set to:"
-        ossinfo -a | grep '/dev/dsp ->'
-        echo "Changing output to ${HD_PATH}"
-	$LINE $HD_PATH $DSP;
-fi
+OUTPUT_1="1"
+OUTPATH_1="/dev/oss/oss_cmi878x0/pcm0"
 
-if [[ $# = 0 ]]; then
-	# Display a warning
-	echo "No input specified, valid options are:"
-	echo "${SB} - ${SB_PATH}"
-	echo "${HD} - ${HD_PATH}"
-	echo "Current output is set to"
-	ossinfo -a | grep '/dev/dsp ->'
-fi
+OUTPUT_2="2"
+OUTPATH_2="/dev/oss/oss_cmi878x0/pcm1"
 
+# Set default colours, adapted from eclectic
+COLOUR_HI="\033[1;34m"
+COLOUR_NORMAL="\033[00m"
+COLOUR_WARN="\033[1;31m"
+
+DSP_STRING="${COLOUR_HI}Dsp is set to:${COLOUR_NORMAL}\n"
+
+function outtext {
+    local CUR_PATH="$OSSINFO_PATH -a | grep '/dev/dsp ->'"
+    if [ "$1" = "$CURPATH" ]; then
+        echo -e $COLOUR_WARN"Output seems to be the same as current, not changing\n"
+        echo -e $COLOUR_HI $DSP_STRING $COLOUR_NORMAL $CUR_PATH
+        echo -e $COLOUR_NORMAL $CUR_PATH
+    else
+        echo -e $COLOUR_HI $DSP_STRING $COLOUR_NORMAL $CUR_PATH
+        echo -e $COLOUR_HI"Changing output to"${COLOUR_NORMAL} $1
+        $LNCMD $1 $DSP
+    fi
+}
+
+function helptext {
+    # Display some helping text
+    echo -e $COLOUR_HI"Usage $0 option\n\nValid options are:\n"
+    echo -e "${COLOUR_HI}${OUTPUT_1} - ${COLOUR_NORMAL}${OUTPATH_1}"
+    echo -e "${COLOUR_HI}${OUTPUT_2} - ${COLOUR_NORMAL}${OUTPATH_2}\n"
+    echo -e $DSP_STRING
+    ossinfo -a | grep '/dev/dsp ->'
+}
+
+case "$1" in
+    "")
+        helptext
+        ;;
+    $OUTPUT_1)
+        outtext "$OUTPATH_1"
+        ;;
+    $OUTPUT_2)
+        outtext "$OUTPATH_2"
+        ;;
+    *)
+        echo -e $COLOUR_WARN"Unrecognized option"
+        helptext
+        ;;
+esac
+exit 0
 

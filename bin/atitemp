@@ -1,1 +1,0 @@
-aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print $5}'

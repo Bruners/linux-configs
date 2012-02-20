@@ -1,2 +1,0 @@
-exe='dmenu_path | dmenu -nb "#000000" -nf "#ffffff" -fn "terminus-8"' && eval "exec $exe"
-

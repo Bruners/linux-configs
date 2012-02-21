@@ -157,6 +157,7 @@ myLayout = avoidStruts $ onWorkspace myWS3 irc $
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
      irc   = reflectVert $ withIM (0.10) (Role "buddy_list") $ withIM (0.15) (ClassName "Mumble") $ standardLayouts
+     test  = reflectHoriz $ (ResizableTall 1 (2/100) (1/4) [])
      stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $

@@ -145,12 +145,14 @@ myTabConfig = defaultTheme { activeColor         = _fg_color
                            , decoHeight          = 13
                            }
 
-myLayout = avoidStruts $ onWorkspace myWS3 irc $
-                         onWorkspace myWS6 (gimp ||| standardLayouts) $
-                         onWorkspace myWS5 (tabbed shrinkText myTabConfig ||| standardLayouts) $
-                         onWorkspace myWS8 full $
-                         onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
+myLayout = avoidStruts $ onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
+                         onWorkspace myWS3 irc $
                          onWorkspace myWS4 (stream ||| standardLayouts) $
+                         onWorkspace myWS5 (tabbed shrinkText myTabConfig ||| standardLayouts) $
+                         onWorkspace myWS6 (gimp ||| standardLayouts) $
+                         onWorkspace myWS7 test $
+                         onWorkspace myWS8 full $
+                         onWorkspace myWS9 full $
                          standardLayouts
   where
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)

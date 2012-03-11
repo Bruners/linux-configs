@@ -12,7 +12,7 @@ H=22
 X=2560
 Y=0
 
-CAPTION="^fg(violet)^i(/home/lasseb/.share/icons/dzen/cpu.xbm)^fg(white)"
+#CAPTION="^fg(violet)^i(/home/lasseb/.share/icons/dzen/cpu.xbm)^fg(white)"
 INTERVAL=5
 CORE0_TEMP=/sys/class/hwmon/hwmon0/device/temp2_input
 CORE1_TEMP=/sys/class/hwmon/hwmon0/device/temp3_input
@@ -30,7 +30,7 @@ while true; do
     TEMP4="`expr $CORE3 / 1000`"
     ALL="`expr $TEMP1 + $TEMP2 + $TEMP3 + $TEMP4`"
     AVG="`expr $ALL / 4`"
-    echo -n "$CAPTION "
+#    echo -n "$CAPTION "
     echo -e "$AVG"
     sleep $INTERVAL;
 done #| dzen2 -ta c -tw $W -h $H -x $X -y $Y -fg $FG -bg $BG -fn $FN

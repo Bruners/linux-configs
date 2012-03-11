@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License V2
 #
 # A small script made to take screenshots, three ways.. the whole thing or the active window or a selectable part.
-# The script utilize ImageMagic, Feh and libaosd.
+# The also script utilize ImageMagic, Feh, libaosd and xclip
 
 #### Configuration ####
 # ImageMagic JPEG/PNG compression level and image type, see man import for more info
@@ -50,6 +50,9 @@ ENABLE_FEH="yes"
 # Feh path or other image viewer
 FEH_PATH="/usr/bin/feh"
 
+# Enable copying path of the screenshot to the clipboard
+ENABLE_XCLIP="yes"
+
 #### / Configuration ####
 
 WARNING="red"
@@ -68,6 +71,7 @@ TAKE_SHOT_STRING="Saving screenshot to ${SAVE_STRING}"
 TAKE_SHOT_ERROR="No screenshot area has been specified. Screenshot not taken.\rMm+Src = Entire screen\rNn+Sm+Scr = Window or area"
 FEH_OUT_STRING="Opening screenshot in feh"
 MISSING_STRING="Directory not found, make sure to set SAVE_TO_DIR, currently set to $SAVE_TO_DIR"
+XLIP_MISSING="Could not find the xclip executable in PATH"
 aosd_out () {
     if [ "${ENABLE_AOSD}" = "yes" ]; then
         local run="\$AOSD_RUN_$2"
@@ -90,6 +94,17 @@ feh_out () {
     fi
 }
 
+xclip_out () {
+    # Copy path of the image to clipboard
+    if [ "$ENABLE_XCLIP" = "yes" ]; then
+        if [ ! -f $(which xclip) ]; then
+            aosd_out "$XCLIP_MISSING" "WARNING" &
+        else
+            `echo -en $SAVE_STRING | xclip`
+        fi
+    fi
+}
+
 error () {
     # Display a warning if no area defined
     aosd_out "$TAKE_SHOT_ERROR" "WARNING" &
@@ -107,6 +122,7 @@ take_shot () {
         aosd_out "$3" "$2" &
         log_out "$SAVE_STRING" &
         feh_out "$SAVE_STRING" &
+        xclip_out "$SAVE_STRINiG" &
     fi
 }
 case "$1" in

@@ -1,8 +1,11 @@
-" Enable syntax highlighting
-syntax enable
+" change the terminal's title
+set title
 
 " Disable vi support mode
 set nocompatible
+
+" Enable syntax highlighting
+syntax enable
 
 " Display what mode is active
 set showmode
@@ -65,7 +68,7 @@ set scrolloff=10
 
 " Show invisible characters
 set list
-set list listchars=tab:·⁖,trail:¶
+set list listchars=nbsp:¬,tab:·⁖,trail:¶,extends:»,precedes:«
 
 " 256 colors
 set t_Co=256
@@ -81,7 +84,8 @@ set foldlevel=0
 
 " Filetype
 filetype on
-filetype plugin indent on
+filetype plugin on
+filetype indent on
 
 " Unload buffers when they are abandoned
 set nohidden

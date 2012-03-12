@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License V2
 #
 # A small script made to take screenshots, three ways.. the whole thing or the active window or a selectable part.
-# The also script utilize ImageMagic, Feh, libaosd and xclip
+# The also utilize ImageMagic, Feh, libaosd and xclip
 
 #### Configuration ####
 # ImageMagic JPEG/PNG compression level and image type, see man import for more info
@@ -73,6 +73,7 @@ FEH_OUT_STRING="Opening screenshot in feh"
 MISSING_STRING="Directory not found, make sure to set SAVE_TO_DIR, currently set to $SAVE_TO_DIR"
 XLIP_MISSING="Could not find the xclip executable in PATH"
 aosd_out () {
+    # Show status with libaosd or echo to console
     if [ "${ENABLE_AOSD}" = "yes" ]; then
         local run="\$AOSD_RUN_$2"
         `echo -e "${1}" | eval $run`
@@ -82,12 +83,14 @@ aosd_out () {
 }
 
 log_out () {
+    # Writes the log file if enabled
     if [ "$ENABLE_LOG" = "yes" ]; then
         echo -e "${1}" >> $LOG_PATH
     fi
 }
 
 feh_out () {
+    # Open screenshot in feh after it has been taken
     if [ "$ENABLE_FEH" = "yes" ]; then
         aosd_out "$FEH_OUT_STRING" "HILIGHT" &
         feh $1 &
@@ -103,11 +106,6 @@ xclip_out () {
             `echo -en $SAVE_STRING | xclip`
         fi
     fi
-}
-
-error () {
-    # Display a warning if no area defined
-    aosd_out "$TAKE_SHOT_ERROR" "WARNING" &
 }
 
 take_shot () {
@@ -133,7 +131,7 @@ case "$1" in
         take_shot $1 "NORMAL" "$TAKE_SHOT_STRING"
         ;;
     *)
-        error
+        aosd_out "$TAKE_SHOT_ERROR" "WARNING" &
         ;;
 esac
 

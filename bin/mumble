@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Script to launch mumble, connect to server and join channel
+
+/usr/bin/mumble mumble://o.haaland.net:64738/Dota-no%20Quakenet%20-%20Right%20click%20here%20and%20make%20your%20own%20room/Heroes%20of%20Newerth/social%20anxiety/?version=1.2.3
+exit 0

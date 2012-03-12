@@ -7,17 +7,15 @@ if [[ $# = 0 ]]; then
     echo "Current mac adresses in use:"
     echo ""
     ifconfig | grep HWaddr | awk '{print $1 " " $5}'
-else
-    if [[ $# == 2 ]]; then
-        echo "Warning..."
-        echo ""
-        echo -e "Changing the mac adress for \033[1m${1}\033[0m to: \033[1m${2}\033[0m"
-        echo -e "Current mac for \033[1m${1}\033[0m is:\033[1m" "\c"
-        ifconfig | grep $1 | grep HWaddr | awk '{print $5}'
-        echo ""
-        read -p "Press [enter] to continue..."
-        ifconfig $1 down
-        ifconfig $1 hw ether $2
-        ifconfig $1 up
-    fi
+elif [[ $# == 2 ]]; then
+    echo "Warning..."
+    echo ""
+    echo -e "Changing the mac adress for \033[1m${1}\033[0m to: \033[1m${2}\033[0m"
+    echo -e "Current mac for \033[1m${1}\033[0m is:\033[1m" "\c"
+    ifconfig | grep $1 | grep HWaddr | awk '{print $5}'
+    echo ""
+    read -p "Press [enter] to continue..."
+    ifconfig $1 down
+    ifconfig $1 hw ether $2
+    ifconfig $1 up
 fi

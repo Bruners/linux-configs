@@ -25,6 +25,7 @@ setterm -blank 0 &
 find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf -n 1 | xargs feh --bg-scale &
 
 # Launch apps
+mpd &
 udiskie &
 ossxmix &
 wicd-client -t &

@@ -1,0 +1,17 @@
+#!/bin/sh
+# Copyright 2012 Lasse Brun <bruners@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
+#
+# Simple script to show current network information
+
+IP="Current IP: \e[36;01m$(ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | awk '{ print $1}')\033[0m"
+GIP="Out IP: \e[36;01m$(curl -s icanhazip.co || echo -e "\e[31;01mNo connection")\033[0m"
+NET="Netmask: \e[36;01m$(ifconfig | grep 'Mask:'| grep -v '127.0.0.1' | cut -d: -f4 | awk '{ print $1}')\033[0m"
+GATE="Gateway: \e[36;01m$(route -n | grep '^0\.0\.\0\.0[ \t]\+[1-9][0-9]*\.[1-9][0-9]*\.[1-9][0-9]*\.[1-9][0-9]*[ \t]\+0\.0\.0\.0[ \t]\+[^ \t]*G[^ \t]*[ \t]' | awk '{print $2}')\033[0m"
+
+echo -e "\e[36;01m*** Network information ***\e[0m"
+echo -e "$IP $GIP"
+echo -e "$NET $GATE"
+echo -e "Current names servers:\e[36;01m\n$(cat /etc/resolv.conf | grep nameserver | awk '{ printf("%5d : %s\n", NR, $2) }')\033[0m"
+echo -e "Current mac adresses in use:\e[36;01m\n$(ifconfig | grep HWaddr | awk '{ printf("%5s : %s\n", $1, $5) }')\033[0m"
+

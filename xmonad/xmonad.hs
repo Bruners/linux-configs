@@ -58,12 +58,10 @@ myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, 
 myNormalBorderColor  = "#000000"
 myFocusedBorderColor = "#333333"
 myDefaultGaps = [(22,0,0,0)]
-myDmenu = "exe=`dmenu_path | dmenu -nb \"#000000\" -nf \"#ffffff\" -fn \"terminus-8\"` && eval \"exec $exe\""
 -- use xev to fin key codes
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
-    , ((mM        , xK_p      ), shellPrompt defaultXPConfig       )  -- Launch shellPromt
-    , ((mM .|. sM , xK_p      ), spawn myDmenu                     )  -- Launch dmenu
+    , ((mM        , xK_p      ), shellPrompt defaultXPConfig       ) -- Launch shellPromt { XPPPosition = ... }
     , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
     , ((mM .|. sM , xK_space  ), setLayout $ XMonad.layoutHook conf) -- Reset the layouts

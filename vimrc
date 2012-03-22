@@ -84,8 +84,7 @@ set foldlevel=0
 
 " Filetype
 filetype on
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 
 " Unload buffers when they are abandoned
 set nohidden
@@ -113,6 +112,12 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
+" ensure every file does syntax highlighting (full)
+autocmd BufEnter * :syntax sync fromstart
+
+" I want to save or quit too fast..
+map :Q :q
+map :W :w
 
 " Pathogen Runetime Path Manipulation https://github.com/tpope/vim-pathogen
 call pathogen#infect()

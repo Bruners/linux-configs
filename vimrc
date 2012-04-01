@@ -82,9 +82,13 @@ set foldmethod=syntax
 " Create folds, but don't fold any of them by default
 set foldlevel=0
 
+" show matching brackets
+set showmatch
+
 " Filetype
 filetype on
-filetype plugin indent on
+filetype plugin on
+filetype indent on
 
 " Unload buffers when they are abandoned
 set nohidden

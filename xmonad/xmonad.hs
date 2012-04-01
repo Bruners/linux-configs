@@ -134,21 +134,27 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- Color config for the tabbed layout
 --
 
-myTabConfig = defaultTheme { activeColor         = _fg_color
-                           , activeBorderColor   = _fg_color
-                           , activeTextColor     = _bg_color
+_fg_color = "#909090"
+_bg_color = "#303030"
+_br_color = "#262626"
+_hd_color = "#606060"
+_or_color = "#ee9a00"
+
+myTabConfig = defaultTheme { activeColor         = _bg_color
+                           , activeBorderColor   = _br_color
+                           , activeTextColor     = _fg_color
                            , inactiveColor       = _bg_color
-                           , inactiveBorderColor = _bg_color
-                           , inactiveTextColor   = "#ee9a00"
+                           , inactiveBorderColor = _br_color
+                           , inactiveTextColor   = _or_color
                            , decoHeight          = 13
                            }
 
 myLayout = avoidStruts $ onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS3 irc $
-                         onWorkspace myWS4 (stream ||| standardLayouts) $
+                         onWorkspace myWS4 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS5 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS6 (gimp ||| standardLayouts) $
-                         onWorkspace myWS7 test $
+                         onWorkspace myWS7 (Grid ||| standardLayouts)$
                          onWorkspace myWS8 full $
                          onWorkspace myWS9 full $
                          standardLayouts
@@ -176,10 +182,10 @@ myWS0  = "0:p2p"
 myWS1  = "1:code"
 myWS2  = "2:www"
 myWS3  = "3:irssi"
-myWS4  = "4:stream"
+myWS4  = "4:code"
 myWS5  = "5:mp3"
 myWS6  = "6:gimp"
-myWS7  = "7:oof"
+myWS7  = "7:stream"
 myWS8  = "8:games"
 myWS9  = "9:wine"
 myWS10 = "0:p2p"
@@ -200,7 +206,7 @@ myManageHook = composeAll . concat $
     ]
 
   where myMatchAnywhereFloats = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
-        myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Gmpc", "Ktsuss"]
+        myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Ktsuss"]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]
         myWSShift = [ (myWS1, [])
@@ -220,11 +226,6 @@ myFocusFollowsMouse = True
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 
-_fg_color = "#909090"
-_bg_color = "#303030"
-_hd_color = "#606060"
-_or_color = "#ee9a00"
-
 myLogHook h = dynamicLogWithPP $ defaultPP
                      { ppCurrent         = dzenColor "white"   "brown" . pad
                      , ppHidden          = dzenColor _fg_color "" . pad . noScratchPad
@@ -241,7 +242,7 @@ myLogHook h = dynamicLogWithPP $ defaultPP
                        "Mirror ResizableTall" -> "[-]"
                        "Grid" -> "[+]"
                        "IM ReflectX IM Full" -> "[G]"
-                       "ReflectX IM ReflectX ResizableTall" -> "[@]"
+                       "ReflectY IM IM ResizableTall" -> "[@]"
                        "Tabbed Simplest" -> "[\"]"
                        "ThreeCol" -> "[3]"
                        _ -> x

@@ -18,75 +18,7 @@ alias rtorrent="tmux new -s rtorrent rtorrent"
 alias update_python="sudo python-updater -c 'xargs cave resolve -Cs -1zx'"
 alias patchpaste="git format-patch --stdout -M -C -C -1 | wgetpaste -r"
 alias -s jpg="/usr/bin/gpicview"
-fans() {
-    if [ $1 ] ; then
-        aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ;
-        aticonfig --pplib-cmd "set fanspeed 0 $1" ;
-    else
-        aticonfig --adapter=0 --od-gettemperature | tail -n1 | awk '{print "Current temp: " $5}' ;
-        aticonfig --pplib-cmd "set fanspeed 0 auto" ;
-    fi
-}
 
 # do a du -hs on each dir on current path
 alias lsdir="for dir in *;do;if [ -d \$dir ];then;du -hsL \$dir;fi;done"
 
-extract() {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)
-                tar xvjf $1
-                ;;
-            *.tar.gz)
-                tar xvzf $1
-                ;;
-            *.bz2)
-                bunzip2 $1
-                ;;
-            *.gz)
-                gunzip $1
-                ;;
-            *.tar)
-                tar xvf $1
-                ;;
-            *.tbz2)
-                tar xvjf $1
-                ;;
-            *.tgz)
-                tar xvzf $1
-                ;;
-            *.rar)
-                unrar e $1
-                ;;
-            *.zip)
-                unzip $1
-                ;;
-            *.ace)
-                unace x $1
-                ;;
-            *.Z)
-                uncompress $1
-                ;;
-            *.7z)
-                7z x $1
-                ;;
-            *.xz)
-                xz dc $1
-                ;;
-            *.lha)
-                lha xfq $1
-                ;;
-            *.deb)
-                ar x $1
-                ;;
-            *tar.lzma)
-                lzma -dc $1 | tar xf - --no-same-owner
-                ;;
-            *)
-                echo "don't know how to extract '$1'..."
-                ;;
-        esac
-    else
-        echo "'$1' is not a valid file."
-    fi
-}

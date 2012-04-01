@@ -1,14 +1,24 @@
 style "scroll"
 {
-    GtkScrollbar::slider-width        = 10
+    GtkScrollbar::slider-width        = 15
     }
 
     class "*" style "scroll"
 
 gtk-toolbar-style = GTK_TOOLBAR_ICONS
 gtk-toolbar-icon-size = GTK_ICON_SIZE_SMALL_TOOLBAR
-gtk-button-images=0
-gtk-menu-images=0
+gtk-button-images=1
+gtk-menu-images=1
 gtk-menu-popup-delay=1
 gtk-icon-size="gtk-large-toolbar=16,16:gtk-small-toolbar=16,16:panel-menu=16,16:panel=16,16:gtk-button=16,16:gtk-dialog=24,24"
 
+style "default"
+{
+    GnomeHRef::link_color = "#268bd2"
+    GtkHTML::link-color = "#268bd2"
+    GtkIMHtmlr::hyperlink-color = "#268bd2"
+    GtkIMHtml::hyperlink-color = "#268bd2"
+    GtkWidget::link-color = "#268bd2"
+    GtkWidget::visited-link-color = "#2c2c2c"
+}
+class "GtkWidget" style "default"

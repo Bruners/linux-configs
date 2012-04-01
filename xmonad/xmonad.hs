@@ -18,6 +18,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Tabbed
+import XMonad.Layout.Master
 import XMonad.Util.Themes
 
 -- Prompt.Shell replacement for dmenu
@@ -162,8 +163,7 @@ myLayout = avoidStruts $ onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| st
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = reflectVert $ withIM (0.10) (Role "buddy_list") $ withIM (0.15) (ClassName "Mumble") $ standardLayouts
-     test  = reflectHoriz $ (ResizableTall 1 (2/100) (1/4) [])
+     irc   = multimastered 2 (1/100) (0.15) $ standardLayouts
      stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
@@ -212,10 +212,10 @@ myManageHook = composeAll . concat $
         myWSShift = [ (myWS1, [])
                      , (myWS2, ["Firefox"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy", "Mumble"])
-                     , (myWS4, ["VirtualBox", "Chromium-browser", "Opera"])
+                     , (myWS4, ["VirtualBox", "Chromium-browser"])
                      , (myWS5, ["Spotify", "Quodlibet", "Gmpc", "Ossxmix"])
-                     , (myWS6, ["Gimp"])
-                     , (myWS7, ["OpenOffice.org 3.2", "libreoffice-startcenter"])
+                     , (myWS6, ["Gimp", "OpenOffice.org 3.2", "libreoffice-startcenter"])
+                     , (myWS7, ["Opera"])
                      , (myWS8, ["Heroes of Newerth"])
                      , (myWS9, ["Wine"])
                      ]

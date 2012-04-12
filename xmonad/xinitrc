@@ -34,5 +34,4 @@ blueman-applet &
 (sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
 (sleep 3 && urxvt -name IRC) &
 (sleep 3 && pidgin) &
-xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C &
 exec ck-launch-session dbus-launch xmonad

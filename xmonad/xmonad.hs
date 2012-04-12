@@ -163,7 +163,7 @@ myLayout = avoidStruts $ onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| st
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = multimastered 2 (1/100) (0.15) $ standardLayouts
+     irc   = reflectHoriz $ withIM (0.10) (Role "mumble") $ reflectHoriz $ multimastered 2 (1/100) (0.15) $ standardLayouts
      stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
@@ -334,6 +334,7 @@ manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
 
 armorStartupHook =  do
                      setWMName "LG3D"
+                     spawn "xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C"
                      return ()
 main :: IO ()
 main = do

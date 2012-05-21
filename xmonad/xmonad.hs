@@ -205,7 +205,7 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat | c <- myMatchCenterFloats ]
     ]
 
-  where myMatchAnywhereFloats = ["Google", "Pavucontrol", "MPlayer", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
+  where myMatchAnywhereFloats = ["Google", "Pavucontrol", "mplayer2", "vdpau", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
         myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Ktsuss"]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]

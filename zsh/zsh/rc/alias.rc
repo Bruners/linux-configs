@@ -21,4 +21,3 @@ alias -s jpg="/usr/bin/gpicview"
 
 # do a du -hs on each dir on current path
 alias lsdir="for dir in *;do;if [ -d \$dir ];then;du -hsL \$dir;fi;done"
-

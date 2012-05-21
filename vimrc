@@ -72,15 +72,17 @@ set list listchars=nbsp:¬,tab:·⁖,trail:¶,extends:»,precedes:«
 
 " 256 colors
 set t_Co=256
+let g:solarized_termcolors=256
+let g:solarized_visibility="normal"
 
 " Folding
 set foldenable
 " Size of the fold columen
-set foldcolumn=4
+"set foldcolumn=4
 " Fold based on syntax
 set foldmethod=syntax
 " Create folds, but don't fold any of them by default
-set foldlevel=0
+" set foldlevel=0
 
 " show matching brackets
 set showmatch

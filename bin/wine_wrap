@@ -12,6 +12,8 @@ case "$1" in
     "wow")
         $WINE_PATH /games/WoW/Wow.exe -opengl
         ;;
+    "d4")
+        $WINE_PATH wine explorer /desktop=Diablo,1820x1024 /games/Diablo\ III/Diablo\ III.exe -launch
 esac
 exit 0
 

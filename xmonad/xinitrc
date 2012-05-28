@@ -7,6 +7,9 @@ export PATH=/home/lasseb/.bin:$PATH
 xrdb -merge ~/.Xdefaults &
 setxkbmap no &
 
+# export the current environment, in case it needs to be debugged
+env > ~/.xenv
+
 # Set up an icon tray
 trayer --monitor 1 --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 8 --height 22 --widthtype percent --transparent true --tint 0x303030 &
 
@@ -34,4 +37,4 @@ blueman-applet &
 (sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
 (sleep 3 && urxvt -name IRC) &
 (sleep 3 && pidgin) &
-exec ck-launch-session dbus-launch xmonad
+exec dbus-launch xmonad

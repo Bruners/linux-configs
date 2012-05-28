@@ -90,9 +90,9 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
     , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
     , ((mM .|. sM , xK_Right  ), shiftToNext                       ) -- Move WS next WS
-    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd DEC 1"   ) -- Reduce volume
-    , ((0         , 0x1008ff13), spawn "~/.bin/volume-osd INC 1"   ) -- Raise volume
-    , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd MUT"     ) -- Mute volume
+    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd -d 1"    ) -- Reduce volume
+    , ((0         , 0x1008ff13), spawn "~/.bin/volume-osd -i 1"    ) -- Raise volume
+    , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd -t"      ) -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm

@@ -10,7 +10,7 @@ then
     exit 0
 else
     echo "Starting HoN and mumble"
-    mumble mumble://o.haaland.net:64738/?version=1.2.3 &
+    /home/lasseb/vt &
     /games/hon/hon.sh &
     exit 0
 fi

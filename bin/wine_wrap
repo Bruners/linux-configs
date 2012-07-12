@@ -13,7 +13,10 @@ case "$1" in
         $WINE_PATH /games/WoW/Wow.exe -opengl
         ;;
     "d3")
-        $WINE_PATH explorer /desktop=Diablo,1920x1080 /games/Diablo\ III/Diablo\ III.exe -launch
+        setarch i386 -3 -L -B -R $WINE_PATH /games/Diablo\ III/Diablo\ III.exe -launch
+        ;;
+    "diablo")
+        setarch i386 -3 -L -B -R $WINE_PATH /games/Diablo\ III/Diablo\ III.exe -launch
 esac
 exit 0
 

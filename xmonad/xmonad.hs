@@ -29,7 +29,7 @@ import XMonad.Prompt.Shell
 import XMonad.Actions.CycleWS
 
 -- Scratchpad
-import XMonad.Util.Scratchpad
+import XMonad.Util.NamedScratchpad
 
 -- Dzen
 import Dzen
@@ -96,7 +96,8 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
-    , ((cM        , xK_bar    ), sP                                ) -- Spawn a scratchpad terminal
+    , ((cM        , xK_bar    ), scratchTerm                       ) -- Spawn scratchpad terminal
+    , ((mM        , xK_v      ), scratchMixer                      ) -- Spawn scratchpad mixer
     , ((mM        , xK_0      ), windows $ W.view myWS10           ) -- Move to workspace 10
     ]
     ++
@@ -116,7 +117,8 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     where
         sM = shiftMask
         cM = controlMask
-        sP = scratchpadSpawnActionTerminal "urxvtc -background '#303030'"
+        scratchTerm = namedScratchpadAction myScratchPads "terminal"
+        scratchMixer = namedScratchpadAction myScratchPads "mixer"
         myRestart = spawn $ "for pid in `pgrep xcompmgr`; do kill -9 $pid; done && " ++
                             "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
                             "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
@@ -209,7 +211,7 @@ myManageHook = composeAll . concat $
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat | c <- myMatchCenterFloats ]
     ]
 
-  where myMatchAnywhereFloats = ["Google", "Pavucontrol", "mplayer2", "vdpau", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker"]
+  where myMatchAnywhereFloats = ["Google", "Pavucontrol", "mplayer2", "vdpau", "Gpicview", "Vlc", "File-roller", "Brasero", "Gnomebaker", "Ossxmix"]
         myMatchCenterFloats = ["feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Ktsuss"]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]
@@ -217,7 +219,7 @@ myManageHook = composeAll . concat $
                      , (myWS2, ["Firefox", "Opera"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy", "Mumble"])
                      , (myWS4, ["VirtualBox", "Chromium-browser"])
-                     , (myWS5, ["Spotify", "Quodlibet", "Gmpc", "Ossxmix"])
+                     , (myWS5, ["Spotify", "Quodlibet", "Gmpc"])
                      , (myWS6, ["Gimp", "OpenOffice.org 3.2", "libreoffice-startcenter"])
                      , (myWS7, [])
                      , (myWS8, ["Heroes of Newerth","explorer.exe"])
@@ -300,16 +302,33 @@ myRightBar3 = myRightBar2
     }
 
 -- Scratchpad
-
-manageScratchPad :: ManageHook
-manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
+myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
+                , NS "terminal" spawnTerm findTerm manageTerm
+                ]
 
   where
+    spawnMixer  = "ossxmix"
+    findMixer   = className =? "Ossxmix"
+    manageMixer = customFloating $ W.RationalRect l t w h
 
-    h = 0.1     -- terminal height, 10%
-    w = 1       -- terminal width, 100%
-    t = 200     -- distance from top edge, 90%
-    l = 200     -- distance from left edge, 0%
+      where
+
+        h = 0.6       -- height, 60%
+        w = 0.6       -- width, 60%
+        t = (1 - h)/2 -- centered top/bottom
+        l = (1 - w)/2 -- centered left/right
+
+    spawnTerm   = myTerminal ++ " -name scratchpad"
+    findTerm    = resource =? "scratchpad"
+    manageTerm  = customFloating $ W.RationalRect l t w h
+
+      where
+
+        h = 0.1
+        w = 1
+        t = 1 - h
+        l = (1 - w)/2
+
 
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
@@ -341,7 +360,7 @@ main = do
                       , keys               = armorKeys
                       , mouseBindings      = myMouseBindings
                       , layoutHook         = myLayout
-                      , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks <+> manageScratchPad
+                      , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks <+> namedScratchpadManageHook myScratchPads
                       , startupHook        = armorStartupHook
                       , logHook            = myLogHook dzen1
                      }

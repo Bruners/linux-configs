@@ -117,10 +117,10 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
         sM = shiftMask
         cM = controlMask
         sP = scratchpadSpawnActionTerminal "urxvtc -background '#303030'"
-        myRestart = spawn $ "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
-                               "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
-                               "for pid in `pgrep xcompmgr`; do kill -9 $pid; done && " ++
-                               "xmonad --recompile && xmonad --restart"
+        myRestart = spawn $ "for pid in `pgrep xcompmgr`; do kill -9 $pid; done && " ++
+                            "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
+                            "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
+                            "xmonad --recompile && xmonad --restart"
 
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -236,7 +236,7 @@ myLogHook h = dynamicLogWithPP $ defaultPP
                      , ppHiddenNoWindows = dzenColor _hd_color "" . pad . noScratchPad
                      , ppVisible         = dzenColor "white"   "" . pad
                      , ppUrgent          = dzenColor "white"   _or_color . pad . dzenStrip
-                     , ppTitle           = dzenColor "green"   "" . shorten 100 . pad
+                     , ppTitle           = dzenColor "green"   "" . shorten 200 . pad
                      , ppWsSep           = ""
                      , ppSep             = " "
                      , ppLayout          = dzenColor _fg_color "" .
@@ -257,60 +257,46 @@ myLogHook h = dynamicLogWithPP $ defaultPP
                        noScratchPad ws = if ws == "NSP" then "" else ws
 
 -- StatusBars
---
--- x_position :: Int
--- y_position :: Int
--- width      :: Int
--- height     :: Int
--- alignment  :: TextAlign (LeftAlign, RightAlign, Centered)
--- font       :: String
--- fg_color   :: String
--- bg_color   :: String
--- exec       :: String
--- addargs    :: [String]
---
+-- Usage: http://docs.pbrisbin.com/haskell/xmonad-config/Dzen.html or lib/dzen.hs
 
-myLeftBar1 :: DzenConf
-myLeftBar1 = defaultDzen
+myLeftBar :: DzenConf
+myLeftBar = defaultDzen
     -- use the default as a base and override width and colors
-    { Dzen.width       = 960
-    , Dzen.height      = 22
-    , Dzen.fg_color    = _fg_color
-    , Dzen.bg_color    = _bg_color
+    { Dzen.alignment  = Just LeftAlign
+    , Dzen.screen     = Just $ 1
+    , Dzen.width      = Just $ Percent 70
+    , Dzen.height     = Just $ 22
+    , Dzen.fgColor    = Just _fg_color
+    , Dzen.bgColor    = Just _bg_color
     }
 
 myLeftBar2 :: DzenConf
-myLeftBar2 = myLeftBar1
-    { Dzen.x_position  = 960
-    , Dzen.width       = 960
-    , Dzen.height      = 22
-    , Dzen.alignment   = RightAlign
+myLeftBar2 = myLeftBar
+    { Dzen.width      = Just $ Percent 30
+    , Dzen.alignment  = Just RightAlign
+    , Dzen.xPosition  = Just $ Percent 70
     }
 
 myRightBar1 :: DzenConf
 myRightBar1 = myLeftBar2
-    { Dzen.x_position = 1920
-    , Dzen.width      = 640
-    , Dzen.height     = 22
-    , Dzen.alignment  = LeftAlign
-    , Dzen.exec       = "button4=exec:mpc seek +5;button5=exec:mpc seek -5;button1=exec:mpc prev;button3=exec:mpc next;button2=exec:mpc toggle"
+    { Dzen.xPosition  = Just $ Pixels 0
+    , Dzen.screen     = Just $ 0
+    , Dzen.width      = Just $ Pixels 640
+    , Dzen.alignment  = Just LeftAlign
     }
 
 myRightBar2 :: DzenConf
 myRightBar2 = myRightBar1
-    { Dzen.x_position = 2560
-    , Dzen.width      = 640
-    , Dzen.height     = 22
-    , Dzen.alignment  = Centered
+    { Dzen.xPosition  = Just $ Pixels 640
+    , Dzen.width      = Just $ Pixels 640
+    , Dzen.alignment  = Just Centered
     }
 
 myRightBar3 :: DzenConf
 myRightBar3 = myRightBar2
-    -- use the left one as a base and override just the x position and width
-    { Dzen.x_position = 3200
-    , Dzen.width      = 487
-    , Dzen.height     = 22
-    , Dzen.alignment  = RightAlign
+    { Dzen.xPosition  = Just $ Pixels 1280
+    , Dzen.width      = Just $ Pixels 487
+    , Dzen.alignment  = Just RightAlign
     }
 
 -- Scratchpad
@@ -338,12 +324,11 @@ armorStartupHook =  do
                      return ()
 main :: IO ()
 main = do
-          dzen1 <- spawnDzen myLeftBar1
-          spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar2
--- Right
-          spawn $ "/home/lasseb/.bin/dzen_mpd.sh | " ++ dzen myRightBar1
-          spawn $ "/home/lasseb/.bin/dzen_cputemp.sh  | " ++ dzen myRightBar2
-          spawn $ "conky -c /home/lasseb/.xmonad/dzen_right2 | " ++ dzen myRightBar3
+          dzen1 <- spawnDzen myLeftBar
+          spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_left2" myLeftBar2
+          spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_right_left" myRightBar1
+          spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_right_center" myRightBar2
+          spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_right_right" myRightBar3
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
                       { terminal           = myTerminal
                       --, handleEventHook    = fullscreenEventHook

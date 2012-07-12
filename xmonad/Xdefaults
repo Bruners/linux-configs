@@ -4,53 +4,55 @@ Xft.rgba: rgb
 Xft.hinting: 1
 Xft.hintstyle: hintfull
 Xft.antialias: 1
-Xft.autohit: 0
+Xft.autohint: 0
 
 #include "/home/lasseb/.xcolors/solarized.xcolors"
 
-URxvt*transparent: true
-URxvt*shading: 10
-URxvt*depth: 32
-URxvt*background: rgba:1111/1111/1111/dddd
-URxvt*font: -*-proggyclean-medium-r-normal--13-*-*-*-*-*-*-*
-URxvt*keysym.Home: \033[1~
-URxvt*keysym.End: \033[4~
-URxvt.geometry: 100x30
+URxvt*.transparent: true
+URxvt*.shading: 10
+URxvt*.depth: 32
+URxvt*.background: rgba:1111/1111/1111/dddd
+URxvt*.font: -*-proggyclean-medium-r-normal--13-*-*-*-*-*-*-*
+URxvt*.boldFont: -*-proggyclean-bold-r-normal--13-*-*-*-*-*-*-*
+URxvt*.keysym.Home: \033[1~
+URxvt*.keysym.End: \033[4~
+URxvt*.geometry: 154x36
 
-URxvt*saveLines: 2048
-URxvt*inheritPixmap: false
-URxvt*visualBell: true
-URxvt*scrollBar: 0
+urxvt*.saveLines: 8192
+URxvt*.inheritPixmap: false
+URxvt*.visualBell: true
 
-URxvt*cursorColor: #ff9900
-URxvt*cursorColor2: #454638
-URxvt*cursorBlink: false
+URxvt*.cursorColor: #ff9900
+URxvt*.cursorColor2: #454638
+URxvt*.cursorBlink: false
 
-!urxvt.underlineColor: #999999
-URxvt*underlineColor: #c0c0c0
-URxvt.colorIT: #bbbbbb
-URxvt.colorBD: #ffffff
+URxvt*.underlineColor: #c0c0c0
+URxvt*.colorIT: #bbbbbb
+URxvt*.colorBD: #ffffff
 
-URxvt*loginShell: true
-URxvt*print-pipe: cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
-URxvt.jumpScroll: true
+URxvt*.loginShell: true
+URxvt*.print-pipe: cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
+URxvt*.jumpScroll: true
 
-URxvt*scrollTtyOutput: false
-URxvt*scrollWithBuffer: true
-URxvt*scrollTtyKeypress: true
+URxvt*.scrollBar: 0
+URxvt*.secondaryScroll: true
+URxvt*.scrollTtyOutput: false
+URxvt*.scrollWithBuffer: true
+URxvt*.scrollTtyKeypress: true
 
-URxvt*pointerBlank: true
-URxvt*pointerBlankDelay: 5
+URxvt*.pointerBlank: true
+URxvt*.pointerBlankDelay: 5
 
-URxvt*urgentOnBell: true
+URxvt*.urgentOnBell: true
 
-URxvt*perl-ext-common: matcher
-URxvt*urlLauncher: /usr/bin/firefox
-URxvt*matcher.button: 1
-!URxvt*cutchars: `"()'*<>[]{|}
+URxvt.perl-ext-common: default,matcher,-selection-popup,-option-popup,-readline
+URxvt*.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
+URxvt*.urlLauncher: /usr/bin/opera
+URxvt*.matcher.button: 1
 
-URxvt*xftAntialias: false
 IRC*title: IRC
+IRC*saveLines: 0
+IRC*mapAlert: true
 
-Xcursor.theme: Obsidian
-Xcursor*size: 24
+Xcursor*.theme: Obsidian
+Xcursor*.size: 24

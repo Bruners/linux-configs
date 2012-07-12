@@ -51,9 +51,9 @@ import qualified Data.Map        as M
 import System.IO
 
 myTerminal = "urxvtc"
-myBorderWidth   = 0
+myBorderWidth = 0
 
-myModMask       = mod4Mask
+myModMask = mod4Mask
 myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
 
 myNormalBorderColor  = "#000000"
@@ -81,7 +81,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM        , xK_t      ), withFocused $ windows . W.sink    ) -- Push back into tiling
     , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)        ) -- Increment windows
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows
-    , ((mM .|. sM , xK_F12    ), io (exitWith ExitSuccess)         ) -- Quit xmonad
+    , ((mM .|. cM , xK_F11    ), io (exitWith ExitSuccess)         ) -- Quit xmonad
     , ((mM        , xK_F12    ), myRestart                         ) -- Restart xmonad
     , ((0         , xK_Print  ), spawn "screenshot"                ) -- Screenshot
     , ((mM        , xK_Print  ), spawn "screenshot scr"            ) -- Screenshot screen
@@ -119,6 +119,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
         sP = scratchpadSpawnActionTerminal "urxvtc -background '#303030'"
         myRestart = spawn $ "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
                                "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
+                               "for pid in `pgrep xcompmgr`; do kill -9 $pid; done && " ++
                                "xmonad --recompile && xmonad --restart"
 
 
@@ -140,13 +141,15 @@ _bg_color = "#303030"
 _br_color = "#262626"
 _hd_color = "#606060"
 _or_color = "#ee9a00"
+_gr_color = "#99cc66"
 
-myTabConfig = defaultTheme { activeColor         = _bg_color
+myTabConfig = defaultTheme { activeColor         = _hd_color
                            , activeBorderColor   = _br_color
-                           , activeTextColor     = _fg_color
+                           , activeTextColor     = _or_color
                            , inactiveColor       = _bg_color
                            , inactiveBorderColor = _br_color
-                           , inactiveTextColor   = _or_color
+                           , inactiveTextColor   = _fg_color
+                           , urgentTextColor     = _gr_color
                            , decoHeight          = 13
                            }
 
@@ -155,7 +158,7 @@ myLayout = avoidStruts $ onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| st
                          onWorkspace myWS4 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS5 (tabbed shrinkText myTabConfig ||| standardLayouts) $
                          onWorkspace myWS6 (gimp ||| standardLayouts) $
-                         onWorkspace myWS7 (Grid ||| standardLayouts)$
+                         onWorkspace myWS7 (Grid ||| standardLayouts) $
                          onWorkspace myWS8 full $
                          onWorkspace myWS9 full $
                          standardLayouts
@@ -163,8 +166,9 @@ myLayout = avoidStruts $ onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| st
      standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabbed shrinkText myTabConfig ||| Grid ||| full)
 
      tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
-     irc   = reflectHoriz $ withIM (0.10) (Role "mumble") $ reflectHoriz $ multimastered 2 (1/100) (0.15) $ standardLayouts
+     irc   = multimastered 2 (1/100) (0.15) $ (tabbed shrinkText myTabConfig ||| standardLayouts)
      stream = reflectHoriz $ withIM (0.15) (ClassName "chromium-browser") $ reflectHoriz $ standardLayouts
+     twoplusone = reflectHoriz $ multimastered 2 (1/100) (0.15) $ standardLayouts
      threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
      gimp  = withIM (0.11) (Role "gimp-toolbox") $
              reflectHoriz $
@@ -210,13 +214,13 @@ myManageHook = composeAll . concat $
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]
         myWSShift = [ (myWS1, [])
-                     , (myWS2, ["Firefox"])
+                     , (myWS2, ["Firefox", "Opera"])
                      , (myWS3, ["IRC", "Pidgin", "Mangler", "Empathy", "Mumble"])
                      , (myWS4, ["VirtualBox", "Chromium-browser"])
                      , (myWS5, ["Spotify", "Quodlibet", "Gmpc", "Ossxmix"])
                      , (myWS6, ["Gimp", "OpenOffice.org 3.2", "libreoffice-startcenter"])
-                     , (myWS7, ["Opera"])
-                     , (myWS8, ["Heroes of Newerth"])
+                     , (myWS7, [])
+                     , (myWS8, ["Heroes of Newerth","explorer.exe"])
                      , (myWS9, ["Wine"])
                      ]
 
@@ -278,21 +282,13 @@ myLeftBar1 = defaultDzen
 myLeftBar2 :: DzenConf
 myLeftBar2 = myLeftBar1
     { Dzen.x_position  = 960
-    , Dzen.width       = 480
-    , Dzen.height      = 22
-    , Dzen.alignment   = RightAlign
-    }
-
-myLeftBar3 :: DzenConf
-myLeftBar3 = myLeftBar1
-    { Dzen.x_position  = 960
     , Dzen.width       = 960
     , Dzen.height      = 22
     , Dzen.alignment   = RightAlign
     }
 
 myRightBar1 :: DzenConf
-myRightBar1 = myLeftBar3
+myRightBar1 = myLeftBar2
     { Dzen.x_position = 1920
     , Dzen.width      = 640
     , Dzen.height     = 22
@@ -335,12 +331,15 @@ manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
 armorStartupHook =  do
                      setWMName "LG3D"
                      spawn "xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C"
+                     spawn "xrdb -merge ~/.Xdefaults"
+                     spawn "setxkbmap no"
+                     spawn "xmodmap -e 'clear Lock'"
+                     spawn "xmodmap /home/lasseb/.Xmodmap"
                      return ()
 main :: IO ()
 main = do
           dzen1 <- spawnDzen myLeftBar1
-          --spawn $ "/home/lasseb/.bin/dzen_cputemp.sh | " ++ dzen myLeftBar2
-          spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar3
+          spawn $ "conky -c /home/lasseb/.xmonad/dzen_left2 | " ++ dzen myLeftBar2
 -- Right
           spawn $ "/home/lasseb/.bin/dzen_mpd.sh | " ++ dzen myRightBar1
           spawn $ "/home/lasseb/.bin/dzen_cputemp.sh  | " ++ dzen myRightBar2

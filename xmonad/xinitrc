@@ -3,12 +3,12 @@
 # .xinitrc
 
 # Load Resources
-export PATH=/home/lasseb/.bin:$PATH
+export PATH=/home/lasseb/.bin:$PATH &
 xrdb -merge ~/.Xdefaults &
 setxkbmap no &
 
 # export the current environment, in case it needs to be debugged
-env > ~/.xenv
+env > ~/.xenv &
 
 # Set up an icon tray
 trayer --monitor 1 --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 8 --height 22 --widthtype percent --transparent true --tint 0x303030 &
@@ -20,7 +20,7 @@ urxvtd --quiet --fork --opendisplay &
 xsetroot -cursor_name left_ptr &
 
 # Set mouse acceleration and threshold (m acc thr) and screensaver (s on/off) and dpms off
-xset m 0 0 s off -dpms &
+xset m 0 0 s 7200 7200 s off -dpms &
 
 # Set the interval of inactivity, after which the screen will be automatically blanked
 setterm -blank 0 &
@@ -32,9 +32,12 @@ mpd &
 udiskie &
 ossxmix &
 wicd-client -t &
-blueman-applet &
-(sleep 3 && xmodmap -e "clear Lock") &
-(sleep 3 && xmodmap /home/lasseb/.Xmodmap) &
-(sleep 3 && urxvt -name IRC) &
+#blueman-applet &
+(sleep 2 && xmodmap -e "clear Lock") &
+(sleep 2 && xmodmap /home/lasseb/.Xmodmap) &
+# WS3
+(sleep 2 && urxvt -name IRC) &
+(sleep 3 && mumble) &
 (sleep 3 && pidgin) &
-exec dbus-launch xmonad
+
+exec dbus-launch --sh-syntax --exit-with-session xmonad

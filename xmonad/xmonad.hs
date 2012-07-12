@@ -1,17 +1,14 @@
 
 import XMonad
 import System.Exit
--- module to get host information
---import System.Posix.Unistd
+import System.IO
 -- For Xinerama
 import Graphics.X11.Xlib
 import Graphics.X11.Xinerama
-
 -- For the gimp layout.
 import XMonad.Layout.IM
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Reflect
-
 -- Other layouts
 import XMonad.Layout.Grid
 import XMonad.Layout.NoBorders
@@ -24,17 +21,14 @@ import XMonad.Util.Themes
 -- Prompt.Shell replacement for dmenu
 import XMonad.Prompt
 import XMonad.Prompt.Shell
-
 -- Switch desktops
 import XMonad.Actions.CycleWS
-
 -- Scratchpad
 import XMonad.Util.NamedScratchpad
 
 -- Dzen
 import Dzen
 import XMonad.Util.Run (hPutStrLn, spawnPipe)
---import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog hiding (dzen)
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -43,23 +37,27 @@ import XMonad.Hooks.Place
 import Data.List
 
 import XMonad.Hooks.SetWMName
----import XMonad.Hooks.EwmhDesktops
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-import System.IO
-
+myTerminal :: String
 myTerminal = "urxvtc"
+
+myBorderWidth :: Dimension
 myBorderWidth = 0
 
+myModMask :: KeyMask
 myModMask = mod4Mask
-myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
 
+myNormalBorderColor, myFocusedBorderColor :: String
 myNormalBorderColor  = "#000000"
 myFocusedBorderColor = "#333333"
+
 myDefaultGaps = [(22,0,0,0)]
+
 -- use xev to fin key codes
+armorKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
     , ((mM        , xK_p      ), shellPrompt defaultXPConfig       ) -- Launch shellPromt { XPPPosition = ... }
@@ -124,20 +122,15 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
                             "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
                             "xmonad --recompile && xmonad --restart"
 
-
+myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
     [ ((modMask, button1), (\w -> focus w >> mouseMoveWindow w)    ) -- Float window and move with m1
     , ((modMask, button2), (\w -> focus w >> windows W.swapMaster) ) -- Raise window to the top of the stack
     , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w)  ) -- Float window and resize with m3
---    , ((modMask, button4), (\_ -> prevWS)) -- switch to previous workspace
---    , ((modMask, button5), (\_ -> nextWS)) -- switch to next workspace
     ]
 
---
 -- Color config for the tabbed layout
---
-
 _fg_color = "#909090"
 _bg_color = "#303030"
 _br_color = "#262626"
@@ -180,10 +173,10 @@ myLayout = avoidStruts $ onWorkspace myWS2 (tabbed shrinkText myTabConfig ||| st
      ratio   = 1/2
      delta   = 3/100
 
---
--- Workspace variables for easy renaming
---
+myWorkspaces :: [WorkspaceId]
+myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
 
+-- Workspace variables for easy renaming
 myWS0  = "0:p2p"
 myWS1  = "1:code"
 myWS2  = "2:www"
@@ -196,10 +189,9 @@ myWS8  = "8:games"
 myWS9  = "9:wine"
 myWS10 = "0:p2p"
 
-
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
-
+myManageHook :: ManageHook
 myManageHook = composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
@@ -231,7 +223,6 @@ myFocusFollowsMouse = True
 
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
-
 myLogHook h = dynamicLogWithPP $ defaultPP
                      { ppCurrent         = dzenColor "white"   "brown" . pad
                      , ppHidden          = dzenColor _fg_color "" . pad . noScratchPad
@@ -248,7 +239,8 @@ myLogHook h = dynamicLogWithPP $ defaultPP
                        "Mirror ResizableTall" -> "[-]"
                        "Grid" -> "[+]"
                        "IM ReflectX IM Full" -> "[G]"
-                       "ReflectY IM IM ResizableTall" -> "[@]"
+--                       "ReflectY IM IM ResizableTall" -> "[@]"
+                       "Mastered Tabbed Simplest" -> "[@]"
                        "Tabbed Simplest" -> "[\"]"
                        "ThreeCol" -> "[3]"
                        _ -> x
@@ -329,10 +321,9 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
         t = 1 - h
         l = (1 - w)/2
 
-
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
-
+armorStartupHook :: X ()
 armorStartupHook =  do
                      setWMName "LG3D"
                      spawn "xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C"
@@ -350,7 +341,6 @@ main = do
           spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_right_right" myRightBar3
           xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
                       { terminal           = myTerminal
-                      --, handleEventHook    = fullscreenEventHook
                       , focusFollowsMouse  = myFocusFollowsMouse
                       , borderWidth        = myBorderWidth
                       , modMask            = myModMask
@@ -363,4 +353,4 @@ main = do
                       , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks <+> namedScratchpadManageHook myScratchPads
                       , startupHook        = armorStartupHook
                       , logHook            = myLogHook dzen1
-                     }
+                      }

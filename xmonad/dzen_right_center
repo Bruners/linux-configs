@@ -11,6 +11,7 @@ update_interval 1
 total_run_times 0
 
 TEXT
-^fg(grey60) ${mpd_status} \
-^fg(orange)[^fg(grey90)$(top name 1}^fg(orange)/^fg(grey90)${top cpu 1}^fg(orange)]\
-[^fg(grey90)${top name 2}^fg(orange)/^fg(grey90)${top cpu 2}^fg(orange)]
+^fg(grey90)/: ^fg(orange)[^fg(grey90)${fs_bar 1,7 /}^fg(orange)] ^fg(grey90)${fs_free_perc /} % \
+^fg(grey90)/home: ^fg(orange)[^fg(grey90)${fs_bar 1,7 /home}^fg(orange)] ^fg(grey90)${fs_free_perc /home} % \
+^fg(grey90)/wdc2tb: ^fg(orange)[^fg(grey90)${fs_bar 1,7 /mnt/wdc2tb}^fg(orange)] ^fg(grey90)${fs_free_perc /mnt/wdc2tb} % \
+^fg(grey90)/wdc1tb: ^fg(orange)[^fg(grey90)${fs_bar 1,7 /mnt/wdc1tb}^fg(orange)] ^fg(grey90)${fs_free_perc /mnt/wdc1tb} % \

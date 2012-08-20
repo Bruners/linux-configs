@@ -1,0 +1,34 @@
+#!/bin/bash
+# A script to download youtube-videos with youtube-dl and convert them to be used on Pioneer AVH-head units
+#
+# ffmpeg Options:
+#  -f avi output format
+#  -s output resolution here we use the native format of the screen 480x240
+#  -c:v mpeg4 video
+#  -b:v video bitrate (higher the better it looks and larger the file )
+#  -c:a audio is mp3 using mp3lame lib
+#  -b:a audio bitrate
+#  -bf 2 add bframes
+#  -vtag DX50 adds the fourCC divx tag so the media is defined as Divx (The Unit will not be able to read file[s] without this)
+
+# Keep and reuse the youtube file for several conversions
+remove_orig=false
+
+tubeurl=$1
+regex='v=(.*)'
+
+if [[ $tubeurl =~ $regex ]]; then
+    video_id=${BASH_REMATCH[1]}
+    video_id=$(echo $video_id | cut -d'&' -f1)
+    video_title="$(youtube-dl --get-title $tubeurl)"
+
+    youtube-dl $tubeurl
+    ext="mp4"
+    #ffmpeg -y -i $video_id.$ext -f avi -s 480x240 -r 30000/1001 -c:v mpeg4 -vtag DX50 -b:v 640k -r:a 44100 -ac 2 -bf 2 -c:a libmp3lame -b:a 256k -filter:v yadif "$video_title".avi
+    avconv -i $video_id.$ext -f avi -b 768k -g 300 -bf 2 -vcodec mpeg4 -vtag DX50 -s 320x240 -acodec libmp3lame -ab 256k "$video_title".avi
+    if [[ $remove_orig == true ]]; then
+        rm $video_id.$ext
+    fi
+else
+    echo "Unknown url, usage: tube2car http://www.youtube.com/watch?v=vxXxXXXxfrw"
+fi

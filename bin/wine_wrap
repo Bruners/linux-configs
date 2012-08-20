@@ -16,7 +16,7 @@ case "$1" in
         setarch i386 -3 -L -B -R $WINE_PATH /games/Diablo\ III/Diablo\ III.exe -launch
         ;;
     "diablo")
-        setarch i386 -3 -L -B -R $WINE_PATH /games/Diablo\ III/Diablo\ III.exe -launch
+        setarch i386 -3 -L -B -R $WINE_PATH /games/Diablo\ III/Diablo\ III.exe
 esac
 exit 0
 

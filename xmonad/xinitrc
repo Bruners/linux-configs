@@ -30,7 +30,7 @@ find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf 
 # Launch apps
 mpd &
 udiskie &
-ossxmix &
+#ossxmix &
 wicd-client -t &
 #blueman-applet &
 (sleep 2 && xmodmap -e "clear Lock") &

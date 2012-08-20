@@ -1,9 +1,8 @@
-keycode 66 = XF86Launch1
-!keycode  93 = XF86Launch1
-!keycode 129 = XF86Launch8
-!keycode 130 = XF86Launch9
-!keycode 131 = XF86Launch2
+! ~/.Xmodmap
+! xmodmap -pke
 
+! Swap horiz tilt-scroll G5 (6-7)
+pointer = 1 2 3 4 5 7 6 8 9 10 11 12
 keycode 173 = XF86AudioPrev
 keycode 171 = XF86AudioNext
 keycode 121 = XF86AudioMute
@@ -11,4 +10,10 @@ keycode 172 = XF86AudioPlay
 keycode 174 = XF86AudioStop
 keycode 122 = XF86AudioLowerVolume
 keycode 123 = XF86AudioRaiseVolume
+
 clear Lock
+! Caps_Lock = 66
+keycode 66 = XF86Phone
+! Scroll_Lock = 78
+keycode 78 = Caps_Lock
+add Lock = Caps_Lock

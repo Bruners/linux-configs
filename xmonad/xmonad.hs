@@ -61,7 +61,7 @@ armorKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
     , ((mM        , xK_p      ), shellPrompt defaultXPConfig       ) -- Launch shellPromt { XPPPosition = ... }
-    , ((mM .|. sM , xK_c      ), kill                              ) -- Close focused window
+    , ((aM        , xK_F4     ), kill                              ) -- Close focused window
     , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
     , ((mM .|. sM , xK_space  ), setLayout $ XMonad.layoutHook conf) -- Reset the layouts
     , ((mM        , xK_n      ), refresh                           ) -- Resize windows
@@ -115,6 +115,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     where
         sM = shiftMask
         cM = controlMask
+        aM = mod1Mask
         scratchTerm = namedScratchpadAction myScratchPads "terminal"
         scratchMixer = namedScratchpadAction myScratchPads "mixer"
         myRestart = spawn $ "for pid in `pgrep xcompmgr`; do kill -9 $pid; done && " ++

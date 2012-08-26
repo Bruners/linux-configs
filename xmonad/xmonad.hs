@@ -327,7 +327,7 @@ armorStartupHook :: X ()
 armorStartupHook =  do
                      setWMName "LG3D"
                      spawn "xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C"
-                     spawn "xrdb -merge ~/.Xdefaults"
+                     spawn "xrdb -merge ~/.Xresources"
                      spawn "setxkbmap no"
                      spawn "xmodmap -e 'clear Lock'"
                      spawn "xmodmap /home/lasseb/.Xmodmap"

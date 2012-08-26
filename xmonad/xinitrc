@@ -4,7 +4,7 @@
 
 # Load Resources
 export PATH=/home/lasseb/.bin:$PATH &
-xrdb -merge ~/.Xdefaults &
+xrdb -merge ~/.Xresources
 setxkbmap no &
 
 # export the current environment, in case it needs to be debugged

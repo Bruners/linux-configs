@@ -45,14 +45,14 @@ myTerminal :: String
 myTerminal = "urxvtc"
 
 myBorderWidth :: Dimension
-myBorderWidth = 0
+myBorderWidth = 1
 
 myModMask :: KeyMask
 myModMask = mod4Mask
 
 myNormalBorderColor, myFocusedBorderColor :: String
-myNormalBorderColor  = "#000000"
-myFocusedBorderColor = "#333333"
+myNormalBorderColor  = "#282828"
+myFocusedBorderColor = "#282828"
 
 myDefaultGaps = [(22,0,0,0)]
 

@@ -2,7 +2,7 @@
 ! xmodmap -pke
 
 ! Swap horiz tilt-scroll G5 (6-7)
-pointer = 1 2 3 4 5 7 6 8 9 10 11 12
+pointer = 1 2 3 4 5 7 6 8 9
 keycode 173 = XF86AudioPrev
 keycode 171 = XF86AudioNext
 keycode 121 = XF86AudioMute
@@ -12,8 +12,10 @@ keycode 122 = XF86AudioLowerVolume
 keycode 123 = XF86AudioRaiseVolume
 
 clear Lock
+!remove Lock = Caps_Lock
 ! Caps_Lock = 66
 keycode 66 = XF86Phone
+!keysym Caps_Lock = XF86Phone
 ! Scroll_Lock = 78
 keycode 78 = Caps_Lock
 add Lock = Caps_Lock

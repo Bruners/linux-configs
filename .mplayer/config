@@ -9,9 +9,12 @@ vf-clr=yes
 monitoraspect=16:9
 ao=oss,pulse
 input:file=/home/lasseb/.mplayer/rc
-#menu=yes
 fs=yes
 xineramascreen=0
+
+subfont-text-scale=3
+subfont-osd-scale=4
+
 # Pretend to be Window Media Player.
 # Fixes playback when playlist and media file use the same URL.
 #user-agent=NSPlayer/4.1.0.3856

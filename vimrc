@@ -1,3 +1,6 @@
+"exheres"
+let g:exheres_author_name="Lasse Brun <bruners@gmail.com>"
+
 " change the terminal's title
 set title
 
@@ -125,5 +128,4 @@ autocmd BufEnter * :syntax sync fromstart
 map :Q :q
 map :W :w
 
-" Pathogen Runetime Path Manipulation https://github.com/tpope/vim-pathogen
-call pathogen#infect()
+source $VIMRUNTIME/mswin.vim

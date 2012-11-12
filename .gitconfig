@@ -14,3 +14,5 @@
     excludesfile = /home/lasseb/github/.global_ignore
 [alias]
     hist = log --pretty=format:\"%C(yellow)%h %Cgreen%ad %Creset%s%C(yellow)%d %Creset[%C(cyan)%an%Creset]\" --graph --date=short
+[format]
+    pretty = "Commit:  %C(yellow)%H%nAuthor:  %C(green)%aN <%aE>%nDate:    (%C(red)%ar%Creset) %ai%nSubject: %s%n%n%b"

@@ -57,47 +57,47 @@ myDefaultGaps = [ (22,0,0,0) ]
 -- use xev to fin key codes
 armorKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
-    [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf      ) -- Lanch a terminal
-    , ((mM        , xK_p      ), shellPrompt myXPConfig            ) -- Launch shellPromt
-    , ((aM        , xK_F4     ), kill                              ) -- Close focused window
-    , ((mM        , xK_space  ), sendMessage NextLayout            ) -- Rotate layouts
+    [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf) -- Lanch a terminal
+    , ((mM        , xK_p      ), shellPrompt myXPConfig) -- Launch shellPromt
+    , ((aM        , xK_F4     ), kill) -- Close focused window
+    , ((mM        , xK_space  ), sendMessage NextLayout) -- Rotate layouts
     , ((mM .|. sM , xK_space  ), setLayout $ XMonad.layoutHook conf) -- Reset the layouts
-    , ((mM        , xK_n      ), refresh                           ) -- Resize windows
+    , ((mM        , xK_n      ), refresh) -- Resize windows
     , ((aM        , xK_Tab    ), cycleRecentWindows [xK_Alt_L] xK_Tab xK_Tab ) -- Move focus to next
-    , ((mM        , xK_Tab    ), windows W.focusUp                 )
-    , ((mM        , xK_j      ), windows W.focusDown               ) -- Move foucs to next
-    , ((mM        , xK_k      ), windows W.focusUp                 ) -- Move focus to prev
-    , ((mM        , xK_m      ), windows W.focusMaster             ) -- Move focus to master
-    , ((mM        , xK_Return ), dwmpromote                        ) -- Swap focused with master or next in stack
-    , ((mM .|. sM , xK_j      ), windows W.swapDown                ) -- Swap focused/next
-    , ((mM .|. sM , xK_k      ), windows W.swapUp                  ) -- Swap focused/prev
-    , ((mM        , xK_h      ), sendMessage Shrink                ) -- Shrink area horiz
-    , ((mM        , xK_l      ), sendMessage Expand                ) -- Expand area horiz
-    , ((mM .|. cM , xK_h      ), sendMessage MirrorShrink          ) -- Shrink mirror vert
-    , ((mM .|. cM , xK_l      ), sendMessage MirrorExpand          ) -- Expand mirror vert
-    , ((mM        , xK_t      ), withFocused $ windows . W.sink    ) -- Push back into tiling
-    , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)        ) -- Increment windows
-    , ((mM        , xK_period ), sendMessage (IncMasterN (-1))     ) -- Deincrement windows
-    , ((mM .|. cM , xK_F11    ), io (exitWith ExitSuccess)         ) -- Quit xmonad
-    , ((mM        , xK_F12    ), myRestart                         ) -- Restart xmonad
-    , ((0         , xK_Print  ), spawn "screenshot"                ) -- Screenshot
-    , ((mM        , xK_Print  ), spawn "screenshot scr"            ) -- Screenshot screen
-    , ((mM .|. sM , xK_Print  ), spawn "screenshot win"            ) -- Screenshot window or area
-    , ((mM        , xK_Left   ), prevWS                            ) -- Cycle previous WS
-    , ((mM        , xK_Right  ), nextWS                            ) -- Cycle to next WS
-    , ((mM .|. sM , xK_Left   ), shiftToPrev                       ) -- Move WS to previous
-    , ((mM .|. sM , xK_Right  ), shiftToNext                       ) -- Move WS next WS
-    , ((mM        , xK_s      ), sendMessage $ SwapWindow          )
-    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd -d 1"    ) -- Reduce volume
-    , ((0         , 0x1008ff13), spawn "~/.bin/volume-osd -i 1"    ) -- Raise volume
-    , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd -t"      ) -- Mute volume
+    , ((mM        , xK_Tab    ), windows W.focusUp)
+    , ((mM        , xK_j      ), windows W.focusDown) -- Move foucs to next
+    , ((mM        , xK_k      ), windows W.focusUp) -- Move focus to prev
+    , ((mM        , xK_m      ), windows W.focusMaster) -- Move focus to master
+    , ((mM        , xK_Return ), dwmpromote) -- Swap focused with master or next in stack
+    , ((mM .|. sM , xK_j      ), windows W.swapDown) -- Swap focused/next
+    , ((mM .|. sM , xK_k      ), windows W.swapUp) -- Swap focused/prev
+    , ((mM        , xK_h      ), sendMessage Shrink) -- Shrink area horiz
+    , ((mM        , xK_l      ), sendMessage Expand) -- Expand area horiz
+    , ((mM .|. cM , xK_h      ), sendMessage MirrorShrink) -- Shrink mirror vert
+    , ((mM .|. cM , xK_l      ), sendMessage MirrorExpand) -- Expand mirror vert
+    , ((mM        , xK_t      ), withFocused $ windows . W.sink) -- Push back into tiling
+    , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)) -- Increment windows
+    , ((mM        , xK_period ), sendMessage (IncMasterN (-1))) -- Deincrement windows
+    , ((mM .|. cM , xK_F11    ), io (exitWith ExitSuccess)) -- Quit xmonad
+    , ((mM        , xK_F12    ), myRestart) -- Restart xmonad
+    , ((0         , xK_Print  ), spawn "screenshot") -- Screenshot
+    , ((mM        , xK_Print  ), spawn "screenshot scr") -- Screenshot screen
+    , ((mM .|. sM , xK_Print  ), spawn "screenshot win") -- Screenshot window or area
+    , ((mM        , xK_Left   ), prevWS) -- Cycle previous WS
+    , ((mM        , xK_Right  ), nextWS) -- Cycle to next WS
+    , ((mM .|. sM , xK_Left   ), shiftToPrev) -- Move WS to previous
+    , ((mM .|. sM , xK_Right  ), shiftToNext) -- Move WS next WS
+    , ((mM        , xK_s      ), sendMessage $ SwapWindow)
+    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd -d 1") -- Reduce volume
+    , ((0         , 0x1008ff13), spawn "~/.bin/volume-osd -i 1") -- Raise volume
+    , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd -t") -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
-    , ((mM        , xK_b      ), sendMessage ToggleStruts          ) -- toggle xmobar gap
-    , ((mM        , xK_f      ), spawn "pcmanfm"                   ) -- Start pcmanfm
-    , ((cM        , xK_bar    ), scratchTerm                       ) -- Spawn scratchpad terminal
-    , ((mM        , xK_v      ), scratchMixer                      ) -- Spawn scratchpad mixer
-    , ((mM        , xK_0      ), windows $ W.greedyView myWS10     ) -- Switch to workspace 10
-    , ((mM .|. sM , xK_0      ), windows $ W.shift myWS10          ) -- Move to workspace 10
+    , ((mM        , xK_b      ), sendMessage ToggleStruts) -- toggle xmobar gap
+    , ((mM        , xK_f      ), spawn "pcmanfm") -- Start pcmanfm
+    , ((cM        , xK_bar    ), scratchTerm) -- Spawn scratchpad terminal
+    , ((mM        , xK_v      ), scratchMixer) -- Spawn scratchpad mixer
+    , ((mM        , xK_0      ), windows $ W.greedyView myWS10) -- Switch to workspace 10
+    , ((mM .|. sM , xK_0      ), windows $ W.shift myWS10) -- Move to workspace 10
     ]
     ++
     -- mod-[1..9], Switch to workspace N
@@ -207,12 +207,12 @@ myWS10 = "0:p2p"
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
 myManageHook :: ManageHook
 myManageHook = composeAll . concat $
-    [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW,  cs) <- myWSShift, c <- cs ]
+    [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW, cs) <- myWSShift, c <- cs ]
     , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
     , [ isDialog --> doCenterFloat ]
     , [ classNotRole (cnf) --> doCenterFloat | (cnf) <- windowFloats ]
-    , [ resource  =? "desktop_window" --> doIgnore ]
-    , [ resource  =? "idesk" --> doIgnore ]
+    , [ resource =? "desktop_window" --> doIgnore ]
+    , [ resource =? "idesk" --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat | c <- myMatchAnywhereFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat | c <- myMatchCenterFloats ] ]
 
@@ -266,41 +266,41 @@ myLogHook h = dynamicLogWithPP $ defaultPP
 myLeftBar :: DzenConf
 myLeftBar = defaultDzen
     -- use the default as a base and override width and colors
-    { Dzen.alignment  = Just LeftAlign
-    , Dzen.screen     = Just $ 1
-    , Dzen.width      = Just $ Percent 70
-    , Dzen.height     = Just $ 22
-    , Dzen.fgColor    = Just myLightGrey
-    , Dzen.bgColor    = Just myDarkGrey
+    { Dzen.alignment = Just LeftAlign
+    , Dzen.screen    = Just $ 1
+    , Dzen.width     = Just $ Percent 70
+    , Dzen.height    = Just $ 22
+    , Dzen.fgColor   = Just myLightGrey
+    , Dzen.bgColor   = Just myDarkGrey
     }
 
 myLeftBar2 :: DzenConf
 myLeftBar2 = myLeftBar
-    { Dzen.width      = Just $ Percent 30
-    , Dzen.alignment  = Just RightAlign
-    , Dzen.xPosition  = Just $ Percent 70
+    { Dzen.width     = Just $ Percent 30
+    , Dzen.alignment = Just RightAlign
+    , Dzen.xPosition = Just $ Percent 70
     }
 
 myRightBar1 :: DzenConf
 myRightBar1 = myLeftBar2
-    { Dzen.xPosition  = Just $ Pixels 0
-    , Dzen.screen     = Just $ 0
-    , Dzen.width      = Just $ Pixels 640
-    , Dzen.alignment  = Just LeftAlign
+    { Dzen.xPosition = Just $ Pixels 0
+    , Dzen.screen    = Just $ 0
+    , Dzen.width     = Just $ Pixels 640
+    , Dzen.alignment = Just LeftAlign
     }
 
 myRightBar2 :: DzenConf
 myRightBar2 = myRightBar1
-    { Dzen.xPosition  = Just $ Pixels 640
-    , Dzen.width      = Just $ Pixels 640
-    , Dzen.alignment  = Just Centered
+    { Dzen.xPosition = Just $ Pixels 640
+    , Dzen.width     = Just $ Pixels 640
+    , Dzen.alignment = Just Centered
     }
 
 myRightBar3 :: DzenConf
 myRightBar3 = myRightBar2
-    { Dzen.xPosition  = Just $ Pixels 1280
-    , Dzen.width      = Just $ Pixels 487
-    , Dzen.alignment  = Just RightAlign
+    { Dzen.xPosition = Just $ Pixels 1280
+    , Dzen.width     = Just $ Pixels 487
+    , Dzen.alignment = Just RightAlign
     }
 
 -- Scratchpad
@@ -331,7 +331,7 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 armorStartupHook :: X ()
-armorStartupHook =  do
+armorStartupHook = do
     setWMName "LG3D"
     spawn "xcompmgr -c -f -t-5 -l-5 -r4.2 -o.55 -C"
     spawn "setxkbmap no"

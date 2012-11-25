@@ -21,6 +21,13 @@ bindkey "\e[3~" delete-char             # Delete
 bindkey "\e[5~" beginning-of-history    # PageUp
 bindkey "\e[6~" end-of-history          # PageDown
 
+## smart urls
+autoload -U url-quote-magic
+zle -N self-insert url-quote-magic
+
+### file rename magick
+bindkey "^O" copy-prev-shell-word
+
 compinit
 
 setopt promptsubst

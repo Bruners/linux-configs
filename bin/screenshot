@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License V2
 #
 # A small script made to take screenshots, three ways.. the whole thing or the active window or a selectable part.
-# The also utilize ImageMagic, Feh, libaosd and xclip
+# The also utilize ImageMagic, Feh, libaosd/libnotify and xclip
 
 #### Configuration ####
 # ImageMagic JPEG/PNG compression level and image type, see man import for more info
@@ -18,17 +18,19 @@ IMPORT_PATH="/usr/bin/import"
 
 # Directory to save screenshots in
 SAVE_TO_DIR="${HOME}/Pictures/scrot"
-
 # Name format, here date+time is used
 NAME_FORMAT="$(date +%Y-%m-%d@%H.%M.%S)"
-
 # Log all screenshot writes: yes/no
 ENABLE_LOG="yes"
 # Directory to write log file
 LOG_PATH="${SAVE_TO_DIR}/screenshots.log"
 
 # Enable OSD output; yes/no
-ENABLE_AOSD="yes"
+ENABLE_OSD="yes"
+# What OSD method to use, takes "aosd" or "libnotify"
+OSD_CLIENT="libnotify"
+# OSD_CLIENT="aosd"
+
 # aosd_cat font settings
 AOSD_FONT="sans 20 bold"
 # Sets fade in time -> time to show in full opacity -> fade out time
@@ -67,16 +69,25 @@ AOSD_RUN_WARNING="${AOSD_RUN} --fore-color=${WARNING}"
 AOSD_RUN_HILIGHT="${AOSD_RUN} --fore-color=${HILIGHT}"
 AOSD_RUN_NORMAL="${AOSD_RUN} --fore-color=${NORMAL}"
 
-TAKE_SHOT_STRING="Saving screenshot to ${SAVE_STRING}"
-TAKE_SHOT_ERROR="No screenshot area has been specified. Screenshot not taken.\rMm+Src = Entire screen\rNn+Sm+Scr = Window or area"
+TAKE_SHOT_BODY="Screenshot taken"
+TAKE_SHOT_SUMMARY="Saving file to ${SAVE_STRING}"
+TAKE_SHOT_BASH="${TAKE_SHOT_STRING}\n${TAKE_SHOT_STRING_SUMMARY}"
+
+TAKE_SHOT_ERROR_BODY="No screenshot area specified."
+TAKE_SHOT_ERROR_SUMMARY="Super-Src for entire screen or Super-Shift-Scr for Window or area"
+TAKE_SHOT_ERROR_BASH="${TAKE_SHOT_ERROR_BODY}\n${TAKE_SHOT_ERROR_SUMMARY}"
 FEH_OUT_STRING="Opening screenshot in feh"
-MISSING_STRING="Directory not found, make sure to set SAVE_TO_DIR, currently set to $SAVE_TO_DIR"
+MISSING_STRING="Directory not found, set a valid directory in SAVE_TO_DIR, currently set to ${SAVE_TO_DIR}"
 XLIP_MISSING="Could not find the xclip executable in PATH"
 aosd_out () {
     # Show status with libaosd or echo to console
-    if [ "${ENABLE_AOSD}" = "yes" ]; then
-        local run="\$AOSD_RUN_$2"
-        `echo -e "${1}" | eval $run`
+    if [ "${ENABLE_OSD}" = "yes" ]; then
+        if [ "${OSD_CLIENT}" = "aosd" ]; then
+            local run="\$AOSD_RUN_$2"
+            `echo -e "${1}" | eval $run`
+        elif [ "${OSD_CLIENT}" = "libnotify" ]; then
+            notify-send --urgency=normal --icon=dialog-information --expire-time=5 "$1" "$2" &
+        fi
     else
         echo "$1"
     fi
@@ -92,8 +103,15 @@ log_out () {
 feh_out () {
     # Open screenshot in feh after it has been taken
     if [ "$ENABLE_FEH" = "yes" ]; then
-        aosd_out "$FEH_OUT_STRING" "HILIGHT" &
-        feh $1 &
+        if [ ! -f $(which xclip) ]; then
+            if [ "${OSD_CLIENT}" = "aosd" ]; then
+                aosd_out "$XCLIP_MISSING" "WARNING" &
+            elif [ "${OSD_CLIENT}" = "libnotify" ]; then
+                aosd_out "Ooops!" "$XCLIP_MISSING" &
+            fi
+        else
+            feh $1 &
+        fi
     fi
 }
 
@@ -101,23 +119,31 @@ xclip_out () {
     # Copy path of the image to clipboard
     if [ "$ENABLE_XCLIP" = "yes" ]; then
         if [ ! -f $(which xclip) ]; then
-            aosd_out "$XCLIP_MISSING" "WARNING" &
+            if [ "${OSD_CLIENT}" = "aosd" ]; then
+                aosd_out "$XCLIP_MISSING" "WARNING" &
+            elif [ "${OSD_CLIENT}" = "libnotify" ]; then
+                aosd_out "Ooops!" "$XCLIP_MISSING" &
+            fi
         else
-            `echo -en $SAVE_STRING | xclip`
+            `echo -en $SAVE_STRING | xclip` &
         fi
     fi
 }
 
 take_shot () {
     if [ ! -d $SAVE_TO_DIR ]; then
-        aosd_out "$MISSING_STRING" "WARNING" &
+        if [ "${OSD_CLIENT}" = "aosd" ]; then
+            aosd_out "$MISSING_STRING" "WARNING" &
+        elif [ "${OSD_CLIENT}" = "libnotify" ]; then
+            aosd_out "Ooops!" "$MISSING_STRING" &
+        fi
     else
         if [ "$1" = "win" ]; then
             $IM_RUN_WIN
         elif [ "$1" = "scr" ]; then
             $IM_RUN_SCR
         fi
-        aosd_out "$3" "$2" &
+        aosd_out "$2" "$3" &
         log_out "$SAVE_STRING" &
         feh_out "$SAVE_STRING" &
         xclip_out "$SAVE_STRINiG" &
@@ -125,13 +151,25 @@ take_shot () {
 }
 case "$1" in
     "win")
-        take_shot $1 "NORMAL" "$TAKE_SHOT_STRING"
+        if [ "${OSD_CLIENT}" = "libnotify" ]; then
+            take_shot $1 "$TAKE_SHOT_BODY" "$TAKE_SHOT_SUMMARY" &
+        else
+            take_shot $1 "$TAKE_SHOT_BASH" "NORMAL" &
+        fi
         ;;
     "scr")
-        take_shot $1 "NORMAL" "$TAKE_SHOT_STRING"
+        if [ "${OSD_CLIENT}" = "libnotify" ]; then
+            take_shot $1 "$TAKE_SHOT_BODY" "$TAKE_SHOT_SUMMARY" &
+        else
+            take_shot $1 "$TAKE_SHOT_BASH" "NORMAL" &
+        fi
         ;;
     *)
-        aosd_out "$TAKE_SHOT_ERROR" "WARNING" &
+        if [ "${OSD_CLIENT}" = "aosd" ]; then
+            aosd_out "$TAKE_SHOT_ERROR_BASH" "WARNING" &
+        else
+            aosd_out "$TAKE_SHOT_ERROR_BODY" "$TAKE_SHOT_ERROR_SUMMARY" &
+        fi
         ;;
 esac
 

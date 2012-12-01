@@ -68,7 +68,8 @@ case "$1" in
         usage
         ;;
     *)
-        err "Unrecognized option \`$1', see ossvol --help"
+        err "Unrecognized option '$1', see ossvol --help"
+        exit 0
         ;;
 esac
 

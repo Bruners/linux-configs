@@ -121,7 +121,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
             myRestart = spawn $ "for pid in `pgrep xcompmgr`; do kill -9 $pid; done && " ++
                                 "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
                                 "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
-                                "xmonad --recompile && sleep 2 && xmonad --restart"
+                                "xmonad --recompile && xmonad --restart"
 
 myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -163,22 +163,22 @@ myTabConfig = defaultTheme { activeColor         = myGrey
                            , decoHeight          = 13
                            }
 
-myLayout = modWorkspaces [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS10 ] avoidStruts $
+myLayout = modWorkspaces [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS7, myWS10 ] avoidStruts $
            onWorkspace myWS3 (irc ||| standardLayouts) $
            onWorkspace myWS6 (full ||| threeCol ||| standardLayouts) $
            onWorkspace myWS7 (gimp ||| standardLayouts) $
-           onWorkspaces [ myWS2, myWS4, myWS5 ] (tabs ||| standardLayouts) $
+           onWorkspaces [ myWS2, myWS4, myWS5 ] (tabs ||| tiled) $
            onWorkspaces [ myWS8, myWS9, myWS10 ] (full ||| myTabbed) $
            standardLayouts
 
     where
-        standardLayouts = (tiled ||| Mirror tiled ||| threeCol ||| tabs ||| full)
+        standardLayouts = (tiled ||| Mirror tiled ||| tabs)
         tabs = (myTabbed ||| combineTabbed)
         tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
         irc = combineTwoP (Tall 1 (1/100) 0.15) (Mirror tiled) (tabs ||| standardLayouts) (ClassName "Mumble" `Or` Role "buddy_list")
         myTabbed = tabbed shrinkText myTabConfig
         combineTabbed = combineTwoP (TwoPane 0.03 0.5) (myTabbed) (myTabbed) (ClassName "URxvt")
-        threeCol = ThreeCol 1 (3/100) (1/2) ||| ThreeColMid 1 (3/100) (1/2)
+        threeCol = ThreeCol 1 (3/100) (1/2)
         gimp = withIM (0.11) (Role "gimp-toolbox") $
                reflectHoriz $
                withIM (0.15) (Role "gimp-dock") Full
@@ -333,7 +333,8 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
 armorStartupHook :: X ()
 armorStartupHook = do
     setWMName "LG3D"
-    spawn "xcompmgr -c -f -t-5 -l-5 -r4.2 -o.55 -C"
+    -- xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C
+    spawn "xcompmgr -s"
     spawn "setxkbmap no"
     spawn "xmodmap -e 'clear Lock'"
     spawn "xmodmap /home/lasseb/.Xmodmap"

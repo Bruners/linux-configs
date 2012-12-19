@@ -1,0 +1,32 @@
+#!/bin/sh
+export DISPLAY=:0
+WATCH_FOLDER="/mnt/ds212/torrent/watch/"
+LOGFILE="/home/lasseb/.torrentmove.log"
+FILEINFO="`file \"${FILENAME}\" | grep 'BitTorrent file'`"
+CHECKPATH="/home/lasseb/Downloads/Opera/:/home/lasseb/Downloads/Chromium/:"
+INPUT="${1}"
+if [ "${INPUT}" = "" ]; then
+    INPUT=${CHECKPATH}
+else
+    INPUT="${1}:${CHECKPATH}"
+fi
+for DIRECTORY in `echo "${INPUT}" | tr ':' '\n'` ; do
+    find "${DIRECTORY}" -name '*.torrent' -print | while read FILENAME; do
+        if [ -f "${FILENAME}" ]; then
+            BASEFILE="`basename \"${FILENAME}\"`"
+            if [ -z ${FILEINFO} ]; then
+                if [ -d "${WATCH_FOLDER}" ]; then
+                    if [ -f ${WATCH_FOLDER}/${BASEFILE} ]; then
+                       echo -e "Error ::: ${BASEFILE} already in ${WATCH_FOLDER} :::" >> "${LOGFILE}"
+                    elif [ -w "${WATCH_FOLDER}" ]; then
+                       $(which notify-send) --urgency=low --icon=bittorrent --expire-time=5 "New torrent found" "Moved ${BASEFILE}" &
+                       echo -e "Moved ::: ${FILENAME} -> ${WATCH_FOLDER} :::" >> "${LOGFILE}" &
+                       mv "${FILENAME}" "${WATCH_FOLDER}"
+                    fi
+                fi
+            fi
+        fi
+    done
+done
+
+# vim:set ft=sh:

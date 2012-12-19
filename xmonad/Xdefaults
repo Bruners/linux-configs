@@ -53,6 +53,11 @@ URxvt*.matcher.button: 1
 IRC*title: IRC
 IRC*saveLines: 0
 IRC*mapAlert: true
+IRC*perl-ext-common: default,matcher,-selection-popup,-option-popup,-readline,-searchable-scrollback
+IRC*matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
+IRC*urlLauncher: /usr/bin/opera
+IRC*matcher.button: 1
+
 
 Xcursor*.theme: Obsidian
 Xcursor*.size: 24

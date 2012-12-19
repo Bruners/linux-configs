@@ -2,5 +2,6 @@
 
 # Script to launch mumble, connect to server and join channel
 
-mumble mumble://o.haaland.net:64738/Dota-no%20Quakenet%20-%20Right%20click%20here%20and%20make%20your%20own%20room/Heroes%20of%20Newerth/Social%20Anxiety/?version=1.2.3
+#mumble mumble://o.haaland.net:64738/Dota-no%20Quakenet%20-%20Right%20click%20here%20and%20make%20your%20own%20room/Heroes%20of%20Newerth/Social%20Anxiety/?version=1.2.3
+mumble mumble://bruners@o.haaland.net:64738/Dota-no%20Quakenet%20-%20Right%20click%20here%20and%20make%20your%20own%20room/Heroes%20of%20Newerth/Gameroom%203/?version=1.2.3
 exit 0

@@ -3,7 +3,6 @@
 # .xinitrc
 
 # Load Resources
-export PATH=/home/lasseb/.bin:$PATH &
 xrdb -merge ~/.Xresources
 setxkbmap no &
 
@@ -37,7 +36,7 @@ wicd-gtk -t &
 (sleep 2 && xmodmap /home/lasseb/.Xmodmap) &
 # WS3
 (sleep 2 && urxvt -name IRC) &
-(sleep 3 && mumble) &
+(sleep 3 && vt) &
 (sleep 3 && pidgin) &
 
 exec dbus-launch --sh-syntax --exit-with-session xmonad

@@ -1,0 +1,30 @@
+# Zle
+setopt NO_BEEP # No beep on error in ZLE.
+# Changing directories
+setopt AUTO_CD  # Perform cd if command exists as a directory.
+setopt AUTO_PUSHD   # Make cd push the old directory onto the directory stack.
+setopt PUSHD_MINUS  # Exchanges meanings of '+' & '-' when used with a number to specify a directory in the stack.
+setopt PUSHD_SILENT # Do not print the directory stack after pushd or popd.
+setopt PUSHD_TO_HOME    # Have pushd with no arguments act like 'pushd $HOME'.
+setopt CDABLE_VARS  # Try to expand expression as if it were preceded by ~.
+# Completion
+setopt ALWAYS_TO_END    # If a completion is performed with the cursor within a word, and a full completion is inserted.
+setopt AUTO_LIST    # Automatically list choices on an ambiguous completion.
+setopt COMPLETE_IN_WORD # Completion is done from both ends.
+setopt EXTENDED_GLOB    # Treat the '#', '~' and '^' characters as part of patterns for filename generation.
+# Expansion and Globbing
+setopt NO_NOMATCH  # Leaving unchanged in the argument list if no match.
+# History
+setopt HIST_IGNORE_DUPS   # Ignore duplicate history entries.
+# Input/Output
+setopt CORRECT  # Spelling correction
+setopt NO_FLOW_CONTROL  # Output flow control via start/stop characters (^S/^Q) is disabled in the shell's editor.
+setopt PATH_DIRS    # Perform a path search even on command names with slashes in them.
+setopt PRINT_EIGHT_BIT  # Print eight bit characters literally in completion lists.
+setopt PRINT_EXIT_VALUE # Print the exit value of programs with non-zero exit status.
+# Job Control
+setopt NO_HUP   # Don't send the HUP signal to running jobs when the shell exits.
+setopt NOTIFY   # Report the status of background jobs immediately.
+# Prompting
+setopt TRANSIENT_RPROMPT    # Remove any right prompt from display when accepting a command line.
+# vim:set ft=zsh:

@@ -1,0 +1,44 @@
+# Don't autocorrect mkdir
+alias mkdir="nocorrect mkdir"
+# Color datetime of dmesg
+alias dmesg="dmesg -T|sed -e 's|\(^.*'`date +%Y`']\)\(.*\)|\x1b[0;34m\1\x1b[0m - \2|g'"
+# Print ps with threads etc
+alias psc="ps xawf -eo pid,user,cgroup,args"
+# Ps with grep for input
+alias psgrep="ps aux | grep -v grep | grep $1"
+# Print ls with yyyy-mm-dd mm:ss timestamp
+alias ls="ls -Fhb --time-style=long-iso --color=auto"
+alias ll="ls -la"
+alias l="ls -l"
+# --verbose --interactive
+alias rm="rm -vi"
+alias cp="cp -vi"
+alias mv="mv -vi"
+# rsync alias
+alias cpv="rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress --"
+# Verbose output showing --changes after
+alias chmod="chmod -c"
+alias chown="chown -c"
+# run cave with sudo
+alias cave="sudo cave"
+# Pull out WM window props
+alias xp='xprop | grep "WM_WINDOW_ROLE\|WM_CLASS" && echo "WM_CLASS(STRING) = \"NAME\", \"CLASS\""'
+# Cd to top level of git folder
+alias grt='cd $(git rev-parse --show-toplevel || echo \".\")'
+# Reboot/Shutdown shortcuts
+alias reboot="shutdown -r now"
+alias shutdown="shutdown -h now"
+# Mplayer aliases for random file, random with 28s intro skip, all episodes sorted
+alias randep="find . -type f -iregex \".*\.\(avi\|mp4\|mpeg\|mpg\|mkv\)$\" | sort | mplayer -fs -shuffle -playlist -"
+alias randepskip="find . -type f -iregex \".*\.\(avi\|mp4\|mpeg\|mpg\|mkv\)$\" | sort | mplayer -fs -shuffle --ss=28 -playlist -"
+alias allep="find . -type f -iregex \".*\.\(avi\|mp4\|mpeg\|mpg\|mkv\)$\" | sort | mplayer -fs -playlist -"
+# Start rtorrent in a tmux session
+alias rtorrent="tmux new -s rtorrent rtorrent"
+# Short for pasting last commit to gists with wgetpaste
+alias patchpaste="git format-patch --stdout -M -C -C -1 | wgetpaste --raw --service gists"
+# Open file-types with application
+alias -s jpg="/usr/bin/gpicview"
+alias -s png="/usr/bin/gpicview"
+alias -s pdf="/usr/bin/evince"
+
+# vim:set ft=zsh:

@@ -165,16 +165,16 @@ myTabConfig = defaultTheme { activeColor         = myGrey
 
 myLayout = modWorkspaces [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS7, myWS10 ] avoidStruts $
            onWorkspace myWS3 (irc ||| standardLayouts) $
-           onWorkspace myWS6 (full ||| threeCol ||| standardLayouts) $
+           onWorkspace myWS6 (full ||| threeCol ||| avoidStruts (standardLayouts)) $
            onWorkspace myWS7 (gimp ||| standardLayouts) $
            onWorkspaces [ myWS2, myWS4, myWS5 ] (tabs ||| tiled) $
-           onWorkspaces [ myWS8, myWS9, myWS10 ] (full ||| myTabbed) $
+           onWorkspaces [ myWS8, myWS9, myWS10 ] (full ||| avoidStruts (myTabbed)) $
            standardLayouts
 
     where
         standardLayouts = (tiled ||| Mirror tiled ||| tabs)
         tabs = (myTabbed ||| combineTabbed)
-        tiled = smartBorders (ResizableTall 1 (2/100) (1/2) [])
+        tiled = (ResizableTall 1 (2/100) (1/2) [])
         irc = combineTwoP (Tall 1 (1/100) 0.15) (Mirror tiled) (tabs ||| standardLayouts) (ClassName "Mumble" `Or` Role "buddy_list")
         myTabbed = tabbed shrinkText myTabConfig
         combineTabbed = combineTwoP (TwoPane 0.03 0.5) (myTabbed) (myTabbed) (ClassName "URxvt")
@@ -182,7 +182,7 @@ myLayout = modWorkspaces [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS7, myWS10 ] av
         gimp = withIM (0.11) (Role "gimp-toolbox") $
                reflectHoriz $
                withIM (0.15) (Role "gimp-dock") Full
-        full = smartBorders Full
+        full = noBorders Full
         nmaster = 1
         ratio = 1/2
         delta = 3/100

@@ -102,7 +102,7 @@ set ttyfast
 
 " set theme
 set background=dark
-colorscheme solarized
+colorscheme darkglass
 
 set showbreak=>\ \ \
 " left: fileformat, type, encoding, RO/HELP/PREVIEW, modified flag, filepath

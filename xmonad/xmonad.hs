@@ -18,6 +18,7 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ComboP
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
@@ -47,7 +48,7 @@ myTerminal :: String
 myTerminal = "urxvtc"
 
 myBorderWidth :: Dimension
-myBorderWidth = 1
+myBorderWidth = 2
 
 myModMask :: KeyMask
 myModMask = mod4Mask
@@ -76,6 +77,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM .|. cM , xK_h      ), sendMessage MirrorShrink) -- Shrink mirror vert
     , ((mM .|. cM , xK_l      ), sendMessage MirrorExpand) -- Expand mirror vert
     , ((mM        , xK_t      ), withFocused $ windows . W.sink) -- Push back into tiling
+    , ((mM .|. sM , xK_t      ), sendMessage ToggleStruts >> sendMessage ToggleLayout) -- Toggle Full layout
     , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)) -- Increment windows
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))) -- Deincrement windows
     , ((mM .|. cM , xK_F11    ), io (exitWith ExitSuccess)) -- Quit xmonad
@@ -163,12 +165,10 @@ myTabConfig = defaultTheme { activeColor         = myGrey
                            , decoHeight          = 13
                            }
 
-myLayout = modWorkspaces [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS7, myWS10 ] avoidStruts $
-           onWorkspace myWS3 (irc ||| standardLayouts) $
-           onWorkspace myWS6 (full ||| threeCol ||| avoidStruts (standardLayouts)) $
+myLayout = avoidStruts $ noBorders $ toggleLayouts Full $
+           onWorkspace myWS3 (irc) $
            onWorkspace myWS7 (gimp ||| standardLayouts) $
-           onWorkspaces [ myWS2, myWS4, myWS5 ] (tabs ||| tiled) $
-           onWorkspaces [ myWS8, myWS9, myWS10 ] (full ||| avoidStruts (myTabbed)) $
+           onWorkspaces [ myWS6, myWS8, myWS9 ] (Full ||| myTabbed ||| threeCol) $
            standardLayouts
 
     where
@@ -182,7 +182,6 @@ myLayout = modWorkspaces [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS7, myWS10 ] av
         gimp = withIM (0.11) (Role "gimp-toolbox") $
                reflectHoriz $
                withIM (0.15) (Role "gimp-dock") Full
-        full = noBorders Full
         nmaster = 1
         ratio = 1/2
         delta = 3/100
@@ -206,19 +205,19 @@ myWS10 = "0:p2p"
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
 myManageHook :: ManageHook
-myManageHook = composeAll . concat $
+myManageHook = (composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW, cs) <- myWSShift, c <- cs ]
-    , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
-    , [ isDialog --> doCenterFloat ]
-    , [ classNotRole (cnf) --> doCenterFloat | (cnf) <- windowFloats ]
+    , [ isFullscreen --> (doFullFloat <+> doMaster) ]
+    , [ isDialog --> (doCenterFloat <+> doMaster) ]
+    , [ classNotRole (cnf) --> (doCenterFloat <+> doMaster) | (cnf) <- windowFloats ]
     , [ resource =? "desktop_window" --> doIgnore ]
     , [ resource =? "idesk" --> doIgnore ]
-    , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat | c <- myMatchAnywhereFloats ]
-    , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat | c <- myMatchCenterFloats ] ]
-
-    where
-        myMatchAnywhereFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gnomebaker" ]
-        myMatchCenterFloats = [ "feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Ktsuss" ]
+    , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat <+> doMaster | c <- myAnyFloats ]
+    , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat <+> doMaster | c <- myCenFloats ]
+    ]) where
+        doMaster = doF W.shiftMaster
+        myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gnomebaker" ]
+        myCenFloats = [ "feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Ktsuss" ]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]
         myWSShift = [ (myWS1, [])
@@ -308,7 +307,7 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
                 , NS "terminal" spawnTerm findTerm manageTerm
                 ]
     where
-        spawnMixer  = "ossxmix"
+        spawnMixer  = "ossxmix -g 1280:140"
         findMixer   = className =? "Ossxmix"
         manageMixer = customFloating $ W.RationalRect l t w h
 

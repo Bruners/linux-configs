@@ -6,12 +6,12 @@ then
     pid=`ps aux | grep $HON | grep -v grep | awk '{print $2}'`
     echo "HoN is already running on $pid, killing process $pid"
     kill -9 $pid
-    /games/hon/hon.sh &
+    /games/HoN/hon.sh &
     exit 0
 else
     echo "Starting HoN and mumble"
-    /home/lasseb/vt &
-    /games/hon/hon.sh &
+    /home/lasseb/.bin/vt &
+    /games/HoN/hon.sh &
     exit 0
 fi
 

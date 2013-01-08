@@ -8,6 +8,10 @@ Xft.autohint: 0
 
 #include "/home/lasseb/.xcolors/solarized.xcolors"
 
+dzen2.font: -misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*
+dzen2.foreground: #909090
+dzen2.background: #202020
+
 URxvt*.transparent: true
 URxvt*.shading: 10
 URxvt*.depth: 32

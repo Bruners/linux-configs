@@ -1,6 +1,4 @@
 import XMonad
-import Dzen
-
 import System.Exit
 import System.IO
 
@@ -22,6 +20,7 @@ import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ComboP
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
+import XMonad.Layout.Fullscreen
 
 import XMonad.Util.Themes
 import XMonad.Util.NamedScratchpad
@@ -39,7 +38,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.Place
-
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 
 import qualified XMonad.StackSet as W
@@ -48,7 +47,8 @@ myTerminal :: String
 myTerminal = "urxvtc"
 
 myBorderWidth :: Dimension
-myBorderWidth = 2
+
+myBorderWidth = 0
 
 myModMask :: KeyMask
 myModMask = mod4Mask
@@ -90,7 +90,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM .|. sM , xK_Left   ), shiftToPrev) -- Move WS to previous
     , ((mM .|. sM , xK_Right  ), shiftToNext) -- Move WS next WS
     , ((mM        , xK_s      ), sendMessage $ SwapWindow)
-    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd -d 1") -- Reduce volume
+    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd -d 0.5") -- Reduce volume
     , ((0         , 0x1008ff13), spawn "~/.bin/volume-osd -i 1") -- Raise volume
     , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd -t") -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
@@ -165,7 +165,8 @@ myTabConfig = defaultTheme { activeColor         = myGrey
                            , decoHeight          = 13
                            }
 
-myLayout = avoidStruts $ noBorders $ toggleLayouts Full $
+myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
+           onWorkspace myWS2 (myTabbed ||| standardLayouts) $
            onWorkspace myWS3 (irc) $
            onWorkspace myWS7 (gimp ||| standardLayouts) $
            onWorkspaces [ myWS6, myWS8, myWS9 ] (Full ||| myTabbed ||| threeCol) $
@@ -207,17 +208,19 @@ myWS10 = "0:p2p"
 myManageHook :: ManageHook
 myManageHook = (composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW, cs) <- myWSShift, c <- cs ]
-    , [ isFullscreen --> (doFullFloat <+> doMaster) ]
+    --, [ isFullscreen --> (doFullFloat <+> doMaster) ]
     , [ isDialog --> (doCenterFloat <+> doMaster) ]
     , [ classNotRole (cnf) --> (doCenterFloat <+> doMaster) | (cnf) <- windowFloats ]
     , [ resource =? "desktop_window" --> doIgnore ]
     , [ resource =? "idesk" --> doIgnore ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat <+> doMaster | c <- myAnyFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat <+> doMaster | c <- myCenFloats ]
+    , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFullFloat <+> doMaster | c <- myFulFloats ]
     ]) where
         doMaster = doF W.shiftMaster
         myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gnomebaker" ]
-        myCenFloats = [ "feh", "Xmessage", "Squeeze", "GQview", "Thunar", "Pcmanfm", "Ktsuss" ]
+        myCenFloats = [ "feh", "Xmessage", "Squeeze", "GQview", "Thunar", "pcmanfm", "Ktsuss" ]
+        myFulFloats = [ "mplayer", "vdpau", "Gnome-mplayer" ]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]
         myWSShift = [ (myWS1, [])
@@ -260,48 +263,6 @@ myLogHook h = dynamicLogWithPP $ defaultPP
     where
         noScratchPad ws = if ws == "NSP" then "" else ws
 
--- StatusBars
--- Usage: http://docs.pbrisbin.com/haskell/xmonad-config/Dzen.html or lib/dzen.hs
-myLeftBar :: DzenConf
-myLeftBar = defaultDzen
-    -- use the default as a base and override width and colors
-    { Dzen.alignment = Just LeftAlign
-    , Dzen.screen    = Just $ 1
-    , Dzen.width     = Just $ Percent 70
-    , Dzen.height    = Just $ 22
-    , Dzen.fgColor   = Just myLightGrey
-    , Dzen.bgColor   = Just myDarkGrey
-    }
-
-myLeftBar2 :: DzenConf
-myLeftBar2 = myLeftBar
-    { Dzen.width     = Just $ Percent 30
-    , Dzen.alignment = Just RightAlign
-    , Dzen.xPosition = Just $ Percent 70
-    }
-
-myRightBar1 :: DzenConf
-myRightBar1 = myLeftBar2
-    { Dzen.xPosition = Just $ Pixels 0
-    , Dzen.screen    = Just $ 0
-    , Dzen.width     = Just $ Pixels 640
-    , Dzen.alignment = Just LeftAlign
-    }
-
-myRightBar2 :: DzenConf
-myRightBar2 = myRightBar1
-    { Dzen.xPosition = Just $ Pixels 640
-    , Dzen.width     = Just $ Pixels 640
-    , Dzen.alignment = Just Centered
-    }
-
-myRightBar3 :: DzenConf
-myRightBar3 = myRightBar2
-    { Dzen.xPosition = Just $ Pixels 1280
-    , Dzen.width     = Just $ Pixels 487
-    , Dzen.alignment = Just RightAlign
-    }
-
 -- Scratchpad
 myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
                 , NS "terminal" spawnTerm findTerm manageTerm
@@ -327,6 +288,9 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
                 t = 1 - h
                 l = (1 - w)/2
 
+myEwmhEvHook = XMonad.Hooks.EwmhDesktops.fullscreenEventHook
+myFullEvHook = XMonad.Layout.Fullscreen.fullscreenEventHook
+
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 armorStartupHook :: X ()
@@ -341,11 +305,10 @@ armorStartupHook = do
 
 main :: IO ()
 main = do
-    dzen <- spawnDzen myLeftBar
-    spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_left2" myLeftBar2
-    spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_right_left" myRightBar1
-    spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_right_center" myRightBar2
-    spawnToDzen "conky -c /home/lasseb/.xmonad/dzen_right_right" myRightBar3
+    dzen <- spawnPipe "dzen2 -p -ta l -dock -h 22 -w 1280"
+    spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 1280 -p -ta r -dock -h 22 -w 640"
+    spawn $ "conky -c /home/lasseb/.xmonad/dzen_mpd | dzen2 -x 1920 -p -ta l -dock -h 22 -w 1280"
+    spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 3200 -p -ta r -dock -h 22 -w 487"
 
     xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
         { terminal           = myTerminal
@@ -358,7 +321,8 @@ main = do
         , keys               = armorKeys
         , mouseBindings      = myMouseBindings
         , layoutHook         = myLayout
-        , manageHook         = placeHook simpleSmart <+> myManageHook <+> manageDocks <+> namedScratchpadManageHook myScratchPads
+        , manageHook         = placeHook simpleSmart <+> fullscreenManageHook <+> manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
+        , handleEventHook    = myEwmhEvHook
         , startupHook        = armorStartupHook
         , logHook            = myLogHook dzen
         }

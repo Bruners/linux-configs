@@ -32,5 +32,6 @@ mpd &
 (sleep 2 && urxvt -name IRC) &
 (sleep 3 && vt) &
 (sleep 3 && pidgin) &
+/usr/libexec/gpaste/gpaste-applet &
 
 exec dbus-launch --sh-syntax --exit-with-session xmonad

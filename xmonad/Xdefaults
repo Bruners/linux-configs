@@ -63,5 +63,5 @@ IRC*urlLauncher: /usr/bin/opera
 IRC*matcher.button: 1
 
 
-Xcursor*.theme: Obsidian
+Xcursor*.theme: whiteglass
 Xcursor*.size: 24

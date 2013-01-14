@@ -1,3 +1,10 @@
+" Disable modelines, use securemodelines.vim instead
+set nomodeline
+let g:secure_modelines_verbose = 0
+let g:secure_modelines_modelines = 15
+au VimEnter * call filter(exists("g:secure_modelines_allowed_items") ? g:secure_modelines_allowed_items : [],
+            \ 'v:val != "fdm" && v:val != "foldmethod"')
+
 "exheres"
 let g:exheres_author_name="Lasse Brun <bruners@gmail.com>"
 
@@ -8,7 +15,9 @@ set title
 set nocompatible
 
 " Enable syntax highlighting
-syntax enable
+if has("syntax")
+    syntax on
+endif
 
 " Display what mode is active
 set showmode
@@ -36,6 +45,11 @@ set expandtab
 " Number of spaces to use for indenting
 set shiftwidth=4
 
+" Use the cool tab complete menu
+set wildmenu
+set wildignore+=*.o,*~,.lo,*.hi
+set suffixes+=.in,.a,.1
+
 " UTF-8 encoding
 set encoding=utf-8
 
@@ -57,17 +71,15 @@ set incsearch
 " line numbers
 set number
 
-"support modelines
-set modeline
-
 " Don't wrap ling lines
 set nowrap
 
 " tab-completion menu
 set wildmenu
 
-" Keep 10 lines on the screen
-set scrolloff=10
+" Try to show at least three lines and two columns of context when scrolling
+set scrolloff=3
+set sidescrolloff=2
 
 " Show invisible characters
 set list
@@ -127,5 +139,6 @@ autocmd BufEnter * :syntax sync fromstart
 " I want to save or quit too fast..
 map :Q :q
 map :W :w
+map :Wq :wq
 
 source $VIMRUNTIME/mswin.vim

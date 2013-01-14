@@ -1,19 +1,43 @@
 
 [default]
 # Write your default config options here!
-#
-#
 vo=vdpau:fps=50,xv
 vc=ffmpeg12vdpau,ffwmv3vdpau,ffvc1vdpau,ffh264vdpau,ffodivxvdpau,
 vf-clr=yes
 monitoraspect=16:9
-ao=oss,pulse
-input:file=/home/lasseb/.mplayer/rc
+ao=oss
+input:file=$HOME/.mplayer/rc
 fs=yes
 xineramascreen=0
 
-subfont-text-scale=3
-subfont-osd-scale=4
+# Align VobSubs (-1: as they want to align themselves)
+spualign=-1
+# Anti-alias VobSubs (4: best and slowest)
+spuaa=4
+# Default VobSub language to select
+slang=nb,no,en,eng
+# Find subtitle files (1: load all subs containing movie name)
+sub-fuzziness=1
+# The symlink to some font
+font=$HOME/.mplayer/subfont.ttf
+# Font encoding
+subfont-encoding=unicode
+# Resample the font alphamap (10: bold black outline)
+ffactor=10
+# Subtitle position (100: as low as possible)
+subpos=100
+# Subtitle alignment at its position (2: bottom)
+subalign=2
+# Font size (2: proportional to movie width)
+subfont-autoscale=2
+# Font blur radius (default: 2)
+subfont-blur=1.0
+# font outline thickness (default: 2)
+subfont-outline=1.0
+# Autoscale coefficient of the subtitle (default: 5)
+subfont-text-scale=4.0
+# Autoscale coefficient of the OSD elements (default: 6)
+subfont-osd-scale=4.2
 
 # Pretend to be Window Media Player.
 # Fixes playback when playlist and media file use the same URL.

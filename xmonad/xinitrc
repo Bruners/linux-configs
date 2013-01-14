@@ -6,9 +6,6 @@
 xrdb -merge ~/.Xresources
 setxkbmap no &
 
-# export the current environment, in case it needs to be debugged
-env > ~/.xenv &
-
 # Set up an icon tray
 trayer --monitor 1 --edge top --alpha 1 --align right --SetDockType true --SetPartialStrut true --expand true --width 8 --height 22 --widthtype percent --transparent true --tint 0x202020 &
 
@@ -28,10 +25,7 @@ find $HOME/Pictures/WideWallpaper -type f -name '*.jpg' -o -name '*.png' | shuf 
 
 # Launch apps
 mpd &
-udiskie &
-#ossxmix &
-wicd-gtk -t &
-#blueman-applet &
+
 (sleep 2 && xmodmap -e "clear Lock") &
 (sleep 2 && xmodmap /home/lasseb/.Xmodmap) &
 # WS3

@@ -3721,6 +3721,16 @@ helper_xpsp2()
     w_try_cabextract -d "$W_TMP" -L -F $filename "$W_CACHE"/xpsp2/WindowsXP-KB835935-SP2-ENU.exe
 }
 
+helper_win7sp1()
+{
+    filename=$1
+
+    # https://www.microsoft.com/en-us/download/details.aspx?id=5842
+    w_download_to win7sp1 http://download.microsoft.com/download/0/A/F/0AFB5316-3062-494A-AB78-7FB0D4461357/windows6.1-KB976932-X86.exe c3516bc5c9e69fee6d9ac4f981f5b95977a8a2fa
+
+    w_try_cabextract -d "$W_TMP" -L -F $filename "$W_CACHE"/win7sp1/windows6.1-KB976932-X86.exe
+}
+
 #---------------------------------------------------------
 
 w_metadata  adobeair dlls \
@@ -3916,7 +3926,7 @@ w_metadata crypt32 dlls \
     publisher="Microsoft" \
     year="2003" \
     media="download" \
-    file1="../xpsp2/WindowsXP-KB835935-SP2-ENU.exe" \
+    file1="../win2ksp4/W2KSP4_EN.EXE" \
     installed_file1="$W_SYSTEM32_DLLS_WIN/crypt32.dll"
 
 load_crypt32()
@@ -4532,7 +4542,7 @@ w_metadata dotnet11sp1 dlls \
 load_dotnet11sp1()
 {
     w_call dotnet11
-    w_download http://download.microsoft.com/download/8/b/4/8b4addd8-e957-4dea-bdb8-c4e00af5b94b/NDP1.1sp1-KB867460-X86.exe 74a5b25d65a70b8ecd6a9c301a0aea10d8483a23
+    w_download http://download.microsoft.com/download/8/b/4/8b4addd8-e957-4dea-bdb8-c4e00af5b94b/NDP1.1sp1-KB867460-X86.exe 0eba832a0733cd47b7639463dd5a22a41e95ee6e
 
     if test $W_OPT_UNATTENDED
     then
@@ -4577,7 +4587,7 @@ w_metadata dotnet20 dlls \
     year="2006" \
     media="manual_download" \
     file1="dotnetfx.exe" \
-    installed_file1="c:/windows/Microsoft.NET/Framework/v2.0.50727/mscorlib.dll"
+    installed_file1="c:/windows/Microsoft.NET/Framework/v2.0.50727/Microsoft .NET Framework 2.0/install.exe"
 
 load_dotnet20()
 {
@@ -4833,6 +4843,9 @@ load_dotnet30sp1()
     # dotnet20 does this, which is called by dotnet30:
     # w_call remove_mono
     w_call dotnet30
+    $WINESERVER -w
+    w_call dotnet20sp1
+    $WINESERVER -w
 
     w_download http://download.microsoft.com/download/8/F/E/8FEEE89D-9E4F-4BA3-993E-0FFEA8E21E1B/NetFx30SP1_x86.exe 8d779e337920b097aa0c01859912950606e9fc12
     cd "$W_CACHE/$W_PACKAGE"
@@ -4867,8 +4880,6 @@ load_dotnet35()
     *) w_warn "dotnet35 does not yet fully work or install on wine.  Caveat emptor." ;;
     esac
 
-    w_call dotnet20sp1
-    $WINESERVER -w
     w_call dotnet30sp1
     $WINESERVER -w
 
@@ -5031,8 +5042,8 @@ w_metadata flash dlls \
     media="download" \
     file1="install_flash_player_10_plugin.exe" \
     file2="install_flash_player_10_active_x.exe" \
-    installed_file1="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil10zf_Plugin.exe" \
-    installed_file2="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil10zf_ActiveX.exe" \
+    installed_file1="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil10zj_Plugin.exe" \
+    installed_file2="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil10zj_ActiveX.exe" \
     homepage="http://www.adobe.com/products/flashplayer/"
 
 load_flash()
@@ -5057,7 +5068,9 @@ load_flash()
     # 2012-05-02: sha1sum d86ca46afc312b14375aad483d1c7e5f12c707a4
     # 2012-05-11: sha1sum 4020135dfbfe4b49067bb679000e0a6b7c7ed8bc
     # 2012-08-12: sha1sum 3cd65d71ba26b829255e44a1af708fc060282bc6
-    w_download http://fpdownload.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_10_active_x.exe 3cd65d71ba26b829255e44a1af708fc060282bc6
+    # 2012-11-06: sha1sum 415a8e3044749fd73967a19d16c535b6b341a148
+    # 2012-12-22: sha1sum 95b84c0768e4b550238c482a696bfd7aaeb7ed8d
+    w_download http://fpdownload.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_10_active_x.exe 95b84c0768e4b550238c482a696bfd7aaeb7ed8d
     cd "$W_CACHE"/flash
 
     w_try $WINE install_flash_player_10_active_x.exe ${W_OPT_UNATTENDED:+ /install}
@@ -5078,7 +5091,9 @@ load_flash()
     # 2102-05-02: sha1sum 0a7a7b9b8b6b834e452b456205e33210fb3b544c, name change
     # 2102-05-11: sha1sum 060f11d5479863af609272a24dea82e6b04e0641
     # 2012-08-12: sha1sum 3909ee6078bdae2157f595b8d7c4f1484fef710b
-    w_download http://fpdownload.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_10_plugin.exe 3909ee6078bdae2157f595b8d7c4f1484fef710b
+    # 2012-11-06: sha1sum 8cecf58c6ca638c123e37c0e9c3b93ab805c1930
+    # 2012-12-22: sha1sum 8cd26eeb37cef2307bf179d671ad3707089a02d7
+    w_download http://fpdownload.macromedia.com/get/flashplayer/current/licensing/win/install_flash_player_10_plugin.exe 8cd26eeb37cef2307bf179d671ad3707089a02d7
 
     w_try $WINE install_flash_player_10_plugin.exe ${W_OPT_UNATTENDED:+ /install}
 }
@@ -5091,28 +5106,30 @@ w_metadata flash11 dlls \
     publisher="Adobe" \
     year="2011" \
     media="download" \
-    file1="install_flash_player_32bit.exe" \
-    file2="install_flash_player_ax_32bit.exe" \
-    installed_file1="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil11e_Plugin.exe" \
-    installed_file2="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil11e_ActiveX.exe" \
+    file1="install_flash_player.exe" \
+    file2="install_flash_player_ax.exe" \
+    installed_file1="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil32_11_5_502_135_Plugin.exe" \
+    installed_file2="$W_SYSTEM32_DLLS_WIN/Macromed/Flash/FlashUtil32_11_5_502_135_ActiveX.exe" \
     homepage="http://www.adobe.com/products/flashplayer/"
 
 load_flash11()
 {
     # Active X plugin
     # 2011-11-12: sha1sum 8314061c4d73c9957dfb4da525d77437ee6abf0e
-    w_download http://fpdownload.macromedia.com/get/flashplayer/pdc/11.1.102.55/install_flash_player_ax_32bit.exe 8314061c4d73c9957dfb4da525d77437ee6abf0e
+    # 2012-12-22: sha1sum 2a0571dc3d8b28b62586beb1bffd0c5eca3743cc, name change
+    w_download http://fpdownload.macromedia.com/get/flashplayer/pdc/11.5.502.135/install_flash_player_ax.exe 2a0571dc3d8b28b62586beb1bffd0c5eca3743cc
     cd "$W_CACHE"/flash11
 
-    w_try $WINE install_flash_player_ax_32bit.exe ${W_OPT_UNATTENDED:+ /install}
+    w_try $WINE install_flash_player_ax.exe ${W_OPT_UNATTENDED:+ /install}
 
     # Mozilla / Firefox plugin
     # 2011-11-12: sha1sum f1f76c35564c9f842a7e005d97f5008173466d46
-    w_download http://fpdownload.macromedia.com/get/flashplayer/pdc/11.1.102.55/install_flash_player_32bit.exe f1f76c35564c9f842a7e005d97f5008173466d46
+    # 2012-12-22: sha1sum 6c0d910858ba04223da2bfbdd069ef7f6e0f0894, name change
+    w_download http://fpdownload.macromedia.com/get/flashplayer/pdc/11.5.502.135/install_flash_player.exe 6c0d910858ba04223da2bfbdd069ef7f6e0f0894
 
-    w_try $WINE install_flash_player_32bit.exe ${W_OPT_UNATTENDED:+ /install}
+    w_try $WINE install_flash_player.exe ${W_OPT_UNATTENDED:+ /install}
 
-    if w_workaround_wine_bug 25966 "Flash11 still needs native visual c++ 2005 runtimes"
+    if w_workaround_wine_bug 25966 "Flash11 still needs native visual c++ 2005 runtimes" 1.5.7,
     then
         w_call vcrun2005
     fi
@@ -5123,16 +5140,36 @@ load_flash11()
 w_metadata gdiplus dlls \
     title="MS GDI+" \
     publisher="Microsoft" \
+    year="2011" \
+    media="download" \
+    file1="../win7sp1/windows6.1-KB976932-X86.exe" \
+    installed_file1="$W_SYSTEM32_DLLS_WIN/gdiplus.dll"
+
+load_gdiplus()
+{
+    # gdiplus has changed in win7. See http://bugs.winehq.org/show_bug.cgi?id=32163#c3
+    helper_win7sp1 x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.7601.17514_none_72d18a4386696c80/gdiplus.dll
+    w_try cp "$W_TMP/x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.7601.17514_none_72d18a4386696c80/gdiplus.dll" "$W_SYSTEM32_DLLS/gdiplus.dll"
+    
+    # For some reason, native,builtin isn't good enough...?
+    w_override_dlls native gdiplus
+}
+
+#----------------------------------------------------------------
+
+w_metadata gdiplus_winxp dlls \
+    title="MS GDI+" \
+    publisher="Microsoft" \
     year="2004" \
     media="manual_download" \
     file1="NDP1.0sp2-KB830348-X86-Enu.exe" \
     installed_file1="$W_SYSTEM32_DLLS_WIN/gdiplus.dll"
 
-load_gdiplus()
+load_gdiplus_winxp()
 {
     w_download_manual http://download.cnet.com/NET-Framework-1-0-GDIPLUS-DLL-Security-Update/3000-10250_4-10732223.html NDP1.0sp2-KB830348-X86-Enu.exe 6113cd89d77525958295ccbd73b5fb8b89abd0aa
     cd "$W_CACHE"/gdiplus
-    w_try_cabextract -d "$W_TMP" -F FL_gdiplus_dll_____X86.3643236F_FC70_11D3_A536_0090278A1BB8 "$W_CACHE"/gdiplus/$file1
+    w_try_cabextract -d "$W_TMP" -F FL_gdiplus_dll_____X86.3643236F_FC70_11D3_A536_0090278A1BB8 "$W_CACHE"/gdiplus_winxp/$file1
     w_try cp "$W_TMP/FL_gdiplus_dll_____X86.3643236F_FC70_11D3_A536_0090278A1BB8" "$W_SYSTEM32_DLLS/gdiplus.dll"
 
     # For some reason, native,builtin isn't good enough...?
@@ -5352,6 +5389,24 @@ load_ffdshow()
     w_download $WINETRICKS_SOURCEFORGE/ffdshow-tryout/ffdshow_beta7_rev3154_20091209.exe 8534c31489e51df70ee9583438d6211e6f0696d0
     cd "$W_CACHE"/ffdshow
     w_try $WINE ffdshow_beta7_rev3154_20091209.exe $W_UNATTENDED_SLASH_SILENT
+}
+
+#----------------------------------------------------------------
+
+w_metadata hid dlls \
+    title="MS hid" \
+    publisher="Microsoft" \
+    year="2003" \
+    media="download" \
+    file1="../win2ksp4/W2KSP4_EN.EXE" \
+    installed_file1="$W_SYSTEM32_DLLS_WIN/hid.dll"
+
+load_hid()
+{
+    helper_win2ksp4 i386/hid.dl_
+    w_try_cabextract --directory="$W_SYSTEM32_DLLS" "$W_TMP"/i386/hid.dl_
+
+    w_override_dlls native hid
 }
 
 #----------------------------------------------------------------
@@ -5585,6 +5640,23 @@ load_mozillabuild()
     w_download http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/MozillaBuildSetup-1.5.1.exe 216c52eafe42df7559e8451f4e40a28e9c0f8133
     cd "$W_CACHE/$W_PACKAGE"
     w_try $WINE MozillaBuildSetup-1.5.1.exe $W_UNATTENDED_SLASH_S
+}
+
+#----------------------------------------------------------------
+
+w_metadata msacm32 dlls \
+    title="MS ACM32" \
+    publisher="Microsoft" \
+    year="2003" \
+    media="download" \
+    file1="../xpsp2/W2KSP4_EN.EXE" \
+    installed_file1="$W_SYSTEM32_DLLS_WIN/msacm32.dll"
+
+load_msacm32()
+{
+    helper_xpsp2 i386/msacm32.dl_
+    w_try_cabextract --directory="$W_SYSTEM32_DLLS" "$W_TMP"/i386/msacm32.dl_
+    w_override_dlls native,builtin msacm32
 }
 
 #----------------------------------------------------------------
@@ -6218,6 +6290,27 @@ load_speechsdk()
 
 #----------------------------------------------------------------
 
+w_metadata tabctl32 dlls \
+    title="Microsoft Tabbed Dialog Control 6.0 (tabctl32.ocx)" \
+    publisher="Microsoft" \
+    year="2009" \
+    media="download" \
+    file1="tabctl32.cab" \
+    installed_file1="$W_SYSTEM32_DLLS_WIN/tabctl32.ocx"
+
+load_tabctl32()
+{
+    # http://msdn.microsoft.com/en-us/library/aa240864(VS.60).aspx
+    # Nov 2012: tabctl32
+    w_download http://activex.microsoft.com/controls/vb6/tabctl32.cab beca51d05924a5466ab80eb0f8d0cdf8bc1ac697
+
+    w_try_cabextract --directory="$W_TMP" "$W_CACHE"/tabctl32/tabctl32.cab
+    w_try cp -f "$W_TMP"/[Tt][Aa][Bb][Cc][Tt][Ll][3][2].[Oo][Cc][Xx] "$W_SYSTEM32_DLLS"
+    w_try_regsvr tabctl32.ocx
+}
+
+#----------------------------------------------------------------
+
 w_metadata usp10 dlls \
     title="Uniscribe 1.325 " \
     publisher="Microsoft" \
@@ -6511,7 +6604,7 @@ load_vcrun2005()
     w_download http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE b8fab0bb7f62a24ddfe77b19cd9a1451abd7b847
 
     cd "$W_CACHE"/vcrun2005
-    w_override_dlls native,builtin msvcr80
+    w_override_dlls native,builtin atl80 msvcm80 msvcp80 msvcr80 vcomp
     w_try $WINE $file1 $W_UNATTENDED_SLASH_Q
 }
 
@@ -6531,7 +6624,7 @@ load_vcrun2008()
     # http://www.microsoft.com/technet/security/bulletin/MS11-025.mspx or
     # http://support.microsoft.com/kb/2538242
     w_download http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe 470640aa4bb7db8e69196b5edb0010933569e98d
-    w_override_dlls native,builtin msvcr90
+    w_override_dlls native,builtin msvcm90 msvcp90 msvcr90 vcomp90
     cd "$W_CACHE"/vcrun2008
     w_try $WINE $file1 $W_UNATTENDED_SLASH_Q
 }
@@ -6556,11 +6649,11 @@ load_vcrun2010()
         w_call msxml3
     fi
 
-    w_override_dlls native,builtin msvcr100
+    w_override_dlls native,builtin msvcp100 msvcr100 vcomp100 atl100
     cd "$W_CACHE"/vcrun2010
     w_try $WINE vcredist_x86.exe $W_UNATTENDED_SLASH_Q
 
-    case "$WINEARCH" in
+    case "$W_ARCH" in
     win64)
         # See http://bugs.winehq.org/show_bug.cgi?id=30713
         # Also install the 64 bit version
@@ -6573,6 +6666,7 @@ load_vcrun2010()
         cp "$W_TMP"/F_CENTRAL_msvcr100_x64 "$W_SYSTEM64_DLLS"/msvcr100.dll
         cp "$W_TMP"/F_CENTRAL_msvcp100_x64 "$W_SYSTEM64_DLLS"/msvcp100.dll
         cp "$W_TMP"/F_CENTRAL_vcomp100_x64 "$W_SYSTEM64_DLLS"/vcomp100.dll
+        cp "$W_TMP"/F_CENTRAL_atl100_x64 "$W_SYSTEM64_DLLS"/atl100.dll
         ;;
     esac
 }
@@ -7378,7 +7472,7 @@ w_metadata opensymbol fonts \
     publisher="OpenOffice.org" \
     year="2010" \
     media="download" \
-    file1="ttf-opensymbol_3.2.1-11+squeeze4_all.deb" \
+    file1="ttf-opensymbol_3.2.1-11+squeeze7_all.deb" \
     installed_file1="$W_FONTSDIR_WIN/opens___.ttf"
 
 load_opensymbol()
@@ -7386,7 +7480,7 @@ load_opensymbol()
     # The OpenSymbol fonts are a replacement for the Windows Wingdings font from OpenOffice.org.
     # Need to w_download Debian since I can't find a standalone download from OpenOffice
     # Note: The source download package on debian is for _all_ of OpenOffice, which is 266 MB.
-    w_download http://ftp.us.debian.org/debian/pool/main/o/openoffice.org/ttf-opensymbol_3.2.1-11+squeeze4_all.deb 7950540f404daf1af7f279a67cd1164a6d599fc1
+    w_download http://ftp.us.debian.org/debian/pool/main/o/openoffice.org/ttf-opensymbol_3.2.1-11+squeeze7_all.deb 2f10609b35284c2b8c62ee86e479a5d491a6e656
 
     cd "$W_TMP"
     w_try ar x "$W_CACHE/opensymbol/$file1" data.tar.bz2
@@ -8895,7 +8989,8 @@ w_metadata steam apps \
 load_steam()
 {
     # 18 Mar 2011 7f2fee9ffeaba8424a6c76d6c95b794735ac9959
-    w_download http://storefront.steampowered.com/download/SteamInstall.msi 7f2fee9ffeaba8424a6c76d6c95b794735ac9959
+    # 29 Nov 2012 fa053c268b6285741d1a1392c25f92c5cb2a6ffb
+    w_download http://storefront.steampowered.com/download/SteamInstall.msi fa053c268b6285741d1a1392c25f92c5cb2a6ffb
     cd "$W_CACHE"/steam
     
     # Install corefonts first, so if the user doesn't have cabextract/Wine with cab support, we abort before installing Steam.
@@ -14270,24 +14365,28 @@ load_nfsshift_demo()
 w_metadata nfsworld games \
     title="Need For Speed World" \
     publisher="EA" \
-    year="2011" \
+    year="2012" \
     media="download" \
-    file1="setup_659.exe" \
+    file1="setup_1229.exe" \
     installed_exe1="$W_PROGRAMS_X86_WIN/Electronic Arts/Need For Speed World/GameLauncher.exe"
 
 load_nfsworld()
 {
+    w_workaround_wine_bug 27048 "The patcher will probably put up an error dialog and then hang.  When this happens, kill it and try again.  It should succeed after the fourth or so try."
+
     w_workaround_wine_bug 27047 "Game fails with corrupt executable error in wine-1.3.19 and earlier" 1.3.20,
 
     # This changes frequently, I'm afraid
     # Be careful to update $file1 when you update the url
-    w_download http://static.cdn.ea.com/blackbox/u/f/NFSWO/Launcher/weblaunch_1.8.40.659/akamai/setup_659.exe b1f10af09350e2b3f5ccbc679dbea628e9f432d0
+    # 1.8.40.65   9b1f10af09350e2b3f5ccbc679dbea628e9f432d0 ?
+    # 1.8.40.1229 f355fcad20dd6267910bec93a318224718ab5de7
+    w_download http://static.cdn.ea.com/blackbox/u/f/NFSWO/1229/launcher/weblaunch_1.8.40.1229/setup_1229.exe f355fcad20dd6267910bec93a318224718ab5de7
 
-    w_workaround_wine_bug 27048 "The patcher hangs a lot.  When it does, retry the patch (you may need to kill it first).  After five or ten tries, it should work."
-
-    # FIXME: file bugs for these
-    w_call ie7
-    w_call dotnet20
+    if w_workaround_wine_bug 25658 "Installing dotnet20 and ie7 so launcher UI works"
+    then
+        w_call ie7
+        w_call dotnet20
+    fi
 
     if test "$W_OPT_UNATTENDED" && w_workaround_wine_bug 25961
     then

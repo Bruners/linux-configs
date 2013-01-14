@@ -211,14 +211,14 @@ myManageHook = (composeAll . concat $
     --, [ isFullscreen --> (doFullFloat <+> doMaster) ]
     , [ isDialog --> (doCenterFloat <+> doMaster) ]
     , [ classNotRole (cnf) --> (doCenterFloat <+> doMaster) | (cnf) <- windowFloats ]
-    , [ resource =? "desktop_window" --> doIgnore ]
-    , [ resource =? "idesk" --> doIgnore ]
+    , [ fmap ( c `isInfixOf`) resource --> doIgnore | c <- myIgnores ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat <+> doMaster | c <- myAnyFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat <+> doMaster | c <- myCenFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFullFloat <+> doMaster | c <- myFulFloats ]
     ]) where
         doMaster = doF W.shiftMaster
-        myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gnomebaker" ]
+        myIgnores = [ "desktop_window", "idesk" ]
+        myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gnomebaker", "Gsimplecal" ]
         myCenFloats = [ "feh", "Xmessage", "Squeeze", "GQview", "Thunar", "pcmanfm", "Ktsuss" ]
         myFulFloats = [ "mplayer", "vdpau", "Gnome-mplayer" ]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
@@ -235,6 +235,7 @@ myManageHook = (composeAll . concat $
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
+
 
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
@@ -291,6 +292,8 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
 myEwmhEvHook = XMonad.Hooks.EwmhDesktops.fullscreenEventHook
 myFullEvHook = XMonad.Layout.Fullscreen.fullscreenEventHook
 
+myPlaceHook = placeHook (withGaps (14,0,14,0) simpleSmart)
+
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.
 -- Used by, e.g., XMonad.Layout.PerWorkspace to initialize per-workspace layout choices.
 armorStartupHook :: X ()
@@ -309,7 +312,6 @@ main = do
     spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 1280 -p -ta r -dock -h 22 -w 640"
     spawn $ "conky -c /home/lasseb/.xmonad/dzen_mpd | dzen2 -x 1920 -p -ta l -dock -h 22 -w 1280"
     spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 3200 -p -ta r -dock -h 22 -w 487"
-
     xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
         { terminal           = myTerminal
         , focusFollowsMouse  = myFocusFollowsMouse
@@ -321,7 +323,7 @@ main = do
         , keys               = armorKeys
         , mouseBindings      = myMouseBindings
         , layoutHook         = myLayout
-        , manageHook         = placeHook simpleSmart <+> fullscreenManageHook <+> manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
+        , manageHook         = myPlaceHook <+> fullscreenManageHook <+> manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
         , handleEventHook    = myEwmhEvHook
         , startupHook        = armorStartupHook
         , logHook            = myLogHook dzen

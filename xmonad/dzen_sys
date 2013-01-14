@@ -14,5 +14,5 @@ TEXT
 ^fg(khaki)^i(/home/lasseb/.share/icons/dzen/mem.xbm) ^fg(white)${memperc}%^fg() \
 ^fg(green3)^i(/home/lasseb/.share/icons/dzen/temp.xbm) ^fg(white)${execi 60 nvidia-settings -query GPUCoreTemp -t }°C^fg() \
 ^fg(\#80AA83)^i(/home/lasseb/.share/icons/dzen/net_down_03.xbm) ^fg(white)${downspeedf eth0}^fg(orange3) ^i(/home/lasseb/.share/icons/dzen/net_up_03.xbm) ^fg(white)${upspeedf eth0}^fg() \
-^fg(\#eeffcc)^i(/home/lasseb/.share/icons/dzen/clock.xbm) ^fg(\#ee9a00)${time %d/%m/%y} ^fg(white)${time %H:%M:%S }^fg()
+^fg(\#eeffcc)^i(/home/lasseb/.share/icons/dzen/clock.xbm) ^fg(\#ee9a00)${time %d/%m/%y} ^ca(1, gsimplecal)^fg(white)${time %H:%M:%S }^fg()^ca()
 

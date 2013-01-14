@@ -47,7 +47,6 @@ myTerminal :: String
 myTerminal = "urxvtc"
 
 myBorderWidth :: Dimension
-
 myBorderWidth = 0
 
 myModMask :: KeyMask
@@ -236,7 +235,6 @@ myManageHook = (composeAll . concat $
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
-
 -- See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 myLogHook h = dynamicLogWithPP $ defaultPP
@@ -299,7 +297,6 @@ myPlaceHook = placeHook (withGaps (14,0,14,0) simpleSmart)
 armorStartupHook :: X ()
 armorStartupHook = do
     setWMName "LG3D"
-    -- xcompmgr -c -t-5 -l-5 -r4.2 -o.55 -C
     spawn "xcompmgr -s"
     spawn "setxkbmap no"
     spawn "xmodmap -e 'clear Lock'"
@@ -309,9 +306,9 @@ armorStartupHook = do
 main :: IO ()
 main = do
     dzen <- spawnPipe "dzen2 -p -ta l -dock -h 22 -w 1280"
-    spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 1280 -p -ta r -dock -h 22 -w 640"
-    spawn $ "conky -c /home/lasseb/.xmonad/dzen_mpd | dzen2 -x 1920 -p -ta l -dock -h 22 -w 1280"
-    spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 3200 -p -ta r -dock -h 22 -w 487"
+    spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 1280 -p -ta r -dock -h 22 -w 640 -e 'button3='"
+    spawn $ "conky -c /home/lasseb/.xmonad/dzen_mpd | dzen2 -x 1920 -p -ta l -dock -h 22 -w 1280 -e 'button3='"
+    spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 3200 -p -ta r -dock -h 22 -w 487 -e 'button3='"
     xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
         { terminal           = myTerminal
         , focusFollowsMouse  = myFocusFollowsMouse

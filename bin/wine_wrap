@@ -1,23 +1,21 @@
 #!/bin/sh
 
-WINE_PATH="/usr/bin/wine"
-#export WINE_PREFIX="$HOME/.wine"
-
 case "$1" in
-    "bf2")
-        $WINE_PATH /games/BF2/BF2.exe
-        ;;
     "wc3")
-        $WINE_PATH /games/Warcraft\ III/Frozen\ Throne.exe -opengl
+        export WINEPREFIX="$ROOT/games/Warcraft III/.wine"
+        $WINE_PATH $ROOT/games/Warcraft\ III/Frozen\ Throne.exe -opengl
         ;;
     "wow")
-        $WINE_PATH /games/WoW/Wow.exe -opengl
+        export WINEPREFIX="$ROOT/mnt/wdc2tb/WoW/World of Warcraft/.wine"
+        __GL_THREADED_OPTIMIZATIONS=1 WINEDEBUG=-all wine $ROOT/mnt/wdc2tb/WoW/World\ of\ Warcraft/Wow.exe -opengl
         ;;
     "d3")
-        env WINEPREFIX="/games/Diablo III/.wine" setarch i386 -3 -L -B -R $WINE_PATH /games/Diablo\ III/Diablo\ III.exe -launch
+        export WINEPREFIX="$ROOT/games/Diablo III/.wine"
+        WINEDEBUG=-all setarch i386 -3 -L -B -R wine $ROOT/games/Diablo\ III/Diablo\ III.exe -launch
         ;;
     "diablo")
-        env WINEPREFIX="/games/Diablo III/.wine" setarch i386 -3 -L -B -R $WINE_PATH /games/Diablo\ III/Diablo\ III.exe
+        export WINEPREFIX="$ROOT/games/Diablo III/.wine"
+        WINEDEBUG=-all setarch i386 -3 -L -B -R wine $ROOT/games/Diablo\ III/Diablo\ III.exe
 esac
 exit 0
 

@@ -11,6 +11,4 @@ update_interval 1
 total_run_times 0
 
 TEXT
-^ca(2, mpc toggle)^fg(khaki) ^i(/home/lasseb/.share/icons/dzen/play.xbm)^fg(grey60) ${mpd_status}^ca() \
-${if_mpd_playing}^fg(orange)[^fg(grey90)${mpd_elapsed}^fg(orange)/^fg(grey90)${mpd_length}^fg(orange)]$endif^ca(1, mpc prev)^ca(3, mpc next)^ca(4, mpc seek +5)^ca(5, mpc seek -5) \
-[^fg(white)${mpd_artist}^fg(orange) / ^fg(white)${mpd_title}^fg(orange)] [^fg(grey90)${mpd_album}^fg(orange)]^fg()^ca()^ca()^ca()^ca()
+^p(4)^fg(khaki) ^i(/home/lasseb/.share/icons/dzen/play.xbm) ^fg(grey90)[ ^ca(1, mpc toggle)${mpd_status}^ca()${if_mpd_playing} - ${mpd_elapsed}/${mpd_length}$endif ]^fg(blue)^ca(1, mpc prev)^ca(3, mpc next)^ca(4, mpc seek +5)^ca(5, mpc seek -5)${mpd_artist}^fg(orange) - ^fg(green)${mpd_title}^fg(orange) - ^fg(darkcyan)${mpd_album}^fg()^ca()^ca()^ca()^ca()

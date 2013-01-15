@@ -6,7 +6,7 @@ case "$1" in
         $WINE_PATH $ROOT/games/Warcraft\ III/Frozen\ Throne.exe -opengl
         ;;
     "wow")
-        export WINEPREFIX="$ROOT/mnt/wdc2tb/WoW/World of Warcraft/.wine"
+        export WINEPREFIX="$ROOT/games/Diablo III/.wine"
         __GL_THREADED_OPTIMIZATIONS=1 WINEDEBUG=-all wine $ROOT/mnt/wdc2tb/WoW/World\ of\ Warcraft/Wow.exe -opengl
         ;;
     "d3")

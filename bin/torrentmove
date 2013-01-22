@@ -1,33 +1,47 @@
 #!/bin/sh
+set -x
 export DISPLAY=:0
-WATCH_FOLDER="/mnt/ds212/torrent/watch/"
-LOGFILE="/home/lasseb/.torrentmove.log"
-FILEINFO="`file \"${FILENAME}\" | grep 'BitTorrent file'`"
-CHECKPATH="/home/lasseb/Downloads/Opera/:/home/lasseb/Downloads/Chromium/:"
-INPUT="${1}"
-if [ "${INPUT}" = "" ]; then
-    INPUT=${CHECKPATH}
-else
-    INPUT="${1}:${CHECKPATH}"
-fi
+WATCH_FOLDER="$HOME/.watch"
+FILE_TYPE="BitTorrent file"
+FILE_SUFFIX="*.torrent"
+CHECKPATH="$HOME/Downloads/Opera/:$HOME/Downloads/Chromium/:"
+# log to syslog with logger
+LOGGER="/usr/bin/logger -p user.info -t `basename $0`"
+
+# Include directories from args passed
+[ $# -eq 0 ] && INPUT="${CHECKPATH}" || INPUT="$@:${CHECKPATH}"
+
+# Add checkpaths and run different tests to do less
 for DIRECTORY in `echo "${INPUT}" | tr ':' '\n'` ; do
-    find "${DIRECTORY}" -name '*.torrent' -print | while read FILENAME; do
-        if [ -f "${FILENAME}" ]; then
-            BASEFILE="`basename \"${FILENAME}\"`"
-            if [ -z ${FILEINFO} ]; then
-                if [ -d "${WATCH_FOLDER}" ]; then
-                    if [ -f ${WATCH_FOLDER}/${BASEFILE} ]; then
-                       echo -e "Error ::: ${BASEFILE} already in ${WATCH_FOLDER} :::" >> "${LOGFILE}"
-                       break
-                    elif [ -w "${WATCH_FOLDER}" ]; then
-                       $(which notify-send) --urgency=low --icon=bittorrent --expire-time=5 "New torrent found" "Moved ${BASEFILE}" &
-                       echo -e "Moved ::: ${FILENAME} -> ${WATCH_FOLDER} :::" >> "${LOGFILE}" &
-                       mv "${FILENAME}" "${WATCH_FOLDER}"
+    if [ -d "${DIRECTORY}" ]; then
+        find "${DIRECTORY}" -name ${FILE_SUFFIX} -print | while read FILENAME; do
+            if [ -f "${FILENAME}" ]; then
+                BASEFILE="`basename \"${FILENAME}\"`"
+                if [ "`file -b ${FILENAME}`" = "${FILE_TYPE}" ]; then # Check if torrent-file.
+                    if [ -d "${WATCH_FOLDER}" ]; then
+                        # Check if torrent already is in the watch-folder and renames it for next run
+                        if [ -f "${WATCH_FOLDER}/${BASEFILE}" ]; then
+                            echo -e "Duplicate: Renaming ${BASEFILE}->${BASEFILE}.dupe in ${DIRECTORY}" 2>&1 | ${LOGGER}
+                            mv "${DIRECTORY}/${BASEFILE}" "${DIRECTORY}/${BASEFILE}.dupe"
+                            break
+                        # If nothing failed, move torrent to watch folder
+                        elif [ -w "${WATCH_FOLDER}" ]; then
+                            $(which notify-send) --urgency=low --icon=bittorrent --expire-time=5 "New torrent found" "${BASEFILE}" &
+                            LOGGER="${LOGGER} -p user.notice"
+                            echo -e "New torrent found: ${BASEFILE} -> ${WATCH_FOLDER}" 2>&1 | ${LOGGER}
+                            mv "${FILENAME}" "${WATCH_FOLDER}"
+                        fi
                     fi
                 fi
             fi
-        fi
-    done
+        done
+    else
+        # Spew out errors if input directories are non-valid
+        LOGGER="${LOGGER} -p user.alert"
+        echo -e "Input error: \"${DIRECTORY}\" is not a directory!" 2>&1 | ${LOGGER}
+    fi
 done
+
+exit $?
 
 # vim:set ft=sh:

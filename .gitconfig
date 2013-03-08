@@ -10,10 +10,11 @@
 [diff]
     renames = copy
 [core]
-    autocrlf = true
+    autocrlf = input
     excludesfile = /home/lasseb/github/.global_ignore
 [alias]
     hist = log --pretty=format:\"%C(yellow)%h %Cgreen%ad %Creset%s%C(yellow)%d %Creset[%C(cyan)%an%Creset]\" --graph --date=short
+	conflicts = !git ls-files -u | cut -f 2 | sort -u
 [format]
     pretty = "Commit:  %C(yellow)%H%nAuthor:  %C(green)%aN <%aE>%nDate:    (%C(red)%ar%Creset) %ai%nSubject: %s%n%n%b"
 [push]

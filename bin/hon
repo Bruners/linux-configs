@@ -12,7 +12,7 @@ _name=`/usr/bin/systemctl --no-pager --user show ${_service} | grep --only-match
 _notify="/usr/bin/notify-send --urgency=low --icon=start-here --expire-time=5"
 
 case `systemctl --no-pager --user is-active ${_service}` in
-    "unknown")
+    "unknown"|"inactive")
         ${_notify} "$_service" "Starting..."
         /usr/bin/systemctl --user start ${_service}
         ;;

@@ -1,0 +1,27 @@
+#!/bin/sh
+# Copyright 2013 Lasse Brun <bruners@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
+
+# Name of systemd unit
+_service="opera-browser"
+
+# Find the value of Description from the systemd service
+_name=`/usr/bin/systemctl --no-pager --user show ${_service} | grep --only-matching --perl-regex "(?<=Description\=).*"`
+
+# spew out notification with notify-send
+_notify="/usr/bin/notify-send --urgency=low --icon=opera --expire-time=5"
+
+case `systemctl --no-pager --user is-active ${_service}` in
+    "unknown")
+        ${_notify} "$_service" "Starting..."
+        /usr/bin/systemctl --user start ${_service}
+        ;;
+    "active")
+        ${_notify} "$_name" "Is already running, trying active instance..."
+        /usr/bin/opera "$@"
+        #/usr/bin/systemctl --user restart ${_service}
+        ;;
+    "")
+        echo "Don't know what to do"
+        ;;
+esac

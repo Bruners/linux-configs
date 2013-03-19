@@ -12,6 +12,7 @@
 ICON_NAME=""
 OSS_CONTROL="vmix0-outvol"
 VOLUME="$HOME/.volume"
+DISPLAY=":0"
 
 message() {
     cat << EOF

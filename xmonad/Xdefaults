@@ -1,3 +1,7 @@
+#include "/home/lasseb/.xcolors/tango"
+!#include "/home/lasseb/.xcolors/solarized.xcolors"
+
+!URxvt.termName: rxvt-unicode-256color
 Xft.lcdfilter: lcddefault
 Xft.dpi: 96
 Xft.rgba: rgb
@@ -6,12 +10,13 @@ Xft.hintstyle: hintfull
 Xft.antialias: 1
 Xft.autohint: 0
 
-#include "/home/lasseb/.xcolors/solarized.xcolors"
-
 dzen2.font: -misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*
 dzen2.foreground: #909090
 dzen2.background: #202020
-
+URxvt*.resource: $HOME/.Xresources
+URxvt*.iconFile: /usr/share/icons/gnome/16x16/apps/gnome-terminal.png
+URxvt*.insecure: true
+URxvt*.iso14755: False
 URxvt*.transparent: true
 URxvt*.shading: 10
 URxvt*.depth: 32
@@ -21,23 +26,19 @@ URxvt*.boldFont: -*-proggyclean-bold-r-normal--13-*-*-*-*-*-*-*
 URxvt*.keysym.Home: \033[1~
 URxvt*.keysym.End: \033[4~
 URxvt*.geometry: 154x36
-
-urxvt*.saveLines: 8192
+URxvt*.saveLines: 65535
 URxvt*.inheritPixmap: false
 URxvt*.visualBell: true
-
 URxvt*.cursorColor: #ff9900
 URxvt*.cursorColor2: #454638
-URxvt*.cursorBlink: false
-
+URxvt*.mapAlert:         true
+!URxvt*.cursorBlink: false
 URxvt*.underlineColor: #c0c0c0
-URxvt*.colorIT: #bbbbbb
-URxvt*.colorBD: #ffffff
-
-URxvt*.loginShell: true
+URxvt*.colorIT: green
+URxvt*.colorBD: white
+!URxvt*.loginShell: true
 URxvt*.print-pipe: cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
 URxvt*.jumpScroll: true
-
 URxvt*.scrollBar: 0
 URxvt*.secondaryScroll: true
 URxvt*.scrollTtyOutput: false
@@ -49,20 +50,10 @@ URxvt*.pointerBlankDelay: 5
 
 URxvt*.urgentOnBell: true
 
-URxvt.perl-ext: default,matcher,-readline,-searchable-scrollback
+URxvt.perl-ext: default,matcher
 URxvt.url-launcher: /usr/bin/opera
+URxvt.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
 URxvt.matcher.button: 1
-URxvt.matcher.pattern.1: \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
-URxvt.matcher.pattern.2: \\B(/\\S+?):(\\d+)(?=:|$)
-URxvt.matcher.launcher.2: gvim +$2 $1
-
-IRC*title: IRC
-IRC*saveLines: 0
-IRC*mapAlert: true
-IRC*perl-ext: default,matcher,-selection-popup,-option-popup,-readline,-searchable-scrollback
-IRC*matcher.pattern.1: \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
-IRC*urlLauncher: /usr/bin/opera
-IRC*matcher.button: 1
 
 
 Xcursor*.theme: whiteglass

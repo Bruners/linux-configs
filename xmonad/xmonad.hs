@@ -1,3 +1,4 @@
+-- {{{ Imports
 import XMonad
 import System.Exit
 import System.IO
@@ -21,6 +22,9 @@ import XMonad.Layout.ComboP
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Fullscreen
+import XMonad.Layout.Maximize
+import XMonad.Layout.SimpleFloat
+import XMonad.Layout.Named (named)
 
 import XMonad.Util.Themes
 import XMonad.Util.NamedScratchpad
@@ -42,6 +46,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 
 import qualified XMonad.StackSet as W
+-- }}}
 
 myTerminal :: String
 myTerminal = "urxvtc"
@@ -52,9 +57,10 @@ myBorderWidth = 0
 myModMask :: KeyMask
 myModMask = mod4Mask
 
+myDefaultGaps ::  [(Integer, Integer, Integer, Integer)]
 myDefaultGaps = [ (22,0,0,0) ]
 
--- use xev to fin key codes
+-- {{{ keybindings - use xev to fin key codes
 armorKeys :: XConfig Layout -> M.Map (KeyMask, KeySym) (X ())
 armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     [ ((mM .|. sM , xK_Return ), spawn $ XMonad.terminal conf) -- Lanch a terminal
@@ -76,6 +82,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM .|. cM , xK_h      ), sendMessage MirrorShrink) -- Shrink mirror vert
     , ((mM .|. cM , xK_l      ), sendMessage MirrorExpand) -- Expand mirror vert
     , ((mM        , xK_t      ), withFocused $ windows . W.sink) -- Push back into tiling
+    , ((mM        , xK_F11    ), withFocused (sendMessage . maximizeRestore)) -- Push to float
     , ((mM .|. sM , xK_t      ), sendMessage ToggleStruts >> sendMessage ToggleLayout) -- Toggle Full layout
     , ((mM        , xK_comma  ), sendMessage (IncMasterN 1)) -- Increment windows
     , ((mM        , xK_period ), sendMessage (IncMasterN (-1))) -- Deincrement windows
@@ -94,7 +101,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd -t") -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts) -- toggle xmobar gap
-    , ((mM        , xK_f      ), spawn "pcmanfm") -- Start pcmanfm
+    , ((mM        , xK_f      ), spawn "nautilus --no-desktop") -- Start pcmanfm
     , ((cM        , xK_bar    ), scratchTerm) -- Spawn scratchpad terminal
     , ((mM        , xK_v      ), scratchMixer) -- Spawn scratchpad mixer
     , ((mM        , xK_0      ), windows $ W.greedyView myWS10) -- Switch to workspace 10
@@ -119,8 +126,7 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
             aM = mod1Mask
             scratchTerm = namedScratchpadAction myScratchPads "terminal"
             scratchMixer = namedScratchpadAction myScratchPads "mixer"
-            myRestart = spawn $ "for pid in `pgrep xcompmgr`; do kill -9 $pid; done && " ++
-                                "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
+            myRestart = spawn $ "for pid in `pgrep conky`; do kill -9 $pid; done && " ++
                                 "for pid in `pgrep dzen2`; do kill -9 $pid; done && " ++
                                 "xmonad --recompile && xmonad --restart"
 
@@ -131,7 +137,8 @@ myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
     , ((modMask, button3), (\w -> focus w >> mouseResizeWindow w)  ) -- Float window and resize with m3
     ]
 
--- Colors used in different layouts ++
+-- }}}
+-- {{{ Colors used in different layouts ++
 myNormalBorderColor  = "#202020"
 myFocusedBorderColor = "#282828"
 myGrey = "#303030"
@@ -154,30 +161,32 @@ myXPConfig = defaultXPConfig { XMonad.Prompt.bgColor = myDarkGrey
                              , XMonad.Prompt.historySize = 256
                              , XMonad.Prompt.showCompletionOnTab = True
                              }
+myTabConfig ::  Theme
 myTabConfig = defaultTheme { activeColor         = myGrey
                            , activeBorderColor   = myDarkGrey2
                            , activeTextColor     = myOrange
                            , inactiveColor       = myDarkGrey
                            , inactiveBorderColor = myDarkGrey2
                            , inactiveTextColor   = myLightGrey
-                           , urgentTextColor     = myGreen
-                           , decoHeight          = 13
+                           , urgentTextColor     = myOrange
+                           , decoHeight          = 15
                            }
-
+-- }}}
+-- {{{ Layouts
 myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
            onWorkspace myWS2 (myTabbed ||| standardLayouts) $
            onWorkspace myWS3 (irc) $
-           onWorkspace myWS7 (gimp ||| standardLayouts) $
-           onWorkspaces [ myWS6, myWS8, myWS9 ] (Full ||| myTabbed ||| threeCol) $
+           onWorkspace myWS7 (gimp ||| threeCol ||| standardLayouts) $
+           onWorkspaces [ myWS6, myWS8, myWS9 ] (Full ||| simpleFloat ||| myTabbed ||| threeCol) $
            standardLayouts
 
     where
         standardLayouts = (tiled ||| Mirror tiled ||| tabs)
         tabs = (myTabbed ||| combineTabbed)
         tiled = (ResizableTall 1 (2/100) (1/2) [])
-        irc = combineTwoP (Tall 1 (1/100) 0.15) (Mirror tiled) (tabs ||| standardLayouts) (ClassName "Mumble" `Or` Role "buddy_list")
+        irc = named "IRC" $ combineTwoP (Tall 1 (1/100) 0.15) (Mirror threeCol) (tabs ||| standardLayouts) (ClassName "Mumble" `Or` Role "buddy_list" `Or` ClassName "Skype")
         myTabbed = tabbed shrinkText myTabConfig
-        combineTabbed = combineTwoP (TwoPane 0.03 0.5) (myTabbed) (myTabbed) (ClassName "URxvt")
+        combineTabbed = named "Combine Tabbed" $ combineTwoP (TwoPane 0.03 0.5) (myTabbed) (myTabbed) (ClassName "URxvt")
         threeCol = ThreeCol 1 (3/100) (1/2)
         gimp = withIM (0.11) (Role "gimp-toolbox") $
                reflectHoriz $
@@ -185,11 +194,11 @@ myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
         nmaster = 1
         ratio = 1/2
         delta = 3/100
-
-myWorkspaces :: [ WorkspaceId ]
+-- }}}
+-- {{{ Workspace variables for easy renaming
+myWorkspaces ::  [WorkspaceId]
 myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
 
--- Workspace variables for easy renaming
 myWS0  = "0:p2p"
 myWS1  = "1:code"
 myWS2  = "2:www"
@@ -201,6 +210,7 @@ myWS7  = "7:gimp"
 myWS8  = "8:games"
 myWS9  = "9:wine"
 myWS10 = "0:p2p"
+-- }}}
 
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
@@ -216,9 +226,9 @@ myManageHook = (composeAll . concat $
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFullFloat <+> doMaster | c <- myFulFloats ]
     ]) where
         doMaster = doF W.shiftMaster
-        myIgnores = [ "desktop_window", "idesk" ]
-        myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gnomebaker", "Gsimplecal" ]
-        myCenFloats = [ "feh", "Xmessage", "Squeeze", "GQview", "Thunar", "pcmanfm", "Ktsuss" ]
+        myIgnores = [ "desktop_window", "idesk", "nm-applet", "NSP" ]
+        myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gsimplecal" ]
+        myCenFloats = [ "feh", "Xmessage", "Gmpc" ]
         myFulFloats = [ "mplayer", "vdpau", "Gnome-mplayer" ]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]
@@ -235,8 +245,9 @@ myManageHook = (composeAll . concat $
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
--- See the 'DynamicLog' extension for examples.
+-- {{{ See the 'Dynami cLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
+myLogHook ::  Handle -> X ()
 myLogHook h = dynamicLogWithPP $ defaultPP
     { ppCurrent         = dzenColor "white" myGrey . pad
     , ppHidden          = dzenColor myLightGrey "" . pad . noScratchPad
@@ -249,20 +260,25 @@ myLogHook h = dynamicLogWithPP $ defaultPP
     , ppLayout          = dzenColor myLightGrey "" .
     (\x -> case x of
         "Full" -> "[ ]"
-        "ResizableTall" -> "[|]"
-        "Mirror ResizableTall" -> "[-]"
-        "IM ReflectX IM Full" -> "[G]"
-        "Tabbed Simplest" -> "[\"]"
-        "ThreeCol" -> "[3]"
-        x -> dzenColor "orange" "" "[#]"
+        "ResizableTall" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "|" <+> dzenColor brackColor "" "]"
+        "Mirror ResizableTall" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "-" <+> dzenColor brackColor "" "]"
+        "IM ReflectX IM Full" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "G" <+> dzenColor brackColor "" "]"
+        "Tabbed Simplest" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "\"" <+> dzenColor brackColor "" "]"
+        "Combine Tabbed" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "\"\"" <+> dzenColor brackColor "" "]"
+        "ThreeCol" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "3" <+> dzenColor brackColor "" "]"
+        "IRC" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "@" <+> dzenColor brackColor "" "]"
+        "" -> dzenColor brackColor "" "[" <+> dzenColor namedColor "" "#" <+> dzenColor brackColor "" "]"
         _ -> x)
     , ppOutput          = hPutStrLn h
     }
 
     where
         noScratchPad ws = if ws == "NSP" then "" else ws
+        namedColor = "lightblue"
+        brackColor = "orange"
 
--- Scratchpad
+-- }}}Scratchpad
+myScratchPads ::  [NamedScratchpad]
 myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
                 , NS "terminal" spawnTerm findTerm manageTerm
                 ]
@@ -277,19 +293,21 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
                 t = (1 - h)/2 -- centered top/bottom
                 l = (1 - w)/2 -- centered left/right
 
-        spawnTerm  = myTerminal ++ " -name scratchpad"
+        --spawnTerm  = myTerminal ++ " -name scratchpad"
+        spawnTerm  = myTerminal ++ " -name scratchpad -e tmux attach-session -t lasseb"
         findTerm   = resource =? "scratchpad"
         manageTerm = customFloating $ W.RationalRect l t w h
 
             where
-                h = 0.1
-                w = 1
-                t = 1 - h
+                h = 0.6
+                w = 0.5
+                t = (1 - h)/2
                 l = (1 - w)/2
 
 myEwmhEvHook = XMonad.Hooks.EwmhDesktops.fullscreenEventHook
 myFullEvHook = XMonad.Layout.Fullscreen.fullscreenEventHook
 
+myPlaceHook ::  ManageHook
 myPlaceHook = placeHook (withGaps (14,0,14,0) simpleSmart)
 
 -- Perform an arbitrary action each time xmonad starts or is restarted with mod-q.
@@ -297,19 +315,17 @@ myPlaceHook = placeHook (withGaps (14,0,14,0) simpleSmart)
 armorStartupHook :: X ()
 armorStartupHook = do
     setWMName "LG3D"
-    spawn "xcompmgr -s"
-    spawn "setxkbmap no"
     spawn "xmodmap -e 'clear Lock'"
     spawn "xmodmap /home/lasseb/.Xmodmap"
     return ()
 
 main :: IO ()
 main = do
-    dzen <- spawnPipe "dzen2 -p -ta l -dock -h 22 -w 1280"
+    dzen <- spawnPipe "dzen2 -p -ta l -dock -h 22 -w 1280 -e 'button3='"
     spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 1280 -p -ta r -dock -h 22 -w 640 -e 'button3='"
     spawn $ "conky -c /home/lasseb/.xmonad/dzen_mpd | dzen2 -x 1920 -p -ta l -dock -h 22 -w 1280 -e 'button3='"
     spawn $ "conky -c /home/lasseb/.xmonad/dzen_sys | dzen2 -x 3200 -p -ta r -dock -h 22 -w 487 -e 'button3='"
-    xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig
+    xmonad $ withUrgencyHook dzenUrgencyHook $ defaultConfig
         { terminal           = myTerminal
         , focusFollowsMouse  = myFocusFollowsMouse
         , borderWidth        = myBorderWidth

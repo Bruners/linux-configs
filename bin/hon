@@ -1,17 +1,26 @@
 #!/bin/sh
-HON='hon-x86'
+# Copyright 2013 Lasse Brun <bruners@gmail.com>
+# Distributed under the terms of the GNU General Public License v2
 
-if ps ax | grep -v grep | grep $HON > /dev/null
-then
-    pid=`ps aux | grep $HON | grep -v grep | awk '{print $2}'`
-    echo "HoN is already running on $pid, killing process $pid"
-    kill -9 $pid
-    /games/HoN/hon.sh &
-    exit 0
-else
-    echo "Starting HoN and mumble"
-    /home/lasseb/.bin/vt &
-    /games/HoN/hon.sh &
-    exit 0
-fi
+# Name of systemd unit
+_service="heroes-of-newerth"
 
+# Find the value of Description from the systemd service
+_name=`/usr/bin/systemctl --no-pager --user show ${_service} | grep --only-matching --perl-regex "(?<=Description\=).*"`
+
+# spew out notification with notify-send
+_notify="/usr/bin/notify-send --urgency=low --icon=start-here --expire-time=5"
+
+case `systemctl --no-pager --user is-active ${_service}` in
+    "unknown")
+        ${_notify} "$_service" "Starting..."
+        /usr/bin/systemctl --user start ${_service}
+        ;;
+    "active")
+        ${_notify} "$_name" "Is already running, restarting..."
+        #/usr/bin/systemctl --user restart ${_service}
+        ;;
+    "")
+        echo "Don't know what to do"
+        ;;
+esac

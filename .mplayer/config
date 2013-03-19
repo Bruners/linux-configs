@@ -9,7 +9,8 @@ ao=oss
 input:file=$HOME/.mplayer/rc
 fs=yes
 xineramascreen=0
-
+# Don't spew out tons of playback info after initial load
+quiet=1
 # Align VobSubs (-1: as they want to align themselves)
 spualign=-1
 # Anti-alias VobSubs (4: best and slowest)
@@ -56,5 +57,5 @@ subfont-osd-scale=4.2
 #user-agent="Winamp NSV Player/5.12 (ultravox/2.0)"
 
 [gnome-mplayer]
-msglevel=all=5
+msglevel=all=0
 vo=vdpau

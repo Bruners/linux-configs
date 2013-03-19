@@ -1,36 +1,53 @@
 #!/bin/sh
-set -x
 export DISPLAY=:0
-WATCH_FOLDER="$HOME/.watch"
+WATCH_FOLDER="/home/lasseb/.watch"
 FILE_TYPE="BitTorrent file"
 FILE_SUFFIX="*.torrent"
 CHECKPATH="$HOME/Downloads/Opera/:$HOME/Downloads/Chromium/:"
+
 # log to syslog with logger
 LOGGER="/usr/bin/logger -p user.info -t `basename $0`"
+NOTIFY="/usr/bin/notify-send --urgency=low --icon=bittorrent --expire-time=5"
+
+
+function edo() {
+    echo "$@" 1>&2
+    "$@" || echo "$* failed"
+}
 
 # Include directories from args passed
 [ $# -eq 0 ] && INPUT="${CHECKPATH}" || INPUT="$@:${CHECKPATH}"
 
 # Add checkpaths and run different tests to do less
 for DIRECTORY in `echo "${INPUT}" | tr ':' '\n'` ; do
-    if [ -d "${DIRECTORY}" ]; then
-        find "${DIRECTORY}" -name ${FILE_SUFFIX} -print | while read FILENAME; do
-            if [ -f "${FILENAME}" ]; then
+    # Input directories are valid
+    if [[ -d "${DIRECTORY}" ]]; then
+        # Find only files ending with FILE_SUFFIX
+        find "${DIRECTORY}" -name "${FILE_SUFFIX}" -print | while read FILENAME; do
+            # File is readable
+            if [[ -r "${FILENAME}" ]]; then
+                # Remove path from FILENAME and test filetype
                 BASEFILE="`basename \"${FILENAME}\"`"
-                if [ "`file -b ${FILENAME}`" = "${FILE_TYPE}" ]; then # Check if torrent-file.
-                    if [ -d "${WATCH_FOLDER}" ]; then
-                        # Check if torrent already is in the watch-folder and renames it for next run
-                        if [ -f "${WATCH_FOLDER}/${BASEFILE}" ]; then
+                if [ "`file -b \"${FILENAME}\"`" = "${FILE_TYPE}" ]; then
+                    # Watch-folder exist
+                    if [[ -d "${WATCH_FOLDER}" ]]; then
+                        # Check if torrent already exists in watch-folder, rename if found
+                        if [[ -f "${WATCH_FOLDER}/${BASEFILE}" ]]; then
                             echo -e "Duplicate: Renaming ${BASEFILE}->${BASEFILE}.dupe in ${DIRECTORY}" 2>&1 | ${LOGGER}
-                            mv "${DIRECTORY}/${BASEFILE}" "${DIRECTORY}/${BASEFILE}.dupe"
+                            edo mv "${DIRECTORY}/${BASEFILE}" "${DIRECTORY}/${BASEFILE}.dupe"
                             break
-                        # If nothing failed, move torrent to watch folder
-                        elif [ -w "${WATCH_FOLDER}" ]; then
-                            $(which notify-send) --urgency=low --icon=bittorrent --expire-time=5 "New torrent found" "${BASEFILE}" &
+                        # Nothing has failed and writeable folder, move torrent to watch folder
+                        elif [[ -w "${WATCH_FOLDER}" ]]; then
+                            ${NOTIFY} "New torrent found" "${BASEFILE}" &
                             LOGGER="${LOGGER} -p user.notice"
                             echo -e "New torrent found: ${BASEFILE} -> ${WATCH_FOLDER}" 2>&1 | ${LOGGER}
-                            mv "${FILENAME}" "${WATCH_FOLDER}"
+                            edo mv "${FILENAME}" "${WATCH_FOLDER}"
                         fi
+                    else
+                        # Watch folder not a directoru
+                        LOGGER="${LOGGER} -p user.alert"
+                        echo -e "Warning: ${WATCH_FOLDER} is not a directory" 2>&1 | ${LOGGER}
+                        break
                     fi
                 fi
             fi
@@ -38,7 +55,7 @@ for DIRECTORY in `echo "${INPUT}" | tr ':' '\n'` ; do
     else
         # Spew out errors if input directories are non-valid
         LOGGER="${LOGGER} -p user.alert"
-        echo -e "Input error: \"${DIRECTORY}\" is not a directory!" 2>&1 | ${LOGGER}
+        echo -e "Input error: ${DIRECTORY} is not a directory!" 2>&1 | ${LOGGER}
     fi
 done
 

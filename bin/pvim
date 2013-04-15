@@ -6,7 +6,7 @@
 # Check if running as root, call sudo if not
 VIMCMD="vim"
 if [ "$(whoami)" != "root" ]; then
-    VIMCMD="sudo $VIMCMD"
+    VIMCMD="sudo ${VIMCMD}"
 fi
 
 # Exherbo or gentoo configuration
@@ -33,11 +33,15 @@ LICENCES="l"
 LICENCES_F="licences"
 PATH_LICENCES="/etc/paludis/licences.conf"
 
+WORLD="w"
+WORLD_F="world"
+PATH_WORLD=`cat "${PATH_GENERAL}" | cut -d "}" -f2`
+
 HELP="-h"
 HELP_F="--help"
 
 # Gentoo and Exherbo got some differences
-if [ "$DIST" = 'exherbo' ]; then
+if [ "${DIST}" = 'exherbo' ]; then
     PLATFORMS="p"
     PLATFORMS_F="platforms"
     PATH_PLATFORMS="/etc/paludis/platforms.conf"
@@ -51,7 +55,7 @@ if [ "$DIST" = 'exherbo' ]; then
     PATH_LICENCES="/etc/paludis/licences.conf"
 fi
 
-if [ "$DIST" = 'gentoo' ]; then
+if [ "${DIST}" = 'gentoo' ]; then
     PLATFORMS="k"
     PLATFORMS_F="keywords"
     PATH_PLATFORMS="/etc/paludis/keywords.conf"
@@ -70,50 +74,64 @@ COLOUR_HI="\033[1;34m"
 COLOUR_NORMAL="\033[00m"
 COLOUR_WARN="\033[1;31m"
 
+function edo() {
+    echo "$@" 1>&2
+    "$@" || echo "$* failed"
+}
+
 # Display some info on how to use
-function helptext {
-    echo -e $COLOUR_HI"Usage: $0 option\n\nValid options are:"
-    echo -e $COLOUR_HI"${GENERAL} / ${GENERAL_F}"$COLOUR_NORMAL" - opens ${PATH_GENERAL}"
-    echo -e $COLOUR_HI"${UNMASK} / ${UNMASK_F}"$COLOUR_NORMAL" - opens ${PATH_UNMASK}"
-    echo -e $COLOUR_HI"${MASK} / ${MASK_F}"$COLOUR_NORMAL" - opens ${PATH_MASK}"
-    echo -e $COLOUR_HI"${PLATFORMS} / ${PLATFORMS_F}"$COLOUR_NORMAL" = opens ${PATH_PLATFORMS}"
-    echo -e $COLOUR_HI"${OPTIONS} / ${OPTIONS_F}"$COLOUR_NORMAL" = opens ${PATH_OPTIONS}"
-    echo -e $COLOUR_HI"${BASHRC} / ${BASHRC_F}"$COLOUR_NORMAL" = opens ${PATH_BASHRC}"
-    echo -e $COLOUR_HI"${LICENCES} / ${LICENCES_F}"$COLOUR_NORMAL" = opens ${PATH_LICENCES}"
-    echo ""
-    echo -e $COLOUR_HI"${HELP} / ${HELP_F}"$COLOUR_NORMAL" = shows help information"
+function helptext() {
+    echo -e "${COLOUR_HI}Usage: ${0} option\n\nValid file-options are:"
+    echo -e "${COLOUR_HI}${GENERAL} / ${GENERAL_F} ${COLOUR_NORMAL}- opens ${PATH_GENERAL}"
+    echo -e "${COLOUR_HI}${UNMASK} / ${UNMASK_F} ${COLOUR_NORMAL}- opens ${PATH_UNMASK}"
+    echo -e "${COLOUR_HI}${MASK} / ${MASK_F} ${COLOUR_NORMAL}- opens ${PATH_MASK}"
+    echo -e "${COLOUR_HI}${PLATFORMS} / ${PLATFORMS_F} ${COLOUR_NORMAL}= opens ${PATH_PLATFORMS}"
+    echo -e "${COLOUR_HI}${OPTIONS} / ${OPTIONS_F} ${COLOUR_NORMAL}= opens ${PATH_OPTIONS}"
+    echo -e "${COLOUR_HI}${BASHRC} / ${BASHRC_F} ${COLOUR_NORMAL}= opens ${PATH_BASHRC}"
+    echo -e "${COLOUR_HI}${LICENCES} / ${LICENCES_F} ${COLOUR_NORMAL}= opens ${PATH_LICENCES}"
+    if [[ -r "${PATH_WORLD}" ]]; then
+        echo -e "${COLOUR_HI}\nExtra:${COLOUR_NORMAL}"
+        echo -e "${COLOUR_HI}${WORLD} / ${WORLD_F} ${COLOUR_NORMAL}= opens ${PATH_WORLD}"
+    else
+        echo -e "${COLOUR_HI}\nExtra:${COLOUR_NORMAL} - If configured, read world from ${PATH_GENERAL}"
+        echo -e "${WORLD} / ${WORLD_F} ${COLOUR_NORMAL} = not set"
+    fi
+    echo -e ${COLOUR_HI}"${HELP} / ${HELP_F}"${COLOUR_NORMAL}" = shows help information"
 }
 
 case "$1" in
     "")
         helptext
         ;;
-    $GENERAL|$GENERAL_F)
-        $VIMCMD $PATH_GENERAL
+    ${GENERAL}|${GENERAL_F})
+        edo ${VIMCMD} ${PATH_GENERAL}
         ;;
-    $UNMASK|$UNMASK_F)
-        $VIMCMD $PATH_UNMASK
+    ${UNMASK}|${UNMASK_F})
+        edo ${VIMCMD} ${PATH_UNMASK}
         ;;
-    $MASK|$UNMASK_F)
-        $VIMCMD $PATH_MASK
+    ${MASK}|${UNMASK_F})
+        edo ${VIMCMD} ${PATH_MASK}
         ;;
-    $PLATFORMS|$PLATFORMS_F)
-        $VIMCMD $PATH_PLATFORMS
+    ${PLATFORMS}|${PLATFORMS_F})
+        edo ${VIMCMD} ${PATH_PLATFORMS}
         ;;
-    $OPTIONS|$OPTIONS_F)
-        $VIMCMD $PATH_OPTIONS
+    ${OPTIONS}|${OPTIONS_F})
+        edo ${VIMCMD} ${PATH_OPTIONS}
         ;;
-    $BASHRC|$BASHRC_F)
-        $VIMCMD $PATH_BASHRC
+    ${BASHRC}|${BASHRC_F})
+        edo ${VIMCMD} ${PATH_BASHRC}
         ;;
-    $LICENCES|$LICENCES_F)
-        $VIMCMD $PATH_LICENCES
+    ${LICENCES}|${LICENCES_F})
+        edo ${VIMCMD} ${PATH_LICENCES}
         ;;
-    $HELP|$HELP_F)
+    ${WORLD}|${WORLD_F})
+        [[ -r "${PATH_WORLD}" ]] && edo ${VIMCMD} "${PATH_WORLD}" || echo -e "${0}: ${COLOUR_WARN} world file not configured"
+        ;;
+    ${HELP}|${HELP_F})
         helptext
         ;;
     *)
-        echo -e $COLOUR_WARN"Unrecognized option"
+        echo -e "${0}: ${COLOUR_WARN}Unrecognized option ${COLOUR_HI}${1}\n"
         helptext
         ;;
 esac

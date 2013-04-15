@@ -222,7 +222,7 @@ myManageHook = (composeAll . concat $
         myIgnores = [ "desktop_window", "idesk", "nm-applet", "NSP" ]
         myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gsimplecal" ]
         myCenFloats = [ "feh", "Xmessage", "Gmpc" ]
-        myFulFloats = [ "mplayer", "vdpau", "Gnome-mplayer" ]
+        myFulFloats = [ "mplayer", "vdpau", "Gnome-mplayer", "operapluginwrapper-native" ]
         classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
         windowFloats = [ ("Firefox", "browser") ]
         myWSShift = [ (myWS1, [])

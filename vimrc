@@ -48,7 +48,7 @@ let g:package_create_on_empty=1
 let g:common_metadata_create_on_empty=1
 
 "let g:vimembedscript=0
-let g:haskell_indent_if = 2
+"let g:haskell_indent_if = 2
 
 " Settings for showmarks.vim
 if has("gui_running")
@@ -156,7 +156,8 @@ set statusline+=%{&encoding},                " encoding
 set statusline+=%{&fileformat}]              " file format
 set statusline+=%=                           " right align
 set statusline+=%2*0x%-8B\                   " current char
-set statusline+=%-14.(%l,%c%V%)\ %<%P        " offset
+set statusline+=%<%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+"set statusline+=%-14.(%l,%c%V%)\ %<%P        " offset
 
 " Try to load a nice colourscheme
 if has("eval")
@@ -264,7 +265,7 @@ if has("eval")
                 \ set sw=4 sts=4 et tw=80 |
                 \ norm G
             " use ghc functionality for haskell files
-            autocmd BufEnter *.hs compiler ghc
+            "autocmd BufEnter *.hs compiler ghc
             autocmd BufNewFile,BufRead /{etc,lib*}/systemd/**.{conf,target,service,socket,mount,automount,swap,path,timer,snapshot,device} setl ft=desktop
             autocmd BufNewFile /home/lasseb/** call MakeGenericCopyrightHeader()
             autocmd BufNewFile *.sh* call MakeGenericCopyrightHeader()

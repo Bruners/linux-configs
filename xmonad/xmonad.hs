@@ -174,10 +174,9 @@ myTabConfig = defaultTheme { activeColor         = myGrey
 -- }}}
 -- {{{ Layouts
 myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
-           onWorkspace myWS2 (myTabbed ||| standardLayouts) $
            onWorkspace myWS3 (irc) $
-           onWorkspace myWS7 (gimp ||| threeCol ||| standardLayouts) $
-           onWorkspaces [ myWS6, myWS8, myWS9 ] (Full ||| simpleFloat ||| myTabbed ||| threeCol) $
+           onWorkspaces [ myWS1, myWS2, myWS4, myWS10 ] (myTabbed ||| standardLayouts) $
+           onWorkspaces [ myWS6, myWS8, myWS9 ] (Full ||| myTabbed ||| threeCol) $
            standardLayouts
 
     where
@@ -188,12 +187,6 @@ myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
         myTabbed = tabbed shrinkText myTabConfig
         combineTabbed = named "Combine Tabbed" $ combineTwoP (TwoPane 0.03 0.5) (myTabbed) (myTabbed) (ClassName "URxvt")
         threeCol = ThreeCol 1 (3/100) (1/2)
-        gimp = withIM (0.11) (Role "gimp-toolbox") $
-               reflectHoriz $
-               withIM (0.15) (Role "gimp-dock") Full
-        nmaster = 1
-        ratio = 1/2
-        delta = 3/100
 -- }}}
 -- {{{ Workspace variables for easy renaming
 myWorkspaces ::  [WorkspaceId]

@@ -23,7 +23,6 @@ import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Maximize
-import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Named (named)
 
 import XMonad.Util.Themes
@@ -96,9 +95,9 @@ armorKeys conf@(XConfig {XMonad.modMask = mM}) = M.fromList $
     , ((mM .|. sM , xK_Left   ), shiftToPrev) -- Move WS to previous
     , ((mM .|. sM , xK_Right  ), shiftToNext) -- Move WS next WS
     , ((mM        , xK_s      ), sendMessage $ SwapWindow)
-    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd -d 0.5") -- Reduce volume
-    , ((0         , 0x1008ff13), spawn "~/.bin/volume-osd -i 1") -- Raise volume
-    , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd -t") -- Mute volume
+--    , ((0         , 0x1008ff11), spawn "~/.bin/volume-osd -d 0.5") -- Reduce volume
+--    , ((0         , 0x1008ff13), spawn "~/.bin/volume-osd -i 1") -- Raise volume
+--    , ((0         , 0x1008ff12), spawn "~/.bin/volume-osd -t") -- Mute volume
     , ((mM .|. sM , xK_l      ), spawn "xscreensaver-command -lock") -- Lock screen
     , ((mM        , xK_b      ), sendMessage ToggleStruts) -- toggle xmobar gap
     , ((mM        , xK_f      ), spawn "nautilus --no-desktop") -- Start pcmanfm
@@ -176,7 +175,7 @@ myTabConfig = defaultTheme { activeColor         = myGrey
 myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
            onWorkspace myWS3 (irc) $
            onWorkspaces [ myWS1, myWS2, myWS4, myWS10 ] (myTabbed ||| standardLayouts) $
-           onWorkspaces [ myWS6, myWS8, myWS9 ] (Full ||| myTabbed ||| threeCol) $
+           onWorkspaces [ myWS6, myWS8, myWS9 ] (maximize $ Full ||| myTabbed ||| threeCol) $
            standardLayouts
 
     where
@@ -210,7 +209,7 @@ myWS10 = "0:p2p"
 myManageHook :: ManageHook
 myManageHook = (composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW, cs) <- myWSShift, c <- cs ]
-    --, [ isFullscreen --> (doFullFloat <+> doMaster) ]
+    , [ isFullscreen --> doFullFloat ]
     , [ isDialog --> (doCenterFloat <+> doMaster) ]
     , [ classNotRole (cnf) --> (doCenterFloat <+> doMaster) | (cnf) <- windowFloats ]
     , [ fmap ( c `isInfixOf`) resource --> doIgnore | c <- myIgnores ]

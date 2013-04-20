@@ -17,10 +17,11 @@ URxvt*.resource: $HOME/.Xresources
 URxvt*.iconFile: /usr/share/icons/gnome/16x16/apps/gnome-terminal.png
 URxvt*.insecure: true
 URxvt*.iso14755: False
-URxvt*.transparent: true
-URxvt*.shading: 10
+!URxvt*.transparent: true
+URxvt*.shading: 110
 URxvt*.depth: 32
-URxvt*.background: rgba:1111/1111/1111/dddd
+URxvt*.background: rgba:0000/0000/0000/7777
+!rgba:1111/1111/1111/dddd
 URxvt*.font: -*-proggyclean-medium-r-normal--13-*-*-*-*-*-*-*
 URxvt*.boldFont: -*-proggyclean-bold-r-normal--13-*-*-*-*-*-*-*
 URxvt*.keysym.Home: \033[1~
@@ -56,5 +57,5 @@ URxvt.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
 URxvt.matcher.button: 1
 
 
-Xcursor*.theme: whiteglass
+Xcursor*.theme: Pulse-Glass
 Xcursor*.size: 24

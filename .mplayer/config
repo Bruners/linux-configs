@@ -1,7 +1,7 @@
 
 [default]
 # Write your default config options here!
-vo=vdpau:fps=50,xv
+vo=vdpau,xv
 vc=ffmpeg12vdpau,ffwmv3vdpau,ffvc1vdpau,ffh264vdpau,ffodivxvdpau,
 vf-clr=yes
 monitoraspect=16:9

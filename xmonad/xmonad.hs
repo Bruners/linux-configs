@@ -9,6 +9,7 @@ import Graphics.X11.Xinerama
 import Data.List
 import Data.Monoid
 import qualified Data.Map as M
+import Foreign.C.Types (CLong)
 
 import XMonad.Layout.IM
 import XMonad.Layout.PerWorkspace
@@ -24,6 +25,7 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Maximize
 import XMonad.Layout.Named (named)
+import XMonad.Layout.SimplestFloat
 
 import XMonad.Util.Themes
 import XMonad.Util.NamedScratchpad
@@ -38,6 +40,7 @@ import XMonad.Actions.CycleWindows
 
 import XMonad.Hooks.DynamicLog hiding (dzen)
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.XPropManage
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.Place
@@ -45,7 +48,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.SetWMName
 
 import qualified XMonad.StackSet as W
--- }}}
+-- }}} 
 
 myTerminal :: String
 myTerminal = "urxvtc"
@@ -174,6 +177,7 @@ myTabConfig = defaultTheme { activeColor         = myGrey
 -- {{{ Layouts
 myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
            onWorkspace myWS3 (irc) $
+           onWorkspace myWS7 (simplestFloat ||| threeCol ||| standardLayouts) $
            onWorkspaces [ myWS1, myWS2, myWS4, myWS10 ] (myTabbed ||| standardLayouts) $
            onWorkspaces [ myWS6, myWS8, myWS9 ] (maximize $ Full ||| myTabbed ||| threeCol) $
            standardLayouts
@@ -182,12 +186,12 @@ myLayout = avoidStruts $ toggleLayouts Full $ fullscreenFull $
         standardLayouts = (tiled ||| Mirror tiled ||| tabs)
         tabs = (myTabbed ||| combineTabbed)
         tiled = (ResizableTall 1 (2/100) (1/2) [])
-        irc = named "IRC" $ combineTwoP (Tall 1 (1/100) 0.15) (Mirror threeCol) (tabs ||| standardLayouts) (ClassName "Mumble" `Or` Role "buddy_list" `Or` ClassName "Skype")
+        irc = named "IRC" $ combineTwoP (Tall 1 (1/100) 0.15) (Mirror (ThreeCol 1 (2/100) (1/3))) (tabs ||| standardLayouts) (ClassName "Mumble" `Or` Role "buddy_list" `Or` ClassName "Skype")
         myTabbed = tabbed shrinkText myTabConfig
         combineTabbed = named "Combine Tabbed" $ combineTwoP (TwoPane 0.03 0.5) (myTabbed) (myTabbed) (ClassName "URxvt")
-        threeCol = ThreeCol 1 (3/100) (1/2)
+        threeCol = ThreeCol 2 (2/100) (1/3)
 -- }}}
--- {{{ Workspace variables for easy renaming
+-- {{{ Workspace variab les for easy renaming
 myWorkspaces ::  [WorkspaceId]
 myWorkspaces = [ myWS1, myWS2, myWS3, myWS4, myWS5, myWS6, myWS7, myWS8, myWS9, myWS10 ]
 
@@ -206,24 +210,45 @@ myWS10 = "0:p2p"
 
 -- To find the property name associated with a program, use xprop | grep WM_CLASS
 -- To match on the WM_NAME, you can use 'title' in the same way that 'className' and 'resource' are used below.
+--
+
+getProp :: Atom -> Window -> X (Maybe [CLong])
+getProp a w = withDisplay $ \dpy -> io $ getWindowProperty32 dpy a w
+
+checkAtom name value = ask >>= \w -> liftX $ do
+                a <- getAtom name
+                val <- getAtom value
+                mbr <- getProp a w
+                case mbr of
+                  Just [r] -> return $ elem (fromIntegral r) [val]
+                  _ -> return False
+
+checkDialog = checkAtom "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DIALOG"
+checkMenu = checkAtom "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_MENU"
+
+manageMenus = checkMenu --> doFloat
+manageDialogs = checkDialog --> doCenterFloat
+
+-- , [ fmap ( c `isInfixOf`) className <&&> fmap ( p `isInfixOf`) (stringProperty "WM_NAME") --> doSideFloat NE | (c, sP) <- sideNEFloats, p <- sP ]
+
 myManageHook :: ManageHook
 myManageHook = (composeAll . concat $
     [ [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doShift myW | (myW, cs) <- myWSShift, c <- cs ]
-    , [ isFullscreen --> doFullFloat ]
-    , [ isDialog --> (doCenterFloat <+> doMaster) ]
-    , [ classNotRole (cnf) --> (doCenterFloat <+> doMaster) | (cnf) <- windowFloats ]
+    , [ fmap ( c `isInfixOf`) className <&&> fmap ( p `isInfixOf`) title --> doShift myWS7 <+> doSideFloat NE | (c, sP) <- sideNEFloats, p <- sP ]
+    , [ fmap ( c `isInfixOf`) className <&&> fmap ( p `isInfixOf`) (stringProperty "WM_WINDOW_ROLE") --> (doCenterFloat <+> doMaster) | (c, sP) <- windowFloats, p <- sP ]
     , [ fmap ( c `isInfixOf`) resource --> doIgnore | c <- myIgnores ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat <+> doMaster | c <- myAnyFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat <+> doMaster | c <- myCenFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFullFloat <+> doMaster | c <- myFulFloats ]
+    , [ isFullscreen --> doFullFloat <+> doMaster ]
     ]) where
         doMaster = doF W.shiftMaster
         myIgnores = [ "desktop_window", "idesk", "nm-applet", "NSP" ]
         myAnyFloats = [ "Google", "Gpicview", "Vlc", "File-roller", "Gsimplecal" ]
         myCenFloats = [ "feh", "Xmessage", "Gmpc" ]
         myFulFloats = [ "mplayer", "vdpau", "Gnome-mplayer", "operapluginwrapper-native" ]
-        classNotRole (c,r) = className =? c <&&> (stringProperty "WM_WINDOW_ROLE") /=? r
-        windowFloats = [ ("Firefox", "browser") ]
+        sideNEFloats = [ ("Steam", [ "Settings", "Friends", "About Steam", "Servers", "Screenshot Uploader", "- Chat", "- Tags", "Notification" ]) ]
+        windowFloats = [ ("Firefox", [ "browser" ]) ]
         myWSShift = [ (myWS1, [])
                     , (myWS2, [ "Firefox", "Opera" ])
                     , (myWS3, [ "IRC", "Pidgin", "Mangler", "Empathy", "Mumble", "Skype" ])
@@ -237,7 +262,7 @@ myManageHook = (composeAll . concat $
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
 
--- {{{ See the 'Dynami cLog' extension for examples.
+-- {{{ See the 'DynamicLog' extension for examples.
 -- To emulate dwm's status bar logHook = dynamicLogDzen
 myLogHook ::  Handle -> X ()
 myLogHook h = dynamicLogWithPP $ defaultPP
@@ -328,8 +353,8 @@ main = do
         , keys               = armorKeys
         , mouseBindings      = myMouseBindings
         , layoutHook         = myLayout
-        , manageHook         = myPlaceHook <+> fullscreenManageHook <+> manageDocks <+> myManageHook <+> namedScratchpadManageHook myScratchPads
-        , handleEventHook    = myEwmhEvHook
+        , manageHook         = myPlaceHook <+> manageDocks <+> manageMenus <+> manageDialogs <+> myManageHook <+> namedScratchpadManageHook myScratchPads
+        , handleEventHook    = myEwmhEvHook <+> docksEventHook
         , startupHook        = armorStartupHook
         , logHook            = myLogHook dzen
         }

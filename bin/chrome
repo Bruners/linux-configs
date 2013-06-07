@@ -10,7 +10,7 @@ _name="$_service"
 _description=`/usr/bin/systemctl --no-pager --user show ${_service} | grep --only-matching --perl-regex "(?<=Description\=).*"`
 
 # spew out notification with notify-send
-_notify="/usr/bin/notify-send --urgency=low --icon=google-chrome --expire-time=2"
+_notify="/usr/bin/notify-send --urgency=low --app-name=google-chrome  --hint=string:image-path:/usr/share/icons/AwOken/clear/24x24/apps/ --icon=google-chrome.png --expire-time=1000"
 
 
 [[ "$_description" != "" ]] && _name="$_description"

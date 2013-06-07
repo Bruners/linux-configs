@@ -25,7 +25,7 @@ if [[ $tubeurl =~ $regex ]]; then
     youtube-dl $tubeurl
     ext="mp4"
     #ffmpeg -y -i $video_id.$ext -f avi -s 480x240 -r 30000/1001 -c:v mpeg4 -vtag DX50 -b:v 640k -r:a 44100 -ac 2 -bf 2 -c:a libmp3lame -b:a 256k -filter:v yadif "$video_title".avi
-    avconv -i $video_id.$ext -f avi -b 768k -g 300 -bf 2 -vcodec mpeg4 -vtag DX50 -s 320x240 -acodec libmp3lame -ab 256k "$video_title".avi
+    avconv -i $video_id.$ext -f avi -b 975k -g 300 -bf 2 -vcodec xvid -vtag DX50 -s 640x360 -acodec libmp3lame -ab 256k -r:a 48000 "$video_title".avi
     if [[ $remove_orig == true ]]; then
         rm $video_id.$ext
     fi

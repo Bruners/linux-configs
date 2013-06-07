@@ -7,7 +7,7 @@ case "$1" in
         ;;
     "wow")
         export WINEPREFIX="$ROOT/games/Diablo III/.wine"
-        __GL_THREADED_OPTIMIZATIONS=1 WINEDEBUG=-all wine $ROOT/mnt/wdc2tb/WoW/World\ of\ Warcraft/Wow.exe -opengl
+        __GL_THREADED_OPTIMIZATIONS=1 WINEDEBUG=-all wine $HOME/WoW/World\ of\ Warcraft/Wow.exe -opengl
         ;;
     "d3")
         export WINEPREFIX="$ROOT/games/Diablo III/.wine"

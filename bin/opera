@@ -9,7 +9,7 @@ _service="opera-browser"
 _name=`/usr/bin/systemctl --no-pager --user show ${_service} | grep --only-matching --perl-regex "(?<=Description\=).*"`
 
 # spew out notification with notify-send
-_notify="/usr/bin/notify-send --urgency=low --icon=opera --expire-time=5"
+_notify="/usr/bin/notify-send --urgency=low --icon=opera --expire-time=1000"
 
 case `systemctl --no-pager --user is-active ${_service}` in
     "unknown"|"inactive")

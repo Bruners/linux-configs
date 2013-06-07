@@ -3,6 +3,8 @@ if v:progname =~? "evim"
     finish
 endif
 
+call pathogen#infect()
+
 set nocompatible
 " Disable modelines, use securemodelines.vim instead
 set nomodeline
@@ -25,9 +27,12 @@ set showfulltag
 set showcmd
 set showmatch
 set nohidden
+" extra commandline menu
+set wildmenu
+set wildmode=longest:list:full
 
 set lazyredraw
-set whichwrap+=<,>,[,]
+set whichwrap=b,s,<,>,[,]
 set noswapfile
 set nobackup
 
@@ -35,7 +40,13 @@ set smarttab
 set tabstop=4
 set softtabstop=4
 set expandtab
-set shiftwidth=4
+set shiftwidth=2
+
+" autoread when file is changed after loading
+set autoread
+
+" timeoutlen is used for mapping delays, ttimeoutlen is used for key code delays.
+set timeoutlen=1000 ttimeoutlen=0
 
 set showbreak=>\ \ \
 set fileformat=unix
@@ -44,21 +55,14 @@ set fileformats=unix,dos
 let g:full_name='Lasse Brun'
 let g:full_identity=g:full_name.' <bruners@gmail.com>'
 let g:exheres_author_name=g:full_identity
+let g:changelog_username=g:full_identity
 let g:package_create_on_empty=1
+let g:my_theme='molokai'
 let g:common_metadata_create_on_empty=1
-
-"let g:vimembedscript=0
-"let g:haskell_indent_if = 2
-
-" Settings for showmarks.vim
-if has("gui_running")
-    let g:showmarks_enable=1
-else
-    let g:showmarks_enable=0
-    let loaded_showmarks=1
-endif
-
-let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
+let g:SuperTabNoCompleteAfter=[',', '\s']
+let g:NERDTreeMouseMode=2
+let g:NERDTreeWinSize=20
+let g:NERDTreeMinimalUI=2
 
 " I want to save or quit too fast..
 nmap :Q :q
@@ -66,36 +70,100 @@ nmap :W :w
 nmap :Wq :wq
 nmap q: :q
 
-" c^w buffer next
-nmap <C-w> :bn<CR>
+nmap <silent> <leader>/ :set invhlsearch<CR>
 
 " Kill line
-vmap K k
-noremap <C-k> "_dd
+nnoremap <C-k><C-k> "_dd
 inoremap <C-k> <C-o>dd
 
-noremap <C-y> "_P
-inoremap <C-y> <C-o>P
+inoremap <S-V> <C-o>"+p<CR>
+vnoremap <C-c> "+y<CR>
+vnoremap <C-x> "+x<CR>
 
 " F5 toggles paste mode
 set pastetoggle=<F5>
+" F3 toggle highlight
+nnoremap <silent> <F3> :silent set invhlsearch<CR>
+inoremap <silent> <F3> <C-o>:silent set invhlsearch<CR>
 
-noremap <silent> <F3> :silent nohlsearch<CR>
-inoremap <silent> <F3> :silent nohlsearch<CR>
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
 
-" Toggle toolbar, menu in the GUI
-if has('gui')
-    nmap <F2> :set guioptions+=mT<CR>
-    nmap <c-F2> :set guioptions-=mT<CR>
+map <C-n> <plug>NERDTreeMirrorToggle<CR>
+
+" tabs like a pro
+nnoremap <Tab> >>_
+nnoremap <S-Tab> <<_
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+vnoremap > >gv
+vnoremap < <gv
+
+" Map Control-# to switch tabs
+map  <A-0> 0gt
+imap <A-0> <Esc>0gt
+map  <A-1> 1gt
+imap <A-1> <Esc>1gt
+map  <A-2> 2gt
+imap <A-2> <Esc>2gt
+map  <A-3> 3gt
+imap <A-3> <Esc>3gt
+map  <A-4> 4gt
+imap <A-4> <Esc>4gt
+map  <A-5> 5gt
+imap <A-5> <Esc>5gt
+
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+
+    " GUI stuff
+if has('gui_running')
+    " Enable showmarks plugin
+    let g:showmarks_enable=1
+    let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
+
+    " Enable gitgutter (git line indicator)
+    let g:gitgutter_enabled = 1
+    " Allow horizontal split Gitv
+    let g:Gitv_OpenHorizontal = 1
+    cabbrev git Git
+
+    " Indent lines settings
+    let g:indent_guides_guide_size=1
+    let g:indent_guides_start_level=2
+
+    " Toggle toolbar & menu
+    nmap <F2> :set guioptions-=mT<CR>
+    nmap <c-F2> :set guioptions+=mT<CR>
+    " Enable shift-insert paste in gui
+    nnoremap <silent> <S-Insert> "+gP
+    inoremap <silent> <S-Insert> <Esc>"+gP
+
+    nmap <C-T> :tabnew<CR>
+    nmap <C-W><C-W> :tabclose<CR>
 
     " menus and toolbar off by default
-    set guioptions+=m
-    set guioptions+=T
-    "set guioptions-=lL
-    "set guioptions-=rR
+    set guioptions-=m " menubar
+    set guioptions-=T " toolbar
+    set guioptions-=l " no left scroll
+    set guioptions-=L " really! no left scroll
+    set guioptions+=r " always show right scroll
+    set guioptions+=a "
+    set guioptions+=F " footer motif?
+    " Guitab label (tab#. title)
+    set guitablabel=%N\ %t
 
+    " Gui mouse
     set mousehide
+    behave mswin
+    set cmdheight=2
 else
+    let g:showmarks_enable=0
+    let loaded_showmarks=1
+    let g:gitgutter_enabled = 0
     if has('mouse')
         set mouse=a
         set ttymouse=xterm2
@@ -109,7 +177,7 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 " Try to show at least three lines and two columns of context when scrolling
-set scrolloff=3
+set scrolloff=4
 set sidescrolloff=2
 " Show tabs and trailing whitespace visually
 if (&termencoding == "utf-8") || has("gui_running")
@@ -131,33 +199,16 @@ endif
 " Nice statusbar
 set laststatus=2
 set statusline=
-set statusline+=%2*%-3.3n%0*\                " buffer number
-set statusline+=%f\                          " file name
-if has("eval")
-    let g:scm_cache = {}
-    fun! ScmInfo()
-        let l:key = getcwd()
-        if ! has_key(g:scm_cache, l:key)
-            if (isdirectory(getcwd() . "/.git"))
-                let g:scm_cache[l:key] = "[" . substitute(readfile(getcwd() . "/.git/HEAD", "", 1)[0],
-                            \ "^.*/", "", "") . "] "
-            else
-                let g:scm_cache[l:key] = ""
-            endif
-        endif
-        return g:scm_cache[l:key]
-    endfun
-    set statusline+=%{ScmInfo()}             " scm info
-endif
-
-set statusline+=%h%1*%m%r%w%0*               " flags
-set statusline+=\[%{strlen(&ft)?&ft:'none'}, " filetype
-set statusline+=%{&encoding},                " encoding
-set statusline+=%{&fileformat}]              " file format
-set statusline+=%=                           " right align
-set statusline+=%2*0x%-8B\                   " current char
-set statusline+=%<%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
-"set statusline+=%-14.(%l,%c%V%)\ %<%P        " offset
+set statusline+=%2*%-3.3n%0*                    " buffer number
+set statusline+=%F\                             " file name
+set statusline+=%h%1*%m%r%w%0*                  " flags
+set statusline+=%1*%{exists('g:loaded_fugitive')?fugitive#statusline():''}%*
+set statusline+=\[%{strlen(&ft)?&ft:'none'}%*/  " filetype
+set statusline+=%{&encoding}/                   " encoding
+set statusline+=%{&fileformat}]                 " file format
+set statusline+=%=                              " right align
+set statusline+=%2*0x%-8B\                      " current char
+set statusline+=%-14.(%l,%c%V%)\ %P             " line, scroll
 
 " Try to load a nice colourscheme
 if has("eval")
@@ -174,7 +225,7 @@ if has("eval")
         endwhile
     endfun
 
-    let s:prefer_scheme = "inkpot"
+    let s:prefer_scheme = g:my_theme
 
     if has('gui')
         call LoadColourScheme(s:prefer_scheme . ":elflord")
@@ -197,7 +248,7 @@ if has("eval")
 endif
 
 " If possible and in gvim with inkpot, use cursor row highlighting
-if has("gui_running") && v:version >= 700 && s:prefer_scheme == "inkpot"
+if has("gui_running") && v:version >= 700 && s:prefer_scheme == g:my_theme
     set cursorline
 end
 
@@ -206,18 +257,35 @@ if has("eval")
     filetype plugin on
     filetype indent on
 
+    if has("gui_running") && v:version >=703 && s:prefer_scheme == g:my_theme
+        let g:indent_guides_enable_on_vim_startup=1
+    end
+else
+    set autoindent
+    set smartindent
+endif
+
+if has("eval") && has("autocmd")
+    if &omnifunc == "" |
+      setlocal omnifunc=syntaxcomplete#Complete |
+    endif
+endif
+
+if has("eval")
     fun! FixShowmarksColours()
         if has('gui')
             hi ShowMarksHLl gui=bold guifg=#a0a0e0 guibg=#2e2e2e
             hi ShowMarksHLu gui=none guifg=#a0a0e0 guibg=#2e2e2e
             hi ShowMarksHLo gui=none guifg=#a0a0e0 guibg=#2e2e2e
             hi ShowMarksHLm gui=none guifg=#a0a0e0 guibg=#2e2e2e
-            hi SignColumn   gui=none guifg=#f0f0f8 guibg=#2e2e2e
+
+            hi FoldColumn guibg=grey guifg=blue
+            hi Folded ctermfg=11 ctermbg=8 guibg=#444444 guifg=#cccccc
         endif
     endfun
     " If we're in a wide window, enable line numbers.
     fun! WindowWidth()
-        if winwidth(0) > 90
+        if winwidth(0) > 90 && &ft !='help'
             setlocal number
         else
             setlocal nonumber
@@ -264,12 +332,22 @@ if has("eval")
             autocmd BufNewFile *.hs 0put ='-- vim: set sw=4 sts=4 et tw=80 :' |
                 \ set sw=4 sts=4 et tw=80 |
                 \ norm G
-            " use ghc functionality for haskell files
-            "autocmd BufEnter *.hs compiler ghc
             autocmd BufNewFile,BufRead /{etc,lib*}/systemd/**.{conf,target,service,socket,mount,automount,swap,path,timer,snapshot,device} setl ft=desktop
             autocmd BufNewFile /home/lasseb/** call MakeGenericCopyrightHeader()
             autocmd BufNewFile *.sh* call MakeGenericCopyrightHeader()
             autocmd FileType text setlocal textwidth=100
+
+            augroup markdown
+                au!
+                au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+            augroup END
+
+            " Use omnifunc for tab completion
+            autocmd FileType *
+                \ if &omnifunc != '' |
+                \   call SuperTabChain(&omnifunc, "<c-p>") |
+                \   call SuperTabSetDefaultCompletionType("<c-x><c-u>") |
+                \ endif
             autocmd BufReadPost **.git/COMMIT_EDITMSG exe "normal gg"
         augroup END
 
@@ -287,10 +365,17 @@ if has("eval")
             autocmd BufEnter * syntax sync fromstart
             " For help files, move them to the top window and make <Return> behave like <C-]> (jump to tag)
             autocmd FileType help :call WindowToTop()
+            autocmd FileType help :set nonumber
             autocmd FileType help nmap <buffer> <Return> <C-]>
-            " update copyright headers
+            " Update copyright headers
             autocmd BufWritePre * call UpdateCopyrightHeaders()
-
+            " Reload vimrc on save
+            autocmd bufwritepost vimrc,.vimrc source ~/.vimrc
+            " Return to last edit position when opening files
+            autocmd BufReadPost *
+             \ if line("'\"") > 0 && line("'\"") <= line("$") |
+             \   exe "normal! g`\"zvzz" |
+             \ endif
             try
                 autocmd Syntax *
                     \ syn match VimModelineLine /^.\{-1,}vim:[^:]\{-1,}:.*/ contains=VimModeline |
@@ -302,14 +387,7 @@ if has("eval")
 
             autocmd vimEnter * nohls
         augroup END
-    else
-        set autoindent
     endif
-endif
-
-if !exists(":DiffOrig")
-    command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-        \ | wincmd p | diffthis
 endif
 
 " vim: set shiftwidth=4 softtabstop=4 expandtab tw=120

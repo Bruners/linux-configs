@@ -17,7 +17,7 @@ fun! <SID>GenerateMybinScript()
     put ='#/bin/zsh'
     put ='#vim: set et ts=4 sw=4 :'
     put! ='# Copyright ' . l:year . ' ' . g:exheres_author_name
-    put ='# Distributed under the terms of the GNU General Public License v2'
+    put ='# Distributed under the terms of the WTFPL v2 <http://sam.zoy.org/wtfpl/> Public License'
     put ='#'
     put ='# Description'
     put ='# Usage'

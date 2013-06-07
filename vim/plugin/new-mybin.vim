@@ -17,7 +17,7 @@ fun! <SID>GenerateNewMybin()
     endif
 
     put! ='# Copyright ' . l:year . ' ' . g:exheres_author_name
-    put ='# Distributed under the terms of the GNU General Public License v2'
+    put ='# Distributed under the terms of the WTFPL v2 <http://sam.zoy.org/wtfpl/> Public License'
     put ='#'
     put ='# Description'
     put =''

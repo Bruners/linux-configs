@@ -1,28 +1,43 @@
 [user]
-  name = Lasse Brun
-  email = <bruners@gmail.com>
+	name = Lasse Brun
+	email = <bruners@gmail.com>
+[github]
+	user = Bruners
 [branch]
-  autosetupmerge = true
+	autosetupmerge = always
+	autosetuprebase = always
 [color]
-  diff = auto
-  status = auto
-  branch = auto
-  ui = auto
+	ui = auto
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	grep = auto
+[interactive]
+	singlekey = true
+[help]
+	autocorrect = 10
 [diff]
-  renames = copy
+	renames = copy
 [core]
-  autocrlf = input
-  excludesfile = /home/lasseb/github/.global_ignore
+	autocrlf = input
+	excludesfile = /home/lasseb/github/.global_ignore
 [alias]
-  b = branch -v
-  last = diff HEAD^
-  hist = log --pretty=format:\"%C(yellow)%h %Cgreen%ad %Creset%s%C(yellow)%d %Creset[%C(cyan)%an%Creset]\" --graph --date=short
-  conflicts = !git ls-files -u | cut -f 2 | sort -u
-  changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
-  changelog = log --pretty=format:\" * %s\"
+	b = branch -v
+	last = diff HEAD^
+	hist = log --pretty=format:\"%C(yellow)%h %Cgreen%ad %Creset%s%C(yellow)%d %Creset[%C(cyan)%an%Creset]\" --graph --date=short
+	conflicts = !git ls-files -u | cut -f 2 | sort -u
+	changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
+	changelog = log --pretty=format:\" * %s\"
+	short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
+	pig = format-patch --stdout -M -C -C
 [format]
-  pretty = "Commit:  %C(yellow)%H%nAuthor:  %C(green)%aN <%aE>%nDate:    (%C(red)%ar%Creset) %ai%nSubject: %s%n%n%b"
+	pretty = "Commit:  %C(yellow)%H%nAuthor:  %C(green)%aN <%aE>%nDate:    (%C(red)%ar%Creset) %ai%nSubject: %s%n%n%b"
 [push]
-  default = simple
+	default = simple
 [merge]
-  summary = true
+	summary = true
+[pull]
+	rebase = true
+[rebase]
+	autosquash = true

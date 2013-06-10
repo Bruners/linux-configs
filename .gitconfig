@@ -1,6 +1,5 @@
 [user]
   name = Lasse Brun
-  mail = bruners@gmail.com
   email = <bruners@gmail.com>
 [branch]
   autosetupmerge = true
@@ -8,21 +7,11 @@
   diff = auto
   status = auto
   branch = auto
-  ui = true
-[color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
-[color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red bold
-  new = green bold
+  ui = auto
 [diff]
   renames = copy
 [core]
   autocrlf = input
-  editor = vim
   excludesfile = /home/lasseb/github/.global_ignore
 [alias]
   b = branch -v
@@ -31,12 +20,9 @@
   conflicts = !git ls-files -u | cut -f 2 | sort -u
   changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
   changelog = log --pretty=format:\" * %s\"
-  short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
 [format]
   pretty = "Commit:  %C(yellow)%H%nAuthor:  %C(green)%aN <%aE>%nDate:    (%C(red)%ar%Creset) %ai%nSubject: %s%n%n%b"
 [push]
   default = simple
 [merge]
   summary = true
-  verbosity = true
-  tool = gvimdiff

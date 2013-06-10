@@ -24,6 +24,9 @@ if (&term =~ "xterm")
     endif
 endif
 
+" Indicates a fast terminal connection
+set ttyfast
+
 " Section: Settings
 "-----------------------------------------------------------------------
 
@@ -31,6 +34,7 @@ endif
 set nocompatible
 " Call pathogen and bundles
 call pathogen#infect()
+call pathogen#helptags()
 
 " Enable a nice big viminfo file
 set viminfo='1000,f1,:1000,/1000
@@ -64,6 +68,7 @@ if has("autocmd")
     filetype plugin on
     filetype indent on
 
+    autocmd FileType * setlocal colorcolumn=0
     autocmd GUIEnter * set visualbell t_vb=
 
     autocmd BufEnter *
@@ -178,6 +183,24 @@ set timeoutlen=1000 ttimeoutlen=50
 "-----------------------------------------------------------------------
 
 if has('gui')
+
+    " GUI Tab settings
+    fun! <SID>GuiTabLabel()
+        let label = ''
+        let buflist = tabpagebuflist(v:lnum)
+        if exists('t:title')
+            let label .= t:title . ' '
+        endif
+        let label .= '[' . bufname(buflist[tabpagewinnr(v:lnum) - 1]) . ']'
+        for bufnr in buflist
+            if getbufvar(bufnr, '&modified')
+                let label .= '+'
+                break
+            endif
+        endfor
+        return label
+    endfun
+
     " menus and toolbar off by default
     set guioptions-=m " menubar
     set guioptions-=T " toolbar
@@ -187,7 +210,7 @@ if has('gui')
     set guioptions+=a "
     set guioptions+=F " footer motif?
     " Guitab label (tab#. title)
-    set guitablabel=%N\ %t
+    set guitablabel=%{<SID>GuiTabLabel()}
 
     " Gui mouse
     set mousehide
@@ -195,8 +218,8 @@ if has('gui')
     set cmdheight=2
 
     " Enable shift-insert paste in gui
-    nnoremap <silent> <S-Insert> "+gP
-    inoremap <silent> <S-Insert> <Esc>"+gP
+    map <S-Insert> <MiddleMouse>
+    map! <S-Insert> <MiddleMouse>
 
     set cursorline
 endif
@@ -212,20 +235,6 @@ nmap q: :q
 
 " v_K is really really annoying
 vmap K k
-
-" K is really really annoying too, and S is pointless
-if has("eval")
-    fun! SaveLastInsert()
-        let l:c = getchar()
-        if l:c >= char2nr('a') && l:c <= char2nr('z')
-            exec "let @" . nr2char(l:c) . "=substitute(@., '^[\\d23\\d8]\\+', '', '')"
-        endif
-    endfun
-    nmap K :echo "stop hitting K randomly"<CR>
-    " nmap K :call SaveLastChange()<CR>
-    nmap S :echo "stop hitting S randomly"<CR>
-    " nmap S :call SaveLastInsert()<CR>
-endif
 
 " Delete a buffer but keep layout
 if has("eval")

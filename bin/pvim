@@ -4,34 +4,43 @@
 #
 
 # Check if running as root, call sudo if not
-VIMCMD="vim"
+VIMCMD="/usr/bin/vim"
 if [ "$(whoami)" != "root" ]; then
     VIMCMD="sudo ${VIMCMD}"
 fi
 
 # Exherbo or gentoo configuration
 DIST="exherbo"
+CONFDIR="/etc/paludis"
 
 # Short names, full names and paths to .conf files
-UNMASK="u"
-UNMASK_F="unmask"
-PATH_UNMASK="/etc/paludis/package_unmask.conf"
-
-MASK="m"
-MASK_F="mask"
-PATH_MASK="/etc/paludis/package_mask.conf"
+BASHRC="b"
+BASHRC_F="bashrc"
+PATH_BASHRC="${CONFDIR}/bashrc"
 
 GENERAL="g"
 GENERAL_F="general"
-PATH_GENERAL="/etc/paludis/general.conf"
-
-BASHRC="b"
-BASHRC_F="bashrc"
-PATH_BASHRC="/etc/paludis/bashrc"
+PATH_GENERAL="${CONFDIR}/general.conf"
 
 LICENCES="l"
 LICENCES_F="licences"
-PATH_LICENCES="/etc/paludis/licences.conf"
+PATH_LICENCES="${CONFDIR}/licences.conf"
+
+OPTIONS="o"
+OPTIONS_F="options"
+PATH_OPTIONS="${CONFDIR}/options.conf"
+
+MASK="m"
+MASK_F="mask"
+PATH_MASK="${CONFDIR}/package_mask.conf"
+
+UNMASK="u"
+UNMASK_F="unmask"
+PATH_UNMASK="${CONFDIR}/package_unmask.conf"
+
+PLATFORMS="p"
+PLATFORMS_F="platforms"
+PATH_PLATFORMS="${CONFDIR}/platforms.conf"
 
 WORLD="w"
 WORLD_F="world"
@@ -41,32 +50,18 @@ HELP="-h"
 HELP_F="--help"
 
 # Gentoo and Exherbo got some differences
-if [ "${DIST}" = 'exherbo' ]; then
-    PLATFORMS="p"
-    PLATFORMS_F="platforms"
-    PATH_PLATFORMS="/etc/paludis/platforms.conf"
-
-    OPTIONS="o"
-    OPTIONS_F="options"
-    PATH_OPTIONS="/etc/paludis/options.conf"
-
-    LICENCES="l"
-    LICENCES_F="licences"
-    PATH_LICENCES="/etc/paludis/licences.conf"
-fi
-
 if [ "${DIST}" = 'gentoo' ]; then
     PLATFORMS="k"
     PLATFORMS_F="keywords"
-    PATH_PLATFORMS="/etc/paludis/keywords.conf"
+    PATH_PLATFORMS="${CONFDIR}/keywords.conf"
 
     OPTIONS="o"
     OPTIONS_F="use"
-    PATH_OPTIONS="/etc/paludis/use.conf"
+    PATH_OPTIONS="${CONFDIR}/use.conf"
 
     LICENCES="l"
     LICENCES_F="licenses"
-    PATH_LICENCES="/etc/paludis/licenses.conf"
+    PATH_LICENCES="${CONFDIR}/licenses.conf"
 fi
 
 # Set default colours, adapted from eclectic
@@ -109,7 +104,7 @@ case "$1" in
     ${UNMASK}|${UNMASK_F})
         edo ${VIMCMD} ${PATH_UNMASK}
         ;;
-    ${MASK}|${UNMASK_F})
+    ${MASK}|${MASK_F})
         edo ${VIMCMD} ${PATH_MASK}
         ;;
     ${PLATFORMS}|${PLATFORMS_F})

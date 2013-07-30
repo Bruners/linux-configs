@@ -51,7 +51,7 @@ import qualified XMonad.StackSet as W
 -- }}} 
 
 myTerminal :: String
-myTerminal = "urxvtc"
+myTerminal = "/usr/bin/germinal"
 
 myBorderWidth :: Dimension
 myBorderWidth = 0
@@ -171,7 +171,7 @@ myTabConfig = defaultTheme { activeColor         = myGrey
                            , inactiveBorderColor = myDarkGrey2
                            , inactiveTextColor   = myLightGrey
                            , urgentTextColor     = myOrange
-                           , decoHeight          = 15
+                           , decoHeight          = 20
                            }
 -- }}}
 -- {{{ Layouts
@@ -227,7 +227,7 @@ checkDialog = checkAtom "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DIALOG"
 checkMenu = checkAtom "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_MENU"
 
 manageMenus = checkMenu --> doFloat
-manageDialogs = checkDialog --> doCenterFloat
+manageDialogs = checkDialog --> doF W.shiftMaster <+> doF W.swapDown
 
 -- , [ fmap ( c `isInfixOf`) className <&&> fmap ( p `isInfixOf`) (stringProperty "WM_NAME") --> doSideFloat NE | (c, sP) <- sideNEFloats, p <- sP ]
 
@@ -240,7 +240,8 @@ myManageHook = (composeAll . concat $
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFloat <+> doMaster | c <- myAnyFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doCenterFloat <+> doMaster | c <- myCenFloats ]
     , [ fmap ( c `isInfixOf`) className <||> fmap ( c `isInfixOf`) title --> doFullFloat <+> doMaster | c <- myFulFloats ]
-    , [ isFullscreen --> doFullFloat <+> doMaster ]
+    --, [ isFullscreen --> doFullFloat <+> doMaster ]
+    , [ isFullscreen --> (doF W.focusDown <+> doFullFloat) ]
     ]) where
         doMaster = doF W.shiftMaster
         myIgnores = [ "desktop_window", "idesk", "nm-applet", "NSP" ]
@@ -310,8 +311,8 @@ myScratchPads = [ NS "mixer" spawnMixer findMixer manageMixer
                 t = (1 - h)/2 -- centered top/bottom
                 l = (1 - w)/2 -- centered left/right
 
-        --spawnTerm  = myTerminal ++ " -name scratchpad"
-        spawnTerm  = myTerminal ++ " -name scratchpad -e tmux attach-session -t lasseb"
+        spawnTerm  = "urxvtc -name scratchpad"
+        --spawnTerm  = "germinal tmux -u2 a -t 'scratchpad'"
         findTerm   = resource =? "scratchpad"
         manageTerm = customFloating $ W.RationalRect l t w h
 

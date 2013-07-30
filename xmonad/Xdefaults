@@ -1,43 +1,41 @@
 #include "/home/lasseb/.xcolors/tango"
-!#include "/home/lasseb/.xcolors/solarized.xcolors"
 
-!URxvt.termName: rxvt-unicode-256color
-Xft.lcdfilter: lcddefault
-Xft.dpi: 96
-Xft.rgba: rgb
-Xft.hinting: 1
-Xft.hintstyle: hintfull
-Xft.antialias: 1
-Xft.autohint: 0
-
-dzen2.font: -misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*
+dzen2.font: xft:PragmataPro:regular:size=9:autohint=1
 dzen2.foreground: #909090
 dzen2.background: #202020
-URxvt*.resource: $HOME/.Xresources
+
+URxvt.title: Terminal
 URxvt*.iconFile: /usr/share/icons/gnome/16x16/apps/gnome-terminal.png
 URxvt*.insecure: true
 URxvt*.iso14755: False
-!URxvt*.transparent: true
 URxvt*.shading: 110
 URxvt*.depth: 32
+
+Xft.antialias:  1
+Xft.autohint:   0
+Xft.dpi:        97
+Xft.hinting:    1
+Xft.hintstyle:  hintfull
+Xft.lcdfilter:  lcddefault
+Xft.rgba:       rgb
+
 URxvt*.background: rgba:0000/0000/0000/7777
-!rgba:1111/1111/1111/dddd
-URxvt*.font: -*-proggyclean-medium-r-normal--13-*-*-*-*-*-*-*
-URxvt*.boldFont: -*-proggyclean-bold-r-normal--13-*-*-*-*-*-*-*
-URxvt*.keysym.Home: \033[1~
-URxvt*.keysym.End: \033[4~
-URxvt*.geometry: 154x36
+*.font: xft:PragmataPro:normal:size=10
+*.boldFont: xft:PragmataPro-B:bold:size=10
+*.italicFont: xft:PragmataPro-I:italic:size=10
+*.bolditalicFont: xft:PragmataPro-Z:bold:italic:size=10
+
+!URxvt.letterSpace: 0
 URxvt*.saveLines: 65535
 URxvt*.inheritPixmap: false
-URxvt*.visualBell: true
 URxvt*.cursorColor: #ff9900
 URxvt*.cursorColor2: #454638
-URxvt*.mapAlert:         true
-!URxvt*.cursorBlink: false
+URxvt*.pointerBlank: true
+URxvt*.pointerBlankDelay: 5
+URxvt*.mapAlert: true
 URxvt*.underlineColor: #c0c0c0
-URxvt*.colorIT: green
-URxvt*.colorBD: white
-!URxvt*.loginShell: true
+URxvt*.colorUL: DeepSkyBlue
+
 URxvt*.print-pipe: cat > $(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
 URxvt*.jumpScroll: true
 URxvt*.scrollBar: 0
@@ -45,17 +43,33 @@ URxvt*.secondaryScroll: true
 URxvt*.scrollTtyOutput: false
 URxvt*.scrollWithBuffer: true
 URxvt*.scrollTtyKeypress: true
-
-URxvt*.pointerBlank: true
-URxvt*.pointerBlankDelay: 5
-
 URxvt*.urgentOnBell: true
+URxvt*.visualBell: true
 
-URxvt.perl-ext: default,matcher
-URxvt.url-launcher: /usr/bin/opera
-URxvt.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
+URxvt*.perl-ext: selection
+URxvt*.perl-ext-common: default,selecteion-autotransform,matcher,-selection-popup,-option-popup
+URxvt*.url-launcher: x-www-browser
 URxvt.matcher.button: 1
 
+URxvt.keysym.Home: \033[1~
+URxvt.keysym.End: \033[4~
+URxvt.keysym.M-Up: \033[1;3A
+URxvt.keysym.M-Down: \033[1;3B
+URxvt.keysym.M-Right:\033[1;3C
+URxvt.keysym.M-Left: \033[1;3D
+URxvt.keysym.M-Prior: \033[5;3~
+URxvt.keysym.M-Next: \033[6;3~
+URxvt.keysym.M-End: \033[1;3F
+URxvt.keysym.M-Home: \033[1;3H
+
+URxvt.keysym.C-Up: \033[1;5A
+URxvt.keysym.C-Down: \033[1;5B
+URxvt.keysym.C-Right: \033[1;5C
+URxvt.keysym.C-Left: \033[1;5D
+URxvt.keysym.C-Prior: \033[5;5~
+URxvt.keysym.C-Next: \033[6;5~
+URxvt.keysym.C-End: \033[1;5F
+URxvt.keysym.C-Home: \033[1;5H
 
 Xcursor*.theme: Pulse-Glass
 Xcursor*.size: 24

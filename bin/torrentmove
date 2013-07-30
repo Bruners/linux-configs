@@ -1,6 +1,6 @@
 #!/bin/sh
 export DISPLAY=:0
-WATCH_FOLDER="/home/lasseb/.watch"
+WATCH_FOLDER="/mnt/nfs4/torrent/watch"
 FILE_TYPE="BitTorrent file"
 FILE_SUFFIX="*.torrent"
 CHECKPATH="$HOME/Downloads/Opera/:$HOME/Downloads/Chromium/:"

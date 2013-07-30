@@ -18,10 +18,12 @@
 [help]
 	autocorrect = 10
 [diff]
-	renames = copy
+	submodule = log
 [core]
-	autocrlf = input
+	autocrlf = true
 	excludesfile = /home/lasseb/github/.global_ignore
+	whitespace = trailing-space,space-before-tab
+	pager = less -S
 [alias]
 	b = branch -v
 	last = diff HEAD^
@@ -31,13 +33,30 @@
 	changelog = log --pretty=format:\" * %s\"
 	short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
 	pig = format-patch --stdout -M -C -C
+	d = difftool
+	pe = format-patch -M -C --find-copies-harder --stdout
 [format]
 	pretty = "Commit:  %C(yellow)%H%nAuthor:  %C(green)%aN <%aE>%nDate:    (%C(red)%ar%Creset) %ai%nSubject: %s%n%n%b"
 [push]
 	default = simple
 [merge]
 	summary = true
+	conflictstyle = diff3
+	log = 10
+	ff = only
+	defaultToUpstream = true
 [pull]
 	rebase = true
 [rebase]
-	autosquash = true
+	autostash = true
+[status]
+	branch = true
+	short = true
+[blame]
+	date = relative
+[rerere]
+	enabled = true
+[apply]
+	whitespace = fix
+[difftool]
+	prompt = false

@@ -1,15 +1,16 @@
-" ~/.vimrc
 scriptencoding utf-8
 
-if (&termencoding == "")
+" ~.vimrc mostly stolen from Ciaran McCreesh - https://github.com/ciaranm/
+
+"-----------------------------------------------------------------------
+" terminal setup
+"-----------------------------------------------------------------------
+
+if (&term =~ "xterm") && (&termencoding == "")
     set termencoding=utf8
 endif
 
-if (&encoding ==# "latin1") && has("gui_running")
-    set encoding=utf-8
-endif
-
-if (&term =~ "xterm")
+if &term =~ "xterm"
     if has('title')
         set title
     endif
@@ -21,15 +22,19 @@ if (&term =~ "xterm")
     endif
 endif
 
-" Indicates a fast terminal connection
-set ttyfast
+"-----------------------------------------------------------------------
+" unbundle init
+"-----------------------------------------------------------------------
+
+" Call ubundle
+runtime bundle/vim-unbundle/unbundle.vim
+
+"-----------------------------------------------------------------------
+" settings
+"-----------------------------------------------------------------------
 
 " Don't be compatible with vi
 set nocompatible
-" Call pathogen and bundle
-filetype off
-call pathogen#infect()
-call pathogen#helptags()
 
 " Enable a nice big viminfo file
 set viminfo='1000,f1,:1000,/1000
@@ -37,35 +42,25 @@ set viminfo^=!
 set history=500
 " Make backspace delete lots of things
 set backspace=indent,eol,start
-" Create backups
+
+" Create backups and undofile
 set backup
-set backupdir=~/.local/vim-backupdir
+set backupdir=~/.vim/tmp/backups
+
+" Create a undofile
+set undofile
+set undodir=~/.vim/tmp
+set undolevels=50
+set updatetime=1000
+
 " No swapfiles
 set noswapfile
 " Show us the command we're typing
 set showcmd
 " Highlight matching parens
 set showmatch
-" Show full tags when doing search completion
-set showfulltag
-" Highlight search while typing
-set hlsearch
-set incsearch
-" Speed up macros
-set lazyredraw
-" No annoying error noises
-set noerrorbells
-set visualbell t_vb=
 
 if has("autocmd")
-    " Enable auto indent plugin
-    filetype on
-    filetype plugin on
-    filetype indent on
-
-    autocmd FileType * setlocal colorcolumn=0
-    autocmd GUIEnter * set visualbell t_vb=
-
     autocmd BufEnter *
                 \ if &filetype == "cpp" || &filetype == "c" || &filetype == "haskell" || &filetype == "java" |
                 \    set noignorecase noinfercase |
@@ -73,31 +68,41 @@ if has("autocmd")
                 \    set ignorecase infercase |
                 \ endif
 else
-    set autoindent
     set ignorecase
     set infercase
 endif
 
-" Go for an ident of 4 by default
-set shiftwidth=4
-set tabstop=4
-"set softtabstop=4
+" Show full tags when doing search completion
+set showfulltag
+
+" Highlight search while typing
+set hlsearch
+set incsearch
+
+" Speed up macros
+set lazyredraw
+
+" No annoying error noises
+set noerrorbells
+set visualbell t_vb=
+if has("autocmd")
+    autocmd GUIEnter * set visualbell t_vb=
+endif
+
+" Copy indent from the current line
+set autoindent
+
+" Opens new panes to right/bottom, which is more natural
+set splitbelow
+set splitright
+
+if has('gui_gtk')
+    set lines=42
+    set columns=150
+endif
+
 " screw you tabs
 set expandtab
-
-if has("folding")
-    set foldenable
-    set foldmethod=manual
-    set foldlevelstart=99
-endif
-
-" syntax when printing
-set popt+=syntax:y
-
-if has('syntax') && !exists('g:syntax_on')
-    " Syntax highlighting
-    syntax enable
-endif
 
 " dusplay as much as possible of the last line
 set display+=lastline
@@ -109,18 +114,30 @@ set sidescrolloff=5
 set whichwrap+=<,>,[,]
 " Completion menu
 set wildmenu
+set wildchar=<tab>
 set wildmode=longest:list:full
 set wildignore+=*.o,*~,.lo,*.hi
+set wildignore+=.git,.svn,.hg
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
+set wildignore+=*.egg-info/*
 set suffixes+=.in,.a,.1
+
 " allow hidden buffers
 set hidden
+
+" 1 height windows
+set winminheight=1
+
 " tell buffers to use tabs
 try
-    "set switchbuf=useropen,usetab,newtab
     set switchbuf=usetab,newtab
 catch
 endtry
-set winminheight=1
+
+if has('syntax') && !exists('g:syntax_on')
+    " Syntax highlighting
+    syntax enable
+endif
 
 " enable virtual edit in vblock mode, and one past the end
 set virtualedit=block,onemore
@@ -141,9 +158,6 @@ if has("eval")
     endfun
 
     let s:prefer_scheme = 'molokai'
-    if -1 != match(getcwd(), 'inkpot')
-        let s:prefer_scheme = 'inkpot$'
-    endif
 
     if has('gui')
         call LoadColourScheme(s:prefer_scheme . ":elflord")
@@ -165,14 +179,44 @@ if has("eval")
     endif
 endif
 
+" Folding
+if has("folding")
+    set foldenable
+    set foldmethod=manual
+    set foldlevelstart=99
+endif
+
+" syntax when printing
+set popt+=syntax:y
+
+if has('eval')
+    filetype on
+    filetype plugin on
+    filetype indent on
+endif
+
 " Disable modelines, use securemodelines.vim instead
 set nomodeline
-let g:secure_modelines_modelines=5
-
+let g:secure_modelines_verbose = 0
+let g:secure_modelines_modelines = 5
 au VimEnter * call filter(exists("g:secure_modelines_allowed_items") ? g:secure_modelines_allowed_items : [],
             \ 'v:val != "fdm" && v:val != "foldmethod"')
 
-set nrformats-=octal
+" Nice statusbar
+set laststatus=2
+" Call powerline
+set rtp+=~/github/powerline/powerline/bindings/vim
+set noshowmode
+
+" Nice window title
+if has('title') && (has('gui_running') || &title)
+    set titlestring=
+    set titlestring+=%f\                                              " file name
+    set titlestring+=%h%m%r%w                                         " flags
+    set titlestring+=\ -\ %{v:progname}                               " program name
+    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}  " working directory
+endif
+
 " wrap, continue and remove comments in insertmode
 set formatoptions=croqj
 " ignore textwidth for long lines in insertmode
@@ -180,232 +224,46 @@ set formatoptions+=l
 
 set shiftround
 set complete-=i
+set completeopt=longest,menuone
 set mouse=a
 " autoread when file is changed after loading
 set autoread
 
-" timeoutlen is used for mapping and macro delays
-set timeoutlen=1200
-" ttimeoutlen is used for key code delays.
-set ttimeoutlen=50
-
-if has('gui')
-
-    " GUI Tab settings
-    fun! GuiTabLabel()
-        let label = ''
-        let buflist = tabpagebuflist(v:lnum)
-        if exists('t:title')
-            let label .= t:title . ' '
-        endif
-        let label .= '[ ' . bufname(buflist[tabpagewinnr(v:lnum) - 1]) . ' ]'
-        for bufnr in buflist
-            if getbufvar(bufnr, '&modified')
-                let label .= '+'
-                break
-            endif
-        endfor
-        return label
-    endfun
-
-    " menus and toolbar off by default
-    set guioptions-=m " menubar
-    set guioptions-=T " toolbar
-    set guioptions-=l " no left scroll
-    set guioptions-=L " really! no left scroll
-    set guioptions+=r " always show right scroll
-    set guioptions+=a "
-    set guioptions+=F " footer motif?
-    set guioptions+=c " console messages
-    " Guitab label (tab#. title)
-    set guitablabel=%{GuiTabLabel()}
-
-    " Gui mouse
-    set mousehide
-    behave mswin
-
-    set noguipty
-
-    set cmdheight=2
-    set icon
-
-    " Enable shift-insert paste in gui
-    map <S-Insert> <MiddleMouse>
-    map! <S-Insert> <MiddleMouse>
-    "set guifont=ProggyCleanTT\ CE\ 12
-    set cursorline
-endif
-
-if has('eval')
-
-    command! KeepWindowBufferWipe enew|bw #
-
-    " Delete a buffer but keep layout
-    nmap <C-w>! KeepWindowBufferWipe<CR>
-
-endif
-
-" Kill line
-nnoremap <C-k> "_dd
-inoremap <C-k> <ESC>dd
-
-" attempt to paste stuff
-imap <C-v> <ESC>p_
-noremap <C-c> y<CR>
-noremap <C-x> x<CR>
-
-" paste and indent lines
-nnoremap p p`[v`]=
-" New tab
-map <C-t> :tabnew<CR>
-" Close tab
-map <C-q> :quit<CR>
-
-if has('gui')
-    " New window
-    map <C-N> :!gvim &<CR><CR>
-    "Open new file dialog (ctrl-o)
-    map <C-O> :browse confirm e<cr>
-    "Open save-as dialog (ctrl-shift-s)
-    map <C-S-s> :browse confirm saveas<cr>
-endif
-
-" F1 is even more annoying
-inoremap <F1> <ESC>
-
-" F2 Toggle toolbar & menu
-if has('gui')
-    map <silent> <F2> :if &guioptions =~# 'T' <Bar>
-    \   set guioptions-=T <Bar>
-    \   set guioptions-=m <Bar>
-    \ else <Bar>
-    \   set guioptions+=T <Bar>
-    \   set guioptions+=m <Bar>
-    \ endif<CR>
-endif
-
-" F3 toggle highlight and clear with <C-l>
-nnoremap <silent> <F3> :silent nohlsearch<CR>
-inoremap <silent> <F3> <C-o>:silent nohlsearch<CR>
-if maparg('<C-L>', 'n') ==# ''
-    nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
-endif
-
-" F5 toggles paste mode
-set pastetoggle=<F5>
-
-" F6 inserts generic copyright header
-nmap <silent> <F6> :call <SID>MakeGenericCopyrightHeader()<CR>
-
-" Annoying default mappings
-noremap K k
-noremap J j
-
-nnoremap n nzz
-nnoremap N Nzz
-
-" * is silly
-noremap * :let @/='\<'.expand('<cword>').'\>'<bar>:set hls<CR>
-noremap g* :let @/=expand('<cword>')<bar>:set hls<CR>
-
-map <Leader>n <plug>NERDTreeMirrorToggle<CR>
-
-" tabs like a pro
-nnoremap <Tab> >>_
-nnoremap <S-Tab> <<_
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
-
-" tab completion
-if has("eval")
-    function! CleverTab()
-        if strpart(getline('.'), 0, col('.') - 1) =~ '^\s*$'
-            return "\<Tab>"
-        else
-
-            return "\<C-N>"
-        endif
-    endfun
-    inoremap <Tab> <C-R>=CleverTab()<CR>
-    inoremap <S-Tab> <C-P>
-endif
-
-" Map Alt-# to switch tabs
-if has('gui_running')
-    map <A-0> <ESC>0gt
-    map <A-1> <ESC>1gt
-    map <A-2> <ESC>2gt
-    map <A-3> <ESC>3gt
-    map <A-4> <ESC>4gt
-    map <A-5> <ESC>5gt
-    map <A-6> <ESC>6gt
-endif
-
 " Show tabs and trailing whitespace visually
 if (&termencoding == "utf-8") || has("gui_running")
     if has("gui_running")
-        set list listchars=tab:·⁖,trail:¶,extends:…,precedes:«,nbsp:‗
+        set list listchars=tab:⋮\ ,trail:⌴,extends:▸,precedes:◂,nbsp:‗
+        set showbreak=↪
+        set fillchars=vert:│,fold:┄,diff:╱
     else
         set list listchars=tab:·⁖,trail:¶,extends:»,precedes:«,nbsp:_
+        set fillchars=fold:-
     endif
 else
     set list listchars=tab:>-,trail:.,extends:>,nbsp:_
+    set fillchars=fold:-
 endif
-
-set fillchars=fold:-
-
-" Nice statusbar
-set laststatus=2
-set statusline=
-" buffer name
-set statusline+=%1*%-3.3n%0*\
-" file name
-set statusline+=%f\
-" flags
-set statusline+=%(%H%2*%M%R%W%*%\)
-" fugitive
-set statusline+=%1*%{fugitive#statusline()}\
-set statusline+=%=
-" filetype
-set statusline+=\%4*[%1*%{strlen(&ft)?&ft:'none'}%4*/%1*
-" encoding
-set statusline+=%{&encoding}%4*/%1*
-" file format
-set statusline+=%{&fileformat}%4*]%1*
-" line scroll
-set statusline+=%4*[%1*%-4.(%l,%c%V%)%4*]%1*\%4*[%1*%P%4*]%1*
-
-"filename
-"hi default link User1 SignColumn
-" flags Statement
-"hi default link User2 GitGutterAdd
-" errors
-"hi default link User3 Error
-" fugitive
-"hi default link User4 Special
 
 " Include $HOME in cdpath
 if has("file_in_path")
     let &cdpath=','.expand("$HOME").','.expand("$HOME").'.bin'
 endif
 
-" Better include path handling
-set path+=src/
-let &inc.=' ["<]'
-
+"-----------------------------------------------------------------------
 " completion
+"-----------------------------------------------------------------------
+
 set dictionary=/usr/share/dict/words
 
-" Load matchit.vim to enable fancy % matching
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-    runtime! macros/matchit.vim
-endif
+"-----------------------------------------------------------------------
+" autocmds
+"-----------------------------------------------------------------------
 
 if has("eval")
     " If we're in a wide window, enable line numbers.
     fun! <SID>WindowWidth()
         if winwidth(0) > 90
-            setlocal foldcolumn=0
+            setlocal foldcolumn=1
             setlocal number
         else
             setlocal nonumber
@@ -432,10 +290,10 @@ if has("eval")
         let l:a = 0
         for l:x in getline(1, 10)
             let l:a = l:a + 1
-            if -1 != match(l:x, ' Copyright [- 0-9,]*20\(0[456789]\|1[01]\) Lasse Brun')
+            if -1 != match(l:x, 'Copyright [- 0-9,]*20\(0[456789]\|1[01]\) Lasse Brun')
                 if input("Update copyright header? (y/N) ") == "y"
                     call setline(l:a, substitute(l:x, '\(20[01][0123456789]\) Lasse',
-                                \ '\1, '.strftime('%Y').' Lasse', ""))
+                                \ '\1, 2013 Lasse', ""))
                 endif
             endif
         endfor
@@ -444,132 +302,315 @@ endif
 
 if has("autocmd") && has("eval")
     augroup ciaranm
-    autocmd!
+        autocmd!
 
-    " Automagic line numbers
-    autocmd BufEnter * :call <SID>WindowWidth()
-    " Always do a full syntax refresh
-    autocmd BufEnter * syntax sync fromstart
-    " For help files, move them to the top window and make <Return> behave like <C-]> (jump to tag)
-    "autocmd FileType help :call <SID>WindowToTop()
-    autocmd FileType help :set nonumber
-    autocmd FileType help nmap <buffer> <Return> <C-]>
-    " For svn-commit, don't create backups
-    autocmd BufRead svn-commit.tmp :setlocal nobackup
-    " m4 matchit support
-    autocmd FileType m4 :let b:match_words="(:),`:',[:],{:}"
-    " bash-completion ftdetects
-    autocmd BufNewFile,BufRead /*/*bash*completion*/*
-                \ if expand("<amatch>") !~# "ChangeLog"   |
-                \     let b:is_bash = 1 | set filetype=sh |
-                \ endif
+        " Automagic line numbers
+        autocmd BufEnter * :call <SID>WindowWidth()
+        " Always do a full syntax refresh
+        autocmd BufEnter * syntax sync fromstart
+        " For svn-commit, don't create backups
+        autocmd BufRead svn-commit.tmp :setlocal nobackup
+        " m4 matchit support
+        autocmd FileType m4 :let b:match_words="(:),`:',[:],{:}"
+        " bash-completion ftdetects
+        autocmd BufNewFile,BufRead /*/*bash*completion*/*
+                    \ if expand("<amatch>") !~# "ChangeLog"   |
+                    \     let b:is_bash = 1 | set filetype=sh |
+                    \ endif
 
-    " update copyright headers
-    autocmd BufWritePre * call <SID>UpdateCopyrightHeaders()
+        " update copyright headers
+        autocmd BufWritePre * call <SID>UpdateCopyrightHeaders()
 
-    try
-        autocmd Syntax *
-                    \ syn match VimModelineLine /^.\{-1,}vim:[^:]\{-1,}:.*/ contains=VimModeline |
-                    \ syn match VimModeline contained /vim:[^:]\{-1,}:/
-        hi def link VimModelineLine comment
-        hi def link VimModeline     special
-    catch
-    endtry
+        try
+            autocmd Syntax *
+                        \ syn match VimModelineLine /^.\{-1,}vim:[^:]\{-1,}:.*/ contains=VimModeline |
+                        \ syn match VimModeline contained /vim:[^:]\{-1,}:/
+            hi def link VimModelineLine comment
+            hi def link VimModeline     special
+        catch
+        endtry
     augroup END
 
     augroup bruners
-    autocmd!
+        autocmd!
 
-    " fugitive buffers
-    autocmd User Fugitive
-          \ if filereadable(fugitive#buffer().repo().dir('fugitive.vim')) |
-          \   source `=fugitive#buffer().repo().dir('fugitive.vim')`      |
-          \ endif
-    " Remove 'dead' fugitive buffers
-    autocmd BufReadPost fugitive://* set bufhidden=delete
+        " fugitive buffers
+        autocmd User Fugitive
+            \ if filereadable(fugitive#buffer().repo().dir('fugitive.vim')) |
+            \   source `=fugitive#buffer().repo().dir('fugitive.vim')`      |
+            \ endif
+        " Remove 'dead' fugitive buffers
+        autocmd BufReadPost fugitive://* set bufhidden=delete
 
-    " Highlight whitespace in super annoying colors
-    fun! <SID>WhiteSpace()
-        hi ExtraWhitespace ctermbg=red guibg=red
-        match ExtraWhiteSpace /\s\+$/
-        match ExtraWhiteSpace /\s\+\%#\@<!$/
-    endfun
-    autocmd BufWinEnter,InsertEnter,InsertLeave * :call <SID>WhiteSpace()
+        " Highlight whitespace in super annoying colors
+        "fun! <SID>WhiteSpace()
+        "    hi ExtraWhitespace cterm=bold ctermbg=darkgreen guibg=darkgreen
+        "    match ExtraWhitespace / \+\ze\t/
+        "    match ExtraWhiteSpace /\s\+$/
+        "    match ExtraWhiteSpace /\s\+\%#\@<!$/
+        "endfun
+        "autocmd BufWinEnter,InsertEnter,InsertLeave * :call <SID>WhiteSpace()
 
-    " Clear all matches previously defined by match
-    autocmd BufWinLeave * call clearmatches()
+        " Return to last edit position when opening files
+        autocmd BufReadPost *
+            \ if line("'\"") > 0 && line("'\"") <= line("$")    |
+            \   exe "normal! g`\"zvzz"                          |
+            \ endif
+    augroup END
 
-    " Return to last edit position when opening files
-    autocmd BufReadPost *
-        \ if line("'\"") > 0 && line("'\"") <= line("$")    |
-        \   exe "normal! g`\"zvzz"                          |
-        \ endif
+    " timeoutlen is used for mapping and macro delays
+    " ttimeoutlen is used for key code delays
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        autocmd InsertEnter * set timeoutlen=0
+        autocmd InsertLeave * set timeoutlen=1000
+    augroup END
 
-    " Reload vimrc on save
-    autocmd BufWritePost vimrc,.vimrc source ~/.vimrc
+    augroup onwriteloaders
+        autocmd!
 
-    " Reload .Xdefaults on save
-    autocmd BufWritePost,FileWritePost ~/.Xdefaults,~/.Xresources silent! !xrdb -merge % >/dev/null 2>&1
-
-    " Populate omnifunc
-    autocmd FileType *
-        \ if exists("+omnifunc") && &omnifunc == ""         |
-        \     setlocal omnifunc=syntaxcomplete#Complete     |
-        \ endif
-
-    " Populate completefunc
-    autocmd FileType *
-        \ if exists("+completefunc") && &completefunc == "" |
-        \     setlocal completefunc=syntaxcomplete#Complete |
-        \ endif
-
+        " Reload dircolors on save
+        autocmd BufWritePost,FileWritePost *.zsh/dircolors silent! !eval `dircolors -b ~/.zsh/dircolors`
     augroup END
 endif
 
 if has("autocmd")
     augroup content
-    autocmd!
+        autocmd!
 
-    autocmd BufNewFile *.hs 0put ='-- vim: set sw=4 sts=4 et tw=80 :' |
-                \ set sw=4 sts=4 et tw=80 |
-                \ norm G
+        autocmd BufNewFile *.hs 0put ='-- vim: set sw=4 sts=4 et tw=80 :' |
+                    \ set sw=4 sts=4 et tw=80 |
+                    \ norm G
 
-    autocmd BufNewFile *.rb 0put ='# vim: set sw=4 sts=4 et tw=80 :' |
-                \ 0put ='#!/usr/bin/ruby' | set sw=4 sts=4 et tw=80 |
-                \ norm G
+        autocmd BufNewFile *.rb 0put ='# vim: set sw=4 sts=4 et tw=80 :' |
+                    \ 0put ='#!/usr/bin/ruby' | set sw=4 sts=4 et tw=80 |
+                    \ norm G
 
-    autocmd BufNewFile *.hh 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
-                \ 1put ='' | call MakeIncludeGuards() |
-                \ set sw=4 sts=4 et tw=80 | norm G
+        autocmd BufNewFile *.hh 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
+                    \ 1put ='' | "call MakeIncludeGuards() |
+                    \ set sw=4 sts=4 et tw=80 | norm G
 
-    autocmd BufNewFile *.cc 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
-                \ 1put ='' | 2put ='' | call setline(3, '#include "' .
-                \ substitute(expand("%:t"), ".cc$", ".hh", "") . '"') |
-                \ set sw=4 sts=4 et tw=80 | norm G
+        autocmd BufNewFile *.cc 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
+                    \ 1put ='' | 2put ='' | call setline(3, '#include "' .
+                    \ substitute(expand("%:t"), ".cc$", ".hh", "") . '"') |
+                    \ set sw=4 sts=4 et tw=80 | norm G
 
-    autocmd BufNewFile *.pml 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
-                \ set sw=4 sts=4 et tw=80 | norm G
+        autocmd BufNewFile *.pml 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
+                    \ set sw=4 sts=4 et tw=80 | norm G
 
-    autocmd BufNewFile *.java 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
-                \ 1put ='' |
-                \ set sw=4 sts=4 et tw=80 | norm G
+        autocmd BufNewFile *.java 0put ='/* vim: set sw=4 sts=4 et foldmethod=syntax : */' |
+                    \ 1put ='' |
+                    \ set sw=4 sts=4 et tw=80 | norm G
 
-    autocmd BufNewFile *.sh 0put ='# vim: set sw=4 sts=4 et tw=100 foldmethod=syntax :' |
-                \ 0put ='#!/bin/sh' | set sw=4 sts=4 et tw=100 |
-                \ norm G | call <SID>MakeGenericCopyrightHeader()
+        autocmd BufNewFile *.sh 0put ='# vim: set sw=4 sts=4 et tw=100 foldmethod=syntax :' |
+                    \ 0put ='#!/bin/sh' | set sw=4 sts=4 et tw=100 |
+                    \ norm G | call <SID>MakeGenericCopyrightHeader()
 
-    autocmd BufNewFile /home/lasseb/.bin/** 0put ='# vim: set sw=4 sts=4 et tw=100 foldmethod=syntax :' |
-                \ 0put ='#!/bin/sh' | set sw=4 sts=4 et tw=100 |
-                \ norm G | call <SID>MakeGenericCopyrightHeader()
+        autocmd BufNewFile /home/lasseb/.bin/** 0put ='# vim: set sw=4 sts=4 et tw=100 foldmethod=syntax :' |
+                    \ 0put ='#!/bin/sh' | set sw=4 sts=4 et tw=100 |
+                    \ norm G | call <SID>MakeGenericCopyrightHeader()
 
-    autocmd BufNewFile,BufRead *.md,*.markdown set filetype=ghmarkdown |
-                \ norm G
+        autocmd BufNewFile,BufRead *.md,*.markdown
+                    \ if &ft == "" | set filetype=ghmarkdown | norm G | endif
 
-    autocmd BufNewFile,BufRead *.txt,README,INSTALL,NEWS,TODO
-                \ if &ft == "" | set ft=text | endif
+        autocmd BufNewFile,BufRead *.json
+                    \ if &ft == "" | set filetype=json | endif
+    augroup END
 
+    augroup filetypes
+        autocmd!
+
+        " Populate omnifunc
+        autocmd FileType *
+            \ if exists("+omnifunc") && &omnifunc == ""         |
+            \     setlocal omnifunc=syntaxcomplete#Complete     |
+            \ endif
+
+        " Populate completefunc
+        autocmd FileType *
+            \ if exists("+completefunc") && &completefunc == "" |
+            \     setlocal completefunc=syntaxcomplete#Complete |
+            \ endif
     augroup END
 endif
+
+"-----------------------------------------------------------------------
+" gui settings / gvimrc
+"-----------------------------------------------------------------------
+
+if has('gui_running')
+    " menus and toolbar off by default
+    set guioptions-=m " nomenubar
+    set guioptions-=T " notoolbar
+    set guioptions-=l " no left scroll
+    set guioptions-=L " really! no left scroll
+    set guioptions+=r " always show right scroll
+    set guioptions+=a " autoselect
+
+    set guicursor+=a:blinkon0
+
+    " Gui mouse
+    set mousehide
+    behave mswin
+
+    set cmdheight=2
+    set cursorline
+
+    " GUI Tab settings
+    fun! GuiTabLabel()
+        let label = ''
+        let buflist = tabpagebuflist(v:lnum)
+        if exists('t:title')
+            let label .= t:title . ' '
+        endif
+        let label .= '[ ' . bufname(buflist[tabpagewinnr(v:lnum) - 1]) . ' ]'
+        for bufnr in buflist
+            if getbufvar(bufnr, '&modified')
+                let label .= '¿'
+                break
+            endif
+        endfor
+        return label
+    endfun
+
+    " Guitab label (tab#. title)
+    set guitablabel=%{GuiTabLabel()}
+
+    " F2 Toggle toolbar & menu
+    noremap <silent> <F2> :if &guioptions =~# 'T' <Bar>
+        \   set guioptions-=T <Bar>
+        \   set guioptions-=m <Bar>
+        \ else <Bar>
+        \   set guioptions+=T <Bar>
+        \   set guioptions+=m <Bar>
+        \ endif<CR>
+
+    " Enable shift-insert paste in gui
+    noremap <S-Insert> <MiddleMouse>
+    noremap! <S-Insert> <MiddleMouse>
+
+    "Open new file dialog (ctrl-o)
+    noremap <c-o> :browse confirm e<cr>
+    "Open save-as dialog (ctrl-shift-s)
+    noremap <c-s-s> :browse confirm saveas<cr>
+
+    " Map Alt-# to switch tabs
+    noremap <a-0> <esc>0gt
+    noremap <a-1> <esc>1gt
+    noremap <a-2> <esc>2gt
+    noremap <a-3> <esc>3gt
+    noremap <a-4> <esc>4gt
+    noremap <a-5> <esc>5gt
+    noremap <a-6> <esc>6gt
+    noremap <a-7> <esc>7gt
+
+endif
+
+"-----------------------------------------------------------------------
+" mappings
+"-----------------------------------------------------------------------
+
+" Make space more useful they said
+nnoremap <space> za
+
+" Kill line
+noremap <c-k>      "_dd
+noremap <s-del>    "_dd
+inoremap <c-k>  <esc>ddi
+
+" CTRL-X and SHIFT-Del are Cut
+vnoremap     <c-x>      "+x
+vnoremap     <s-del>    "+x
+
+" CTRL-C and CTRL-Insert are Copy
+vnoremap    <c-c>       "+y
+
+" SHIFT-Insert is Paste
+noremap     <s-insert>  "+gP
+cnoremap    <s-insert>  <c-r>+
+
+" Change case
+nnoremap <c-u> gUiw
+inoremap <c-u> <esc>gUiwea
+
+" Use CTRL-Q to do what CTRL-V used to do
+noremap         <c-q>       <c-v>
+
+" paste and indent lines
+nnoremap p p`[v`]=
+" New tab
+noremap <c-t> :tabnew<cr>
+" Close tab
+noremap <c-q>! :quit<cr>
+
+" F1 is even more annoying
+inoremap <F1> <esc>
+
+" F3 toggle highlight and clear with <C-l>
+nnoremap <silent> <F3> :silent nohlsearch<cr>
+inoremap <silent> <F3> <c-o>:silent nohlsearch<cr>
+if maparg('<C-L>', 'n') ==# ''
+    nnoremap <silent> <c-l> :nohlsearch<cr><c-l>
+endif
+
+" F5 toggles paste mode
+set pastetoggle=<F5>
+
+" F6 inserts generic copyright header
+nnoremap <silent> <F6> :call <SID>MakeGenericCopyrightHeader()<cr>
+
+" Annoying default mappings
+noremap K k
+noremap J j
+nnoremap n nzz
+nnoremap N Nzz
+
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+
+" * is silly
+noremap * :let @/='\<'.expand('<cword>').'\>'<bar>:set hls<cr>
+noremap g* :let @/=expand('<cword>')<bar>:set hls<cr>
+
+map <leader><leader> <plug>NERDTreeMirrorToggle<cr>
+
+"tabs like a pro
+nnoremap <tab> >>_
+nnoremap <s-tab> <<_
+vnoremap <tab> >gv
+vnoremap <s-tab> <gv
+
+" Write with sudo.
+cnoremap w!! w !sudo tee % >/dev/null
+
+" Load matchit.vim to enable fancy % matching
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+    runtime! macros/matchit.vim
+endif
+
+if has('eval')
+    command! KeepWindowBufferWipe enew|bw #
+
+    " Delete a buffer but keep layout
+    nnoremap <c-w>! KeepWindowBufferWipe<cr>
+endif
+
+" tab completion
+if has("eval")
+    function! CleverTab()
+        if strpart(getline('.'), 0, col('.') - 1) =~ '^\s*$'
+            return "\<Tab>"
+        else
+
+            return "\<C-N>"
+        endif
+    endfun
+    inoremap <Tab> <C-R>=CleverTab()<CR>
+endif
+
+"-----------------------------------------------------------------------
+" special less.sh and man modes
+"-----------------------------------------------------------------------
 
 if has("eval") && has("autocmd")
     fun! <SID>check_pager_mode()
@@ -585,12 +626,27 @@ if has("eval") && has("autocmd")
     autocmd VimEnter * :call <SID>check_pager_mode()
 endif
 
+"-----------------------------------------------------------------------
+" plugin / script / app settings
+"-----------------------------------------------------------------------
+
 if has("eval")
 
+    " Set default tab width
+    let g:tabwidth = 4
+
+    exec 'set shiftwidth=' . g:tabwidth
+    exec 'set tabstop=' . g:tabwidth
+    exec 'set softtabstop=' . g:tabwidth
+
+    " vim-pager
+    let vimpager_use_gvim = 1
+    let vimpager_passthrough = 0
+    let vimpager_scrolloff = 5
+    let vimpager_disable_x11 = 1
+
     " vim-bufferline
-    let g:bufferline_echo = 1
-    let g:bufferline_active_buffer_left=""
-    let g:bufferline_active_buffer_right=""
+    let g:bufferline_echo = 0
 
     " Vim specific options
     let g:vimsyntax_noerror=1
@@ -608,55 +664,83 @@ if has("eval")
     let g:exheres_author_name=g:full_identity
     let g:package_create_on_empty=1
     let g:common_metadata_create_on_empty=1
+    let g:systemd_create_on_empty=1
 
     " changelog syntax
     let g:changelog_username=g:full_identity
 
     " Settings for :TOhtml
-    let html_number_lines=1
-    let html_use_css=1
+    let g:html_number_lines=1
+    let g:html_use_css=1
+    let g:html_use_encoding = "utf8"
     let use_xhtml=1
 
     " Settings for NERDtree file browser
-    let g:NERDTreeMouseMode=2
-    let g:NERDTreeWinSize=20
-    let g:NERDTreeMinimalUI=2
-    let g:NERDTreeStatusline="%1*%{strftime('%H:%M')}"
-    let g:nerdtree_tabs_open_on_gui_startup=0
-    let g:nerdtree_tabs_focus_on_files=1
+    let NERDCreateDefaultMappings = 0
+    let NERDTreeDirArrows = 1
+    let NERDTreeWinPos = 'right'
+    let NERDTreeMinimalUI = 1
+    let NERDTreeAutoDeleteBuffer=0
+    let NERDTreeShowBookmarks = 1
+    let g:nerdtree_tabs_focus_on_files=0
+    let g:nerdtree_tabs_no_startup_for_diff=1
 
     " Git line status
-    let g:gitgutter_enabled=1
-    let g:gitgutter_highlight_lines=0
+    let g:gitgutter_sign_added = '∷'
+    let g:gitgutter_sign_modified = '≞'
+    let g:gitgutter_sign_removed = '∸'
+    let g:gitgutter_sign_modified_removed = '∵'
 
     " inkpot colors
     let g:inkpot_highlight_gitgutter=0
     let g:inkpot_black_background=0
 
+    " haskellmode
+    let g:haddock_browser="/usr/bin/firefox"
+    let g:haddock_docdir="/usr/local/share/doc/ghc/html/"
+    let g:haddock_indexfiledir="~/.vim/tmp/"
+
     " Allow horizontal split in Gitv
     let g:Gitv_OpenHorizontal = 1
     cabbrev git Git
 
-    if has("gui")
+    if has("gui_running")
         " Enable showmarks.vim
         let g:showmarks_enable=1
-
-        " Indent lines settings
-        let g:indent_guides_enable_on_vim_startup=1
-        let g:indent_guides_guide_size=1
-        let g:indent_guides_start_level=2
+        let g:indentLine_char = '│'
     else
         let g:showmarks_enable=0
         let loaded_showmarks=1
+        let g:indentLine_enabled = 0
     endif
 
     let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
 
+    if has("autocmd")
+        fun! <SID>FixShowmarksColours()
+            if has('gui')
+                hi ShowMarksHLl gui=bold guifg=#a0a0e0 guibg=#232526
+                hi ShowMarksHLu gui=none guifg=#a0a0e0 guibg=#232526
+                hi ShowMarksHLo gui=none guifg=#a0a0e0 guibg=#232526
+                hi ShowMarksHLm gui=none guifg=#a0a0e0 guibg=#232526
+            endif
+        endfun
+        if v:version >= 700
+            autocmd VimEnter,Syntax,ColorScheme * call <SID>FixShowmarksColours()
+        else
+            autocmd VimEnter,Syntax * call <SID>FixShowmarksColours()
+        endif
+    endif
+
 endif
+
+"-----------------------------------------------------------------------
+" final commands
+"-----------------------------------------------------------------------
 
 " turn off any existing search
 if has("autocmd")
-    au VimEnter * nohls
+    autocmd VimEnter * nohls
 endif
 
 "-----------------------------------------------------------------------

@@ -51,7 +51,6 @@
 	autostash = true
 [status]
 	branch = true
-	short = true
 [blame]
 	date = relative
 [rerere]

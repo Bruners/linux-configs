@@ -20,7 +20,6 @@
 [diff]
 	submodule = log
 [core]
-	autocrlf = true
 	excludesfile = /home/lasseb/github/.global_ignore
 	whitespace = trailing-space,space-before-tab
 	pager = less -S

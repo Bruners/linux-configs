@@ -28,7 +28,7 @@ subfont-encoding=unicode
 # Resample the font alphamap (10: bold black outline)
 ffactor=10
 # Subtitle language preferences
-slang=no,en
+slang=no,en,*
 # Subtitle position (100: as low as possible)
 subpos=100
 # Subtitle alignment at its position (2: bottom)
@@ -43,7 +43,3 @@ subfont-outline=1.0
 subfont-text-scale=4.0
 # Autoscale coefficient of the OSD elements (default: 6)
 subfont-osd-scale=4.2
-
-[gnome-mplayer]
-msglevel=all=0
-vo=vdpau
